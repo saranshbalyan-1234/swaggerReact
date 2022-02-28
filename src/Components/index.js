@@ -5,11 +5,10 @@ import Info from "./Info";
 import Settings from "./Settings";
 import "antd/dist/antd.css";
 import Tag from "./Tag";
-export default function Swagger() {
-  const [basePath, setBasePath] = useState("/swagger.json");
+export default function Swagger({ basePath }) {
   const [data, setData] = useState([]);
   useEffect(() => {
-    axios.get("/swagger.json").then((res) => {
+    axios.get(basePath).then((res) => {
       console.log(res.data);
       setData(res.data);
     });

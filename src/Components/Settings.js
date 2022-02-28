@@ -12,10 +12,13 @@ export default function Settings({ servers }) {
             <div class="servers">
               <label for="servers">
                 <select>
-                  {servers &&
+                  {servers ? (
                     servers.map((el) => {
                       return <option value={el.url}>{el.description}</option>;
-                    })}
+                    })
+                  ) : (
+                    <option>Default Server</option>
+                  )}
                 </select>
               </label>
             </div>

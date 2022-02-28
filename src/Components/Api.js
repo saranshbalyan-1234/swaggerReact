@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "antd";
 export default function Api({ data, url, type }) {
-  console.log("saransh", data);
+  console.log("saransh", data.parameters);
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   return (
@@ -72,30 +72,37 @@ export default function Api({ data, url, type }) {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr
-                          data-param-name="executionSuiteRunId"
-                          data-param-in="path"
-                        >
-                          <td class="parameters-col_name">
-                            <div class="parameter__name required">
-                              executionSuiteRunId<span>&nbsp;*</span>
-                            </div>
-                            <div class="parameter__type">
-                              integer<span class="prop-format">($int64)</span>
-                            </div>
-                            <div class="parameter__deprecated"></div>
-                            <div class="parameter__in">(path)</div>
-                          </td>
-                          <td class="parameters-col_description">
-                            <div class="markdown">
-                              <p>executionSuiteRunId</p>
-                            </div>
-                            <input
-                              type="text"
-                              placeholder="executionSuiteRunId"
-                            />
-                          </td>
-                        </tr>
+                        {data.parameters.map((el) => {
+                          return (
+                            <tr
+                              data-param-name="executionSuiteRunId"
+                              data-param-in="path"
+                            >
+                              <td class="parameters-col_name">
+                                <div
+                                  class={`parameter__name ${
+                                    el.required && `required`
+                                  }`}
+                                >
+                                  {el.name}
+                                  {el.required && <span>&nbsp;*</span>}
+                                </div>
+                                <div class="parameter__type">
+                                  {el.type}
+                                  <span class="prop-format">({el.format})</span>
+                                </div>
+                                <div class="parameter__deprecated"></div>
+                                <div class="parameter__in">{el.in}</div>
+                              </td>
+                              <td class="parameters-col_description">
+                                <div class="markdown">
+                                  <p>{el.description}</p>
+                                </div>
+                                <input type="text" placeholder={el.name} />
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
