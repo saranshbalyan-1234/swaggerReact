@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "antd";
 export default function Api({ data, url, type }) {
-  console.log("saransh", data.parameters);
+  console.log("saransh", data);
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   return (
@@ -98,7 +98,65 @@ export default function Api({ data, url, type }) {
                                 <div class="markdown">
                                   <p>{el.description}</p>
                                 </div>
-                                <input type="text" placeholder={el.name} />
+                                {el.in == "body" ? (
+                                  <div class="model-example">
+                                    <ul class="tab" role="tablist">
+                                      <li
+                                        class="tabitem active"
+                                        role="presentation"
+                                      >
+                                        <button
+                                          aria-controls="sOXORSQ="
+                                          aria-selected="true"
+                                          class="tablinks"
+                                          data-name="example"
+                                          id="N+akoPQ="
+                                          role="tab"
+                                        >
+                                          Example Value
+                                        </button>
+                                      </li>
+                                      <li class="tabitem" role="presentation">
+                                        <button
+                                          aria-controls="vhIQdko="
+                                          aria-selected="false"
+                                          class="tablinks"
+                                          data-name="model"
+                                          id="rE2hTbo="
+                                          role="tab"
+                                        >
+                                          Model
+                                        </button>
+                                      </li>
+                                    </ul>
+                                    <div
+                                      aria-hidden="false"
+                                      aria-labelledby="N+akoPQ="
+                                      data-name="examplePanel"
+                                      id="sOXORSQ="
+                                      role="tabpanel"
+                                      tabindex="0"
+                                    >
+                                      <div>
+                                        <div class="highlight-code">
+                                          <pre class="example microlight">
+                                            <div
+                                              contentEditable={tryApi}
+                                              style={{ outline: "none" }}
+                                              class="language-json"
+                                            >
+                                              {el.schema.$ref}
+                                            </div>
+                                          </pre>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ) : el.type == "file" ? (
+                                  <input type="file" placeholder={el.name} />
+                                ) : (
+                                  <input type="text" placeholder={el.name} />
+                                )}
                               </td>
                             </tr>
                           );
@@ -128,9 +186,13 @@ export default function Api({ data, url, type }) {
                         class="content-type"
                         id="get_api_executionSuiteRun__executionSuiteRunId__testCases_responses_select"
                       >
-                        <option value="application/json">
-                          application/json
-                        </option>
+                        {data.produces ? (
+                          data.produces.map((el) => {
+                            return <option value={el}>{el}</option>;
+                          })
+                        ) : (
+                          <option>Default</option>
+                        )}
                       </select>
                     </div>
                   </label>
@@ -151,108 +213,79 @@ export default function Api({ data, url, type }) {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr class="response " data-code="200">
-                        <td class="response-col_status">200</td>
-                        <td class="response-col_description">
-                          <div class="response-col_description__inner">
-                            <div class="markdown">
-                              <p>OK</p>
-                            </div>
-                          </div>
-                          <div class="model-example">
-                            <ul class="tab" role="tablist">
-                              <li class="tabitem active" role="presentation">
-                                <button
-                                  aria-controls="sOXORSQ="
-                                  aria-selected="true"
-                                  class="tablinks"
-                                  data-name="example"
-                                  id="N+akoPQ="
-                                  role="tab"
-                                >
-                                  Example Value
-                                </button>
-                              </li>
-                              <li class="tabitem" role="presentation">
-                                <button
-                                  aria-controls="vhIQdko="
-                                  aria-selected="false"
-                                  class="tablinks"
-                                  data-name="model"
-                                  id="rE2hTbo="
-                                  role="tab"
-                                >
-                                  Model
-                                </button>
-                              </li>
-                            </ul>
-                            <div
-                              aria-hidden="false"
-                              aria-labelledby="N+akoPQ="
-                              data-name="examplePanel"
-                              id="sOXORSQ="
-                              role="tabpanel"
-                              tabindex="0"
-                            >
-                              <div>
-                                <div class="highlight-code">
-                                  <pre class="example microlight">
-                                    <code class="language-json">
-                                      <span></span>
-                                      <span class="hljs-attr">"dataSet"</span>
-                                      <span>"string"</span>
-                                      <span class="hljs-attr">"resultId"</span>
-                                      <span> </span>
-                                      <span>0</span>
-                                      <span></span>
-                                      <span class="hljs-attr">"sequence"</span>
-                                      <span> </span>
-                                      <span>0</span>
-                                      <span></span>
-                                      <span class="hljs-attr">
-                                        "testCaseId"
-                                      </span>
-                                      <span> </span>
-                                      <span>0</span>
-                                      <span></span>
-                                    </code>
-                                  </pre>
+                      {Object.keys(data.responses).map(function (key, index) {
+                        return (
+                          <tr class="response " data-code={key}>
+                            <td class="response-col_status">{key}</td>
+                            <td class="response-col_description">
+                              <div class="response-col_description__inner">
+                                <div class="markdown">
+                                  <p>{data.responses[key].description}</p>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="response " data-code="401">
-                        <td class="response-col_status">401</td>
-                        <td class="response-col_description">
-                          <div class="response-col_description__inner">
-                            <div class="markdown">
-                              <p>Unauthorized</p>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="response " data-code="403">
-                        <td class="response-col_status">403</td>
-                        <td class="response-col_description">
-                          <div class="response-col_description__inner">
-                            <div class="markdown">
-                              <p>Forbidden</p>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="response " data-code="404">
-                        <td class="response-col_status">404</td>
-                        <td class="response-col_description">
-                          <div class="response-col_description__inner">
-                            <div class="markdown">
-                              <p>Not Found</p>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
+                              {data.responses[key].schema && (
+                                <div class="model-example">
+                                  <ul class="tab" role="tablist">
+                                    <li
+                                      class="tabitem active"
+                                      role="presentation"
+                                    >
+                                      <button
+                                        aria-controls="sOXORSQ="
+                                        aria-selected="true"
+                                        class="tablinks"
+                                        data-name="example"
+                                        id="N+akoPQ="
+                                        role="tab"
+                                      >
+                                        Example Value
+                                      </button>
+                                    </li>
+                                    <li class="tabitem" role="presentation">
+                                      <button
+                                        aria-controls="vhIQdko="
+                                        aria-selected="false"
+                                        class="tablinks"
+                                        data-name="model"
+                                        id="rE2hTbo="
+                                        role="tab"
+                                      >
+                                        Model
+                                      </button>
+                                    </li>
+                                  </ul>
+
+                                  <div
+                                    aria-hidden="false"
+                                    aria-labelledby="N+akoPQ="
+                                    data-name="examplePanel"
+                                    id="sOXORSQ="
+                                    role="tabpanel"
+                                    tabindex="0"
+                                  >
+                                    <div>
+                                      <div class="highlight-code">
+                                        <pre class="example microlight">
+                                          <div
+                                            style={{ outline: "none" }}
+                                            class="language-json"
+                                          >
+                                            {data.responses[key].schema.$ref
+                                              ? data.responses[key].schema.$ref
+                                              : data.responses[key].schema
+                                                  .type == "array" &&
+                                                `[${data.responses[key].schema.items.$ref}]`}
+                                          </div>
+                                        </pre>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
