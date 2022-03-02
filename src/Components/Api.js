@@ -139,15 +139,17 @@ export default function Api({ data, url, type }) {
                                     >
                                       <div>
                                         <div class="highlight-code">
-                                          <pre class="example microlight">
-                                            <div
-                                              contentEditable={tryApi}
-                                              style={{ outline: "none" }}
-                                              class="language-json"
-                                            >
+                                          {!tryApi ? (
+                                            <pre class="example microlight">
+                                              <div class="language-json">
+                                                {el.schema.$ref}
+                                              </div>
+                                            </pre>
+                                          ) : (
+                                            <textarea>
                                               {el.schema.$ref}
-                                            </div>
-                                          </pre>
+                                            </textarea>
+                                          )}
                                         </div>
                                       </div>
                                     </div>

@@ -5,11 +5,12 @@ import Info from "./Info";
 import Settings from "./Settings";
 import "antd/dist/antd.css";
 import Tag from "./Tag";
+import Model from "./Model";
 export default function Swagger({ basePath }) {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios.get(basePath).then((res) => {
-      console.log(res.data);
+      console.log("json", res.data);
       setData(res.data);
     });
   }, []);
@@ -24,6 +25,7 @@ export default function Swagger({ basePath }) {
           data.tags.map((el) => {
             return <Tag key={el} tag={el} paths={data.paths} />;
           })}
+        <Model data={data.definitions} />
       </section>
     </div>
   );
