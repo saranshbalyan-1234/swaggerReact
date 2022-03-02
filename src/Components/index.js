@@ -17,7 +17,10 @@ export default function Swagger({ basePath }) {
 
   return (
     <div id="swagger-ui">
-      <section className="swagger-ui swagger-container">
+      <section
+        className="swagger-ui swagger-container"
+        style={{ marginBottom: "100px" }}
+      >
         <Header basePath={basePath} />
         <Info basePath={basePath} />
         <Settings servers={data.servers} />
@@ -26,6 +29,7 @@ export default function Swagger({ basePath }) {
             return <Tag key={el} tag={el} paths={data.paths} />;
           })}
         <Model data={data.definitions} />
+        <div style={{ height: "10px" }}></div>
       </section>
     </div>
   );

@@ -19,10 +19,14 @@ export default function Model({ data }) {
           </button>
         </h4>
         {showModel && (
-          <div class="no-margin">
+          <div style={{ marginBottom: "20px" }}>
             {Object.keys(data).map(function (key, index) {
               return (
-                <div id="model-User" class="model-container" data-name="User">
+                <div
+                  id={`model-${key}`}
+                  class="model-container"
+                  data-name={key}
+                >
                   <span class="models-jump-to-path"></span>
                   <span class="model-box">
                     <button
