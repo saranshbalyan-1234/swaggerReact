@@ -26,7 +26,14 @@ export default function Swagger({ basePath }) {
         <Settings servers={data.servers} />
         {data.tags &&
           data.tags.map((el) => {
-            return <Tag key={el} tag={el} paths={data.paths} />;
+            return (
+              <Tag
+                key={el}
+                tag={el}
+                paths={data.paths}
+                models={data.definitions}
+              />
+            );
           })}
         <Model data={data.definitions} />
         <div style={{ height: "10px" }}></div>

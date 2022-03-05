@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "antd";
-export default function Api({ data, url, type }) {
+import RequestBody from "./RequestBody";
+export default function Api({ data, url, type, models }) {
   console.log("saransh", data);
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
@@ -142,12 +143,18 @@ export default function Api({ data, url, type }) {
                                           {!tryApi ? (
                                             <pre class="example microlight">
                                               <div class="language-json">
-                                                {el.schema.$ref}
+                                                <RequestBody
+                                                  models={models}
+                                                  el={el}
+                                                />
                                               </div>
                                             </pre>
                                           ) : (
                                             <textarea>
-                                              {el.schema.$ref}
+                                              <RequestBody
+                                                models={models}
+                                                el={el}
+                                              />
                                             </textarea>
                                           )}
                                         </div>
