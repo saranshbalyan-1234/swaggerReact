@@ -7305,7 +7305,12 @@
 } */
 .swagger-ui .opblock .opblock-summary-path {
   flex-shrink: 0;
-  max-width: calc(100% - 110px - 15rem);
+  /* max-width: calc(100% - 110px - 15rem); */
+}
+@media (max-width: 768px) {
+  .swagger-ui .opblock .opblock-summary-description {
+    font-size: 0 !important;
+  }
 }
 .swagger-ui .opblock .opblock-summary-path__deprecated {
   text-decoration: line-through;
