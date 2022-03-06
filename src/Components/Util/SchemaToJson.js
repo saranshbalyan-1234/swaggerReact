@@ -21,12 +21,16 @@ export default function SchemaToJson({
             ? formatSchema(models[model.properties[key].$ref.substring(14)])
             : model.properties[key].type == "array"
             ? model.properties[key].items && model.properties[key].items.$ref
-              ? formatSchema(
-                  models[model.properties[key].items.$ref.substring(14)]
-                )
+              ? [
+                  formatSchema(
+                    models[model.properties[key].items.$ref.substring(14)]
+                  ),
+                ]
               : [model.properties[key].items.type]
             : model.properties[key].type == "object"
             ? {}
+            : model.properties[key].enum
+            ? model.properties[key].enum
             : model.properties[key].type);
       });
 
@@ -43,15 +47,17 @@ export default function SchemaToJson({
       tempData[key1] = formatSchema(
         models[key1.charAt(0).toUpperCase() + key1.substring(1)]
       );
-    } else if (
-      models[temp].properties[key1].items &&
-      models[temp].properties[key1].items.$ref
-    ) {
-      tempData[key1] = formatSchema(
-        models[models[temp].properties[key1].items.$ref.substring(14)]
-      );
     } else if (models[temp].properties[key1].type == "array") {
-      tempData[key1] = [models[temp].properties[key1].items.type];
+      if (
+        models[temp].properties[key1].items &&
+        models[temp].properties[key1].items.$ref
+      ) {
+        tempData[key1] = [
+          formatSchema(
+            models[models[temp].properties[key1].items.$ref.substring(14)]
+          ),
+        ];
+      } else tempData[key1] = [models[temp].properties[key1].items.type];
     } else if (models[temp].properties[key1].type == "object") {
       tempData[key1] = {};
     } else if (models[temp].properties[key1].enum) {

@@ -7,47 +7,49 @@ export default function Settings({ servers, schemes }) {
     <>
       <div className="scheme-container" style={{ marginTop: "-50px" }}>
         <section className="schemes wrapper block col-12">
-          <div>
-            <span className="servers-title">Servers</span>
-            <div className="servers">
-              <label for="servers">
-                <select>
-                  {servers ? (
-                    servers.map((el, index) => {
-                      return (
-                        <option key={index} value={el.url}>
-                          {el.description}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <option>Default Server</option>
-                  )}
-                </select>
-              </label>
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <div>
+              <span className="servers-title">Servers</span>
+              <div className="servers">
+                <label for="servers">
+                  <select>
+                    {servers ? (
+                      servers.map((el, index) => {
+                        return (
+                          <option key={index} value={el.url}>
+                            {el.description}
+                          </option>
+                        );
+                      })
+                    ) : (
+                      <option>Default Server</option>
+                    )}
+                  </select>
+                </label>
+              </div>
             </div>
-          </div>
-          <div>
-            <div style={{ fontSize: "12px", fontWeight: "700" }} className="">
-              Schemes
-            </div>
-            <div>Schemes</div>
-            <div className="schemes">
-              <label for="schemes">
-                <select>
-                  {schemes ? (
-                    schemes.map((el, index) => {
-                      return (
-                        <option key={index} value={el}>
-                          {el}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <option>Default Scheme</option>
-                  )}
-                </select>
-              </label>
+            <div>
+              <div style={{ fontSize: "12px", fontWeight: "700" }} className="">
+                Schemes
+              </div>
+              <div>Schemes</div>
+              <div className="schemes">
+                <label for="schemes">
+                  <select>
+                    {schemes ? (
+                      schemes.map((el, index) => {
+                        return (
+                          <option key={index} value={el}>
+                            {el}
+                          </option>
+                        );
+                      })
+                    ) : (
+                      <option>Default Scheme</option>
+                    )}
+                  </select>
+                </label>
+              </div>
             </div>
           </div>
           <div className="auth-wrapper">

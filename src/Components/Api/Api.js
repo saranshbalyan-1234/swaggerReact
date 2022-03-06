@@ -12,7 +12,6 @@ export default function Api({ data, url, type, models }) {
       >
         <div className="opblock-summary opblock-summary-get">
           <button
-            aria-expanded="false"
             className="opblock-summary-control"
             style={{ outline: "none" }}
             onClick={() => showBody(!body)}
@@ -20,7 +19,7 @@ export default function Api({ data, url, type, models }) {
             <span className="opblock-summary-method">{type}</span>
             <span className="opblock-summary-path">
               <a className="nostyle">
-                <span>{url}</span>
+                <span style={{ minWidth: "1000px" }}>{url}</span>
               </a>
             </span>
             <div className="opblock-summary-description">{data.summary}</div>
@@ -31,10 +30,7 @@ export default function Api({ data, url, type, models }) {
               className="fa-solid fa-angle-down"
             ></i>
           </button>
-          <button
-            className="authorization__btn unlocked"
-            aria-label="authorization button unlocked"
-          >
+          <button className="authorization__btn unlocked">
             <i className="fa fa-unlock"></i>
           </button>
         </div>

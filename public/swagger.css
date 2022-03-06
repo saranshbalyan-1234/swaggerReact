@@ -7296,13 +7296,13 @@
   padding: 0 10px;
   word-break: break-word;
 }
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .swagger-ui .opblock .opblock-summary-operation-id,
   .swagger-ui .opblock .opblock-summary-path,
   .swagger-ui .opblock .opblock-summary-path__deprecated {
     font-size: 12px;
   }
-}
+} */
 .swagger-ui .opblock .opblock-summary-path {
   flex-shrink: 0;
   max-width: calc(100% - 110px - 15rem);
@@ -8007,11 +8007,11 @@
 .swagger-ui .opblock-body select {
   min-width: 230px;
 }
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .swagger-ui .opblock-body select {
     min-width: 180px;
   }
-}
+} */
 .swagger-ui label {
   color: #3b4151;
   font-family: sans-serif;
@@ -8019,7 +8019,7 @@
   font-weight: 700;
   margin: 0 0 5px;
 }
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .swagger-ui input[type="email"],
   .swagger-ui input[type="file"],
   .swagger-ui input[type="password"],
@@ -8027,7 +8027,7 @@
   .swagger-ui input[type="text"] {
     max-width: 175px;
   }
-}
+} */
 .swagger-ui input[type="email"],
 .swagger-ui input[type="file"],
 .swagger-ui input[type="password"],
