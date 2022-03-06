@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "antd";
-import RequestBody from "./RequestBody";
+import SchemaToJson from "./SchemaToJson";
 export default function Api({ data, url, type, models }) {
   console.log("saransh", data);
   const [body, showBody] = useState(false);
@@ -140,23 +140,20 @@ export default function Api({ data, url, type, models }) {
                                     >
                                       <div>
                                         <div class="highlight-code">
-                                          {!tryApi ? (
-                                            <pre class="example microlight">
-                                              <div class="language-json">
-                                                <RequestBody
-                                                  models={models}
-                                                  el={el}
-                                                />
-                                              </div>
-                                            </pre>
-                                          ) : (
-                                            <textarea>
-                                              <RequestBody
+                                          <pre class="example ">
+                                            <div class="language-json">
+                                              {/* {el.schema.$ref} */}
+                                              <SchemaToJson
                                                 models={models}
-                                                el={el}
+                                                schema={
+                                                  el.schema.$ref
+                                                    ? el.schema.$ref
+                                                    : el.schema.items.$ref
+                                                }
+                                                tryApi={tryApi}
                                               />
-                                            </textarea>
-                                          )}
+                                            </div>
+                                          </pre>
                                         </div>
                                       </div>
                                     </div>
@@ -279,11 +276,23 @@ export default function Api({ data, url, type, models }) {
                                             style={{ outline: "none" }}
                                             class="language-json"
                                           >
-                                            {data.responses[key].schema.$ref
-                                              ? data.responses[key].schema.$ref
-                                              : data.responses[key].schema
-                                                  .type == "array" &&
-                                                `[${data.responses[key].schema.items.$ref}]`}
+                                            {data.responses[key].schema ? (
+                                              <SchemaToJson
+                                                schema={
+                                                  data.responses[key].schema
+                                                    .$ref
+                                                    ? data.responses[key].schema
+                                                        .$ref
+                                                    : data.responses[key].schema
+                                                        .items.$ref
+                                                }
+                                                models={models}
+                                              />
+                                            ) : (
+                                              data.responses[key].schema.type ==
+                                                "array" &&
+                                              `[${data.responses[key].schema.items.$ref}]`
+                                            )}
                                           </div>
                                         </pre>
                                       </div>
