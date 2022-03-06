@@ -288,7 +288,9 @@ export default function Api({ data, url, type, models }) {
                                             style={{ outline: "none" }}
                                             className="language-json"
                                           >
-                                            {data.responses[key].schema ? (
+                                            {data.responses[key].schema &&
+                                            data.responses[key].schema.type !=
+                                              "string" ? (
                                               <SchemaToJson
                                                 schema={
                                                   data.responses[key].schema
@@ -306,10 +308,12 @@ export default function Api({ data, url, type, models }) {
                                                     : "array"
                                                 }
                                               />
+                                            ) : data.responses[key].schema
+                                                .type == "array" ? (
+                                              `[${data.responses[key].schema.items.$ref}]`
                                             ) : (
                                               data.responses[key].schema.type ==
-                                                "array" &&
-                                              `[${data.responses[key].schema.items.$ref}]`
+                                                "string" && "string"
                                             )}
                                           </div>
                                         </pre>
