@@ -13,7 +13,12 @@ export default function Model({ data }) {
             onClick={() => setShowModel(!showModel)}
           >
             <span>Models</span>
-            <i className="fa-solid fa-angle-down"></i>
+            <i
+              style={{
+                transform: showModel && "rotate(180deg)",
+              }}
+              className="fa-solid fa-angle-down"
+            ></i>
           </button>
         </h4>
         {showModel && (
@@ -26,6 +31,7 @@ export default function Model({ data }) {
                     arrays={data[key]}
                     allData={data}
                     inside={false}
+                    key={index}
                   />
                 );
               })}

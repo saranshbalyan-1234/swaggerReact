@@ -12,6 +12,7 @@ export default function Swagger({ basePath, setBasePath }) {
     axios.get(basePath).then((res) => {
       setData(res.data);
     });
+    console.log("definitions", data.definitions);
   }, [basePath]);
 
   return (

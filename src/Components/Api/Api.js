@@ -24,7 +24,12 @@ export default function Api({ data, url, type, models }) {
               </a>
             </span>
             <div className="opblock-summary-description">{data.summary}</div>
-            <i className="fa-solid fa-angle-down"></i>
+            <i
+              style={{
+                transform: body && "rotate(180deg)",
+              }}
+              className="fa-solid fa-angle-down"
+            ></i>
           </button>
           <button
             className="authorization__btn unlocked"
@@ -78,6 +83,7 @@ export default function Api({ data, url, type, models }) {
                           data.parameters.map((el) => {
                             return (
                               <tr
+                                key={el}
                                 data-param-name="executionSuiteRunId"
                                 data-param-in="path"
                               >
@@ -206,7 +212,11 @@ export default function Api({ data, url, type, models }) {
                       >
                         {data.produces ? (
                           data.produces.map((el) => {
-                            return <option value={el}>{el}</option>;
+                            return (
+                              <option key={el} value={el}>
+                                {el}
+                              </option>
+                            );
                           })
                         ) : (
                           <option>Default</option>
@@ -233,7 +243,7 @@ export default function Api({ data, url, type, models }) {
                     <tbody>
                       {Object.keys(data.responses).map(function (key, index) {
                         return (
-                          <tr className="response " data-code={key}>
+                          <tr className="response " key={key} data-code={key}>
                             <td className="response-col_status">{key}</td>
                             <td className="response-col_description">
                               <div className="response-col_description__inner">

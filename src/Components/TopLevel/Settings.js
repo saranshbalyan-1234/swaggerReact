@@ -13,8 +13,12 @@ export default function Settings({ servers, schemes }) {
               <label for="servers">
                 <select>
                   {servers ? (
-                    servers.map((el) => {
-                      return <option value={el.url}>{el.description}</option>;
+                    servers.map((el, index) => {
+                      return (
+                        <option key={index} value={el.url}>
+                          {el.description}
+                        </option>
+                      );
                     })
                   ) : (
                     <option>Default Server</option>
@@ -32,8 +36,12 @@ export default function Settings({ servers, schemes }) {
               <label for="schemes">
                 <select>
                   {schemes ? (
-                    schemes.map((el) => {
-                      return <option value={el}>{el}</option>;
+                    schemes.map((el, index) => {
+                      return (
+                        <option key={index} value={el}>
+                          {el}
+                        </option>
+                      );
                     })
                   ) : (
                     <option>Default Scheme</option>

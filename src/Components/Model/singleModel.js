@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import SchemaToJson from "../Util/SchemaToJson";
 
-export default function SingleModel({ data, arrays, allData, inside = false }) {
+export default function SingleModel({ data, allData, inside = false }) {
   const [show, setShow] = useState(false);
+  console.log("schema", data);
   return (
     <div
       id={`model-${data}`}
@@ -30,52 +32,13 @@ export default function SingleModel({ data, arrays, allData, inside = false }) {
           <span className="model-toggle collapsed"></span>
           <span> </span>
         </button>
-        <table className="model">
-          <tbody>
-            {show &&
-              arrays &&
-              Object.keys(arrays.properties).map(function (key, index) {
-                return (
-                  <tr className="property-row">
-                    <td> {key}</td>
-                    <td>
-                      {arrays.properties[key].$ref ? (
-                        <table className="model">
-                          <tbody>
-                            {Object.keys(allData).map(function (key1, index) {
-                              return (
-                                key1.toLowerCase() == key && (
-                                  <SingleModel
-                                    data={key1}
-                                    arrays={allData[key1]}
-                                    allData={allData}
-                                    inside={true}
-                                  />
-                                )
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      ) : (
-                        <span className="model">
-                          <span className="prop">
-                            <span className="prop-type">
-                              {arrays.properties[key].type}
-                            </span>
-                            {arrays.properties[key].format && (
-                              <span className="prop-format">
-                                ({arrays.properties[key].format})
-                              </span>
-                            )}
-                          </span>
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
+        {show && (
+          <SchemaToJson
+            schema={"#/definitions/" + data}
+            models={allData}
+            theme={"rjc-default"}
+          />
+        )}
       </span>
     </div>
   );

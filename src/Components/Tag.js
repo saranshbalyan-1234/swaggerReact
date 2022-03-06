@@ -45,7 +45,12 @@ export default function Tag({ tag, paths, models }) {
             className="expand-operation"
             title="Expand operation"
           >
-            <i className="fa-solid fa-angle-down"></i>
+            <i
+              className="fa-solid fa-angle-down"
+              style={{
+                transform: api && "rotate(180deg)",
+              }}
+            ></i>
           </button>
         </h3>
       </div>
