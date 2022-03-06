@@ -24,10 +24,7 @@ export default function SchemaToJson({
               ? formatSchema(
                   models[model.properties[key].items.$ref.substring(14)]
                 )
-              : // formatSchema(
-                //     models[model.properties[key].items.$ref.substring(14)]
-                //   )
-                model.properties[key].items.type
+              : [model.properties[key].items.type]
             : model.properties[key].type == "object"
             ? {}
             : model.properties[key].type);
@@ -50,10 +47,6 @@ export default function SchemaToJson({
       models[temp].properties[key1].items &&
       models[temp].properties[key1].items.$ref
     ) {
-      console.log(
-        "saransh",
-        models[temp].properties[key1].items.$ref.substring(14)
-      );
       tempData[key1] = formatSchema(
         models[models[temp].properties[key1].items.$ref.substring(14)]
       );
