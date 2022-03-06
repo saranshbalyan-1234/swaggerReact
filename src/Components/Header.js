@@ -2,23 +2,23 @@ import React from "react";
 
 export default function Header({ basePath }) {
   return (
-    <div class="topbar">
-      <div class="wrapper">
-        <div class="topbar-wrapper">
-          <a rel="noopener noreferrer" class="link">
+    <div className="topbar">
+      <div className="wrapper">
+        <div className="topbar-wrapper">
+          <a rel="noopener noreferrer" className="link">
             <img
               height="40"
               src="https://rcteambuilder.com/img/rc-logo-1.png"
               alt="Swagger UI"
             />
           </a>
-          <form class="download-url-wrapper">
+          <form className="download-url-wrapper">
             <input
               type="text"
-              class="download-url-input"
+              className="download-url-input"
               defaultValue={basePath}
             />
-            <button class="download-url-button button">Explore</button>
+            <button className="download-url-button button">Explore</button>
           </form>
         </div>
       </div>

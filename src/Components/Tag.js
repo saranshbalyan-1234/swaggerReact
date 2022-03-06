@@ -27,31 +27,31 @@ export default function Tag({ tag, paths, models }) {
   return (
     <>
       <div
-        class="opblock-tag-section"
+        className="opblock-tag-section"
         style={{ marginLeft: "20px", marginRight: "20px" }}
         onClick={() => showApi(!api)}
       >
         <h3
-          class="opblock-tag"
+          className="opblock-tag"
           id="operations-tag-Cloud_App"
           data-tag="Cloud App"
           data-is-open="false"
         >
-          <a class="nostyle" href="#/Cloud%20App">
+          <a className="nostyle" href="#/Cloud%20App">
             <span>{tag && tag.name}</span>
           </a>
           <small>
-            <div class="markdown">
+            <div className="markdown">
               <p>{tag && tag.description}</p>
             </div>
           </small>
           <div></div>
           <button
             aria-expanded="false"
-            class="expand-operation"
+            className="expand-operation"
             title="Expand operation"
           >
-            <i class="fa-solid fa-angle-down"></i>
+            <i className="fa-solid fa-angle-down"></i>
           </button>
         </h3>
       </div>

@@ -7,24 +7,24 @@ export default function Info({ basePath }) {
   return (
     <>
       <div
-        class="information-container wrapper"
+        className="information-container wrapper"
         style={{ paddingLeft: "20px", paddingRight: "20px" }}
       >
-        <section class="block col-12">
+        <section className="block col-12">
           <div>
-            <div class="info">
-              <hgroup class="main">
+            <div className="info">
+              <hgroup className="main">
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <h2 class="title">
+                  <h2 className="title">
                     Swagger
                     <span>
                       <small>
-                        <pre class="version">v1</pre>
+                        <pre className="version">v1</pre>
                       </small>
-                      <small class="version-stamp">
-                        <pre class="version">By Saransh</pre>
+                      <small className="version-stamp">
+                        <pre className="version">By Saransh</pre>
                       </small>
                     </span>
                   </h2>
@@ -62,12 +62,12 @@ export default function Info({ basePath }) {
                   target="_blank"
                   href={basePath}
                   rel="noopener noreferrer"
-                  class="link"
+                  className="link"
                 >
-                  <span class="url">{basePath}</span>
+                  <span className="url">{basePath}</span>
                 </a>
               </hgroup>
-              <div class="description"></div>
+              <div className="description"></div>
             </div>
           </div>
         </section>
@@ -88,15 +88,15 @@ export default function Info({ basePath }) {
           >
             <button
               style={{ display: "flex", alignItems: "center" }}
-              class="btn authorize unlocked"
+              className="btn authorize unlocked"
               onClick={{ handleSave }}
             >
               <span>Authorize</span>
 
-              <i class="fa fa-unlock"></i>
+              <i className="fa fa-unlock"></i>
             </button>
             <button
-              class="btn modal-btn auth btn-done button"
+              className="btn modal-btn auth btn-done button"
               style={{ marginLeft: "10px" }}
               onClick={() => setVisible(false)}
             >
@@ -107,7 +107,7 @@ export default function Info({ basePath }) {
       >
         <div className="swagger-ui">
           <div>
-            <div class="wrapper">
+            <div className="wrapper">
               <h3 style={{ fontWeight: "bold" }}>JWT (apiKey)</h3>
 
               <div>

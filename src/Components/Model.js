@@ -5,17 +5,17 @@ export default function Model({ data }) {
 
   const [showModel, setShowModel] = useState(false);
   return (
-    <div class="wrapper">
-      <section class="models ">
+    <div className="wrapper">
+      <section className="models ">
         <h4>
           <button
             style={{ outline: "none" }}
             aria-expanded="true"
-            class="models-control"
+            className="models-control"
             onClick={() => setShowModel(!showModel)}
           >
             <span>Models</span>
-            <i class="fa-solid fa-angle-down"></i>
+            <i className="fa-solid fa-angle-down"></i>
           </button>
         </h4>
         {showModel && (

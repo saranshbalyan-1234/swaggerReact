@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactJson from "react-json-view";
-export default function SchemaToJson({ models, schema, tryApi = false }) {
+export default function SchemaToJson({ models, schema, tryApi = false, type }) {
   const [data, setData] = useState();
   useEffect(() => {
     console.log("requestBody", data);
@@ -33,7 +33,7 @@ export default function SchemaToJson({ models, schema, tryApi = false }) {
             )
           : models[temp].properties[key1].type);
     });
-    setData(tempData);
+    type == "array" ? setData([tempData]) : setData(tempData);
   };
   const check = () => {
     if (tryApi)

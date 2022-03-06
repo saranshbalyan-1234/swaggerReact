@@ -11,41 +11,41 @@ export default function Api({ data, url, type, models }) {
         style={{ marginLeft: "20px", marginRight: "20px" }}
         class={`opblock opblock-${type}`}
       >
-        <div class="opblock-summary opblock-summary-get">
+        <div className="opblock-summary opblock-summary-get">
           <button
             aria-expanded="false"
-            class="opblock-summary-control"
+            className="opblock-summary-control"
             style={{ outline: "none" }}
             onClick={() => showBody(!body)}
           >
-            <span class="opblock-summary-method">{type}</span>
-            <span class="opblock-summary-path">
-              <a class="nostyle">
+            <span className="opblock-summary-method">{type}</span>
+            <span className="opblock-summary-path">
+              <a className="nostyle">
                 <span>{url}</span>
               </a>
             </span>
-            <div class="opblock-summary-description">{data.summary}</div>
-            <i class="fa-solid fa-angle-down"></i>
+            <div className="opblock-summary-description">{data.summary}</div>
+            <i className="fa-solid fa-angle-down"></i>
           </button>
           <button
-            class="authorization__btn unlocked"
+            className="authorization__btn unlocked"
             aria-label="authorization button unlocked"
           >
-            <i class="fa fa-unlock"></i>
+            <i className="fa fa-unlock"></i>
           </button>
         </div>
-        <div class="no-margin">
+        <div className="no-margin">
           {body && (
-            <div class="opblock-body">
-              <div class="opblock-section">
-                <div class="opblock-section-header">
-                  <div class="tab-header">
-                    <h4 class="opblock-title">Parameters</h4>
+            <div className="opblock-body">
+              <div className="opblock-section">
+                <div className="opblock-section-header">
+                  <div className="tab-header">
+                    <h4 className="opblock-title">Parameters</h4>
                   </div>
                   {!tryApi ? (
-                    <div class="try-out">
+                    <div className="try-out">
                       <button
-                        class="btn try-out__btn"
+                        className="btn try-out__btn"
                         onClick={() => setTryApi(true)}
                       >
                         Try it out
@@ -61,13 +61,15 @@ export default function Api({ data, url, type, models }) {
                     </Button>
                   )}
                 </div>
-                <div class="parameters-container">
-                  <div class="table-container">
-                    <table class="parameters">
+                <div className="parameters-container">
+                  <div className="table-container">
+                    <table className="parameters">
                       <thead>
                         <tr>
-                          <th class="col_header parameters-col_name">Name</th>
-                          <th class="col_header parameters-col_description">
+                          <th className="col_header parameters-col_name">
+                            Name
+                          </th>
+                          <th className="col_header parameters-col_description">
                             Description
                           </th>
                         </tr>
@@ -79,7 +81,7 @@ export default function Api({ data, url, type, models }) {
                               data-param-name="executionSuiteRunId"
                               data-param-in="path"
                             >
-                              <td class="parameters-col_name">
+                              <td className="parameters-col_name">
                                 <div
                                   class={`parameter__name ${
                                     el.required && `required`
@@ -88,28 +90,30 @@ export default function Api({ data, url, type, models }) {
                                   {el.name}
                                   {el.required && <span>&nbsp;*</span>}
                                 </div>
-                                <div class="parameter__type">
+                                <div className="parameter__type">
                                   {el.type}
-                                  <span class="prop-format">({el.format})</span>
+                                  <span className="prop-format">
+                                    ({el.format})
+                                  </span>
                                 </div>
-                                <div class="parameter__deprecated"></div>
-                                <div class="parameter__in">{el.in}</div>
+                                <div className="parameter__deprecated"></div>
+                                <div className="parameter__in">{el.in}</div>
                               </td>
-                              <td class="parameters-col_description">
-                                <div class="markdown">
+                              <td className="parameters-col_description">
+                                <div className="markdown">
                                   <p>{el.description}</p>
                                 </div>
                                 {el.in == "body" ? (
-                                  <div class="model-example">
-                                    <ul class="tab" role="tablist">
+                                  <div className="model-example">
+                                    <ul className="tab" role="tablist">
                                       <li
-                                        class="tabitem active"
+                                        className="tabitem active"
                                         role="presentation"
                                       >
                                         <button
                                           aria-controls="sOXORSQ="
                                           aria-selected="true"
-                                          class="tablinks"
+                                          className="tablinks"
                                           data-name="example"
                                           id="N+akoPQ="
                                           role="tab"
@@ -117,11 +121,14 @@ export default function Api({ data, url, type, models }) {
                                           Example Value
                                         </button>
                                       </li>
-                                      <li class="tabitem" role="presentation">
+                                      <li
+                                        className="tabitem"
+                                        role="presentation"
+                                      >
                                         <button
                                           aria-controls="vhIQdko="
                                           aria-selected="false"
-                                          class="tablinks"
+                                          className="tablinks"
                                           data-name="model"
                                           id="rE2hTbo="
                                           role="tab"
@@ -139,9 +146,9 @@ export default function Api({ data, url, type, models }) {
                                       tabindex="0"
                                     >
                                       <div>
-                                        <div class="highlight-code">
-                                          <pre class="example ">
-                                            <div class="language-json">
+                                        <div className="highlight-code">
+                                          <pre className="example ">
+                                            <div className="language-json">
                                               {/* {el.schema.$ref} */}
                                               <SchemaToJson
                                                 models={models}
@@ -149,6 +156,11 @@ export default function Api({ data, url, type, models }) {
                                                   el.schema.$ref
                                                     ? el.schema.$ref
                                                     : el.schema.items.$ref
+                                                }
+                                                type={
+                                                  el.schema.$ref
+                                                    ? "object"
+                                                    : "array"
                                                 }
                                                 tryApi={tryApi}
                                               />
@@ -173,23 +185,23 @@ export default function Api({ data, url, type, models }) {
                 </div>
               </div>
               {tryApi && (
-                <div class="execute-wrapper">
-                  <button class="btn execute opblock-control__btn">
+                <div className="execute-wrapper">
+                  <button className="btn execute opblock-control__btn">
                     Execute
                   </button>
                 </div>
               )}
-              <div class="execute-wrapper"></div>
-              <div class="responses-wrapper">
-                <div class="opblock-section-header">
+              <div className="execute-wrapper"></div>
+              <div className="responses-wrapper">
+                <div className="opblock-section-header">
                   <h4>Responses</h4>
                   <label for="get_api_executionSuiteRun__executionSuiteRunId__testCases_responses_select">
                     <span>Response content type</span>
-                    <div class="content-type-wrapper execute-content-type">
+                    <div className="content-type-wrapper execute-content-type">
                       <select
                         aria-controls="get_api_executionSuiteRun__executionSuiteRunId__testCases_responses"
                         aria-label="Response content type"
-                        class="content-type"
+                        className="content-type"
                         id="get_api_executionSuiteRun__executionSuiteRunId__testCases_responses_select"
                       >
                         {data.produces ? (
@@ -203,17 +215,17 @@ export default function Api({ data, url, type, models }) {
                     </div>
                   </label>
                 </div>
-                <div class="responses-inner">
+                <div className="responses-inner">
                   <table
                     aria-live="polite"
-                    class="responses-table"
+                    className="responses-table"
                     id="get_api_executionSuiteRun__executionSuiteRunId__testCases_responses"
                     role="region"
                   >
                     <thead>
-                      <tr class="responses-header">
-                        <td class="col_header response-col_status">Code</td>
-                        <td class="col_header response-col_description">
+                      <tr className="responses-header">
+                        <td className="col_header response-col_status">Code</td>
+                        <td className="col_header response-col_description">
                           Description
                         </td>
                       </tr>
@@ -221,25 +233,25 @@ export default function Api({ data, url, type, models }) {
                     <tbody>
                       {Object.keys(data.responses).map(function (key, index) {
                         return (
-                          <tr class="response " data-code={key}>
-                            <td class="response-col_status">{key}</td>
-                            <td class="response-col_description">
-                              <div class="response-col_description__inner">
-                                <div class="markdown">
+                          <tr className="response " data-code={key}>
+                            <td className="response-col_status">{key}</td>
+                            <td className="response-col_description">
+                              <div className="response-col_description__inner">
+                                <div className="markdown">
                                   <p>{data.responses[key].description}</p>
                                 </div>
                               </div>
                               {data.responses[key].schema && (
-                                <div class="model-example">
-                                  <ul class="tab" role="tablist">
+                                <div className="model-example">
+                                  <ul className="tab" role="tablist">
                                     <li
-                                      class="tabitem active"
+                                      className="tabitem active"
                                       role="presentation"
                                     >
                                       <button
                                         aria-controls="sOXORSQ="
                                         aria-selected="true"
-                                        class="tablinks"
+                                        className="tablinks"
                                         data-name="example"
                                         id="N+akoPQ="
                                         role="tab"
@@ -247,11 +259,11 @@ export default function Api({ data, url, type, models }) {
                                         Example Value
                                       </button>
                                     </li>
-                                    <li class="tabitem" role="presentation">
+                                    <li className="tabitem" role="presentation">
                                       <button
                                         aria-controls="vhIQdko="
                                         aria-selected="false"
-                                        class="tablinks"
+                                        className="tablinks"
                                         data-name="model"
                                         id="rE2hTbo="
                                         role="tab"
@@ -270,11 +282,11 @@ export default function Api({ data, url, type, models }) {
                                     tabindex="0"
                                   >
                                     <div>
-                                      <div class="highlight-code">
-                                        <pre class="example microlight">
+                                      <div className="highlight-code">
+                                        <pre className="example microlight">
                                           <div
                                             style={{ outline: "none" }}
-                                            class="language-json"
+                                            className="language-json"
                                           >
                                             {data.responses[key].schema ? (
                                               <SchemaToJson
@@ -287,6 +299,12 @@ export default function Api({ data, url, type, models }) {
                                                         .items.$ref
                                                 }
                                                 models={models}
+                                                type={
+                                                  data.responses[key].schema
+                                                    .$ref
+                                                    ? "object"
+                                                    : "array"
+                                                }
                                               />
                                             ) : (
                                               data.responses[key].schema.type ==

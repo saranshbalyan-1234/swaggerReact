@@ -5,43 +5,43 @@ export default function SingleModel({ data, arrays, allData, inside = false }) {
   return (
     <div
       id={`model-${data}`}
-      class="model-container"
+      className="model-container"
       data-name={data}
       style={{ marginLeft: inside == true ? "-4px" : "15px" }}
     >
-      <span class="models-jump-to-path"></span>
+      <span className="models-jump-to-path"></span>
       <span
-        class="model-box"
+        className="model-box"
         style={{ padding: inside == true ? "0px" : "10px" }}
       >
         <button
           style={{ outline: "none" }}
           aria-expanded="false"
-          class="model-box-control"
+          className="model-box-control"
           onClick={() => {
             setShow(!show);
           }}
         >
-          <span class="pointer">
-            <span class="model-box">
-              <span class="model model-title">{data}</span>
+          <span className="pointer">
+            <span className="model-box">
+              <span className="model model-title">{data}</span>
             </span>
           </span>
-          <span class="model-toggle collapsed"></span>
+          <span className="model-toggle collapsed"></span>
           <span> </span>
         </button>
-        <table class="model">
+        <table className="model">
           <tbody>
             {show &&
               arrays &&
               Object.keys(arrays.properties).map(function (key, index) {
                 console.log("modelKey", arrays.properties[key]);
                 return (
-                  <tr class="property-row">
+                  <tr className="property-row">
                     <td> {key}</td>
                     <td>
                       {arrays.properties[key].$ref ? (
-                        <table class="model">
+                        <table className="model">
                           <tbody>
                             {Object.keys(allData).map(function (key1, index) {
                               console.log(
@@ -62,13 +62,13 @@ export default function SingleModel({ data, arrays, allData, inside = false }) {
                           </tbody>
                         </table>
                       ) : (
-                        <span class="model">
-                          <span class="prop">
-                            <span class="prop-type">
+                        <span className="model">
+                          <span className="prop">
+                            <span className="prop-type">
                               {arrays.properties[key].type}
                             </span>
                             {arrays.properties[key].format && (
-                              <span class="prop-format">
+                              <span className="prop-format">
                                 ({arrays.properties[key].format})
                               </span>
                             )}

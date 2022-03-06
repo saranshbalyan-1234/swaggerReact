@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Modal, Button } from "antd";
-export default function Settings({ servers }) {
+export default function Settings({ servers, schemes }) {
   const [visible, setVisible] = useState(false);
   const handleAuth = () => {};
   return (
     <>
-      <div class="scheme-container" style={{ marginTop: "-50px" }}>
-        <section class="schemes wrapper block col-12">
+      <div className="scheme-container" style={{ marginTop: "-50px" }}>
+        <section className="schemes wrapper block col-12">
           <div>
-            <span class="servers-title">Servers</span>
-            <div class="servers">
+            <span className="servers-title">Servers</span>
+            <div className="servers">
               <label for="servers">
                 <select>
                   {servers ? (
@@ -23,15 +23,34 @@ export default function Settings({ servers }) {
               </label>
             </div>
           </div>
-          <div class="auth-wrapper">
+          <div>
+            <div style={{ fontSize: "12px", fontWeight: "700" }} className="">
+              Schemes
+            </div>
+            <div>Schemes</div>
+            <div className="schemes">
+              <label for="schemes">
+                <select>
+                  {schemes ? (
+                    schemes.map((el) => {
+                      return <option value={el}>{el}</option>;
+                    })
+                  ) : (
+                    <option>Default Scheme</option>
+                  )}
+                </select>
+              </label>
+            </div>
+          </div>
+          <div className="auth-wrapper">
             <button
               style={{ display: "flex", alignItems: "center" }}
-              class="btn authorize unlocked"
+              className="btn authorize unlocked"
               onClick={() => setVisible(true)}
             >
               <span>Authorize</span>
 
-              <i class="fa fa-unlock"></i>
+              <i className="fa fa-unlock"></i>
             </button>
           </div>
         </section>
@@ -53,15 +72,15 @@ export default function Settings({ servers }) {
           >
             <button
               style={{ display: "flex", alignItems: "center" }}
-              class="btn authorize unlocked"
+              className="btn authorize unlocked"
               onClick={{ handleAuth }}
             >
               <span>Authorize</span>
 
-              <i class="fa fa-unlock"></i>
+              <i className="fa fa-unlock"></i>
             </button>
             <button
-              class="btn modal-btn auth btn-done button"
+              className="btn modal-btn auth btn-done button"
               style={{ marginLeft: "10px" }}
               onClick={() => setVisible(false)}
             >
@@ -72,7 +91,7 @@ export default function Settings({ servers }) {
       >
         <div className="swagger-ui">
           <div>
-            <div class="wrapper">
+            <div className="wrapper">
               <h3 style={{ fontWeight: "bold" }}>JWT (apiKey)</h3>
 
               <div>

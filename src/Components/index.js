@@ -23,7 +23,7 @@ export default function Swagger({ basePath }) {
       >
         <Header basePath={basePath} />
         <Info basePath={basePath} />
-        <Settings servers={data.servers} />
+        <Settings servers={data.servers} schemes={data.schemes} />
         {data.tags &&
           data.tags.map((el) => {
             return (
