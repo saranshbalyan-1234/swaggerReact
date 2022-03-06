@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function Header({ basePath }) {
+export default function Header({ basePath, setBasePath }) {
+  const [tempBasePath, setTempBasePath] = useState("");
   return (
     <div className="topbar">
       <div className="wrapper">
@@ -17,8 +18,20 @@ export default function Header({ basePath }) {
               type="text"
               className="download-url-input"
               defaultValue={basePath}
+              onChange={(e) => {
+                e.preventDefault();
+                setTempBasePath(e.target.value);
+              }}
             />
-            <button className="download-url-button button">Explore</button>
+            <button
+              onClick={() => {
+                setBasePath(tempBasePath);
+              }}
+              type="button"
+              className="download-url-button button"
+            >
+              Explore
+            </button>
           </form>
         </div>
       </div>

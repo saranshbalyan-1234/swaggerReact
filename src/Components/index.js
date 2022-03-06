@@ -6,14 +6,14 @@ import Settings from "./Settings";
 import "antd/dist/antd.css";
 import Tag from "./Tag";
 import Model from "./Model";
-export default function Swagger({ basePath }) {
+export default function Swagger({ basePath, setBasePath }) {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios.get(basePath).then((res) => {
       console.log("json", res.data);
       setData(res.data);
     });
-  }, []);
+  }, [basePath]);
 
   return (
     <div id="swagger-ui">
@@ -21,7 +21,7 @@ export default function Swagger({ basePath }) {
         className="swagger-ui swagger-container"
         style={{ marginBottom: "100px" }}
       >
-        <Header basePath={basePath} />
+        <Header basePath={basePath} setBasePath={setBasePath} />
         <Info basePath={basePath} />
         <Settings servers={data.servers} schemes={data.schemes} />
         {data.tags &&
