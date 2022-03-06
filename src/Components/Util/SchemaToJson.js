@@ -8,11 +8,9 @@ export default function SchemaToJson({
   theme = "railscasts",
 }) {
   const [data, setData] = useState();
-  useEffect(() => {}, []);
 
   let tempData = {};
   const formatSchema = (model) => {
-    // console.log("saransh", model);
     let temp1 = {};
     model &&
       Object.keys(model.properties).map(function (key, index) {
@@ -38,7 +36,7 @@ export default function SchemaToJson({
   };
 
   useEffect(() => {
-    formatJson();
+    models && formatJson();
   }, []);
 
   const formatJson2 = (key1, temp) => {
