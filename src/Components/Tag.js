@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Api from "./Api";
-import ApiUrl from "./ApiUrl";
+
+import ApiUrl from "./Api/ApiUrl";
 
 export default function Tag({ tag, paths, models }) {
   const [data, setData] = useState({});
@@ -10,18 +10,12 @@ export default function Tag({ tag, paths, models }) {
       data[key] = {};
       for (const [key1, value1] of Object.entries(value)) {
         value1.tags.forEach((el) => {
-          // console.log("new", tag);
           if (el == tag.name) {
-            console.log("key", el);
-
             data[key][key1] = value1;
-
-            // console.log("new", key1);
           }
         });
       }
     }
-    console.log("new", data);
   }, [paths]);
 
   return (

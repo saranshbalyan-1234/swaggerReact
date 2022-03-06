@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Header from "./Header";
-import Info from "./Info";
-import Settings from "./Settings";
+import Header from "./TopLevel/Header";
+import Info from "./TopLevel/Info";
+import Settings from "./TopLevel/Settings";
 import "antd/dist/antd.css";
 import Tag from "./Tag";
-import Model from "./Model";
+import Model from "./Model/Model";
 export default function Swagger({ basePath, setBasePath }) {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios.get(basePath).then((res) => {
-      console.log("json", res.data);
       setData(res.data);
     });
   }, [basePath]);

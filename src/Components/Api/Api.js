@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "antd";
-import SchemaToJson from "./SchemaToJson";
+import SchemaToJson from "../Util/SchemaToJson";
 export default function Api({ data, url, type, models }) {
-  console.log("saransh", data);
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   return (
@@ -75,110 +74,111 @@ export default function Api({ data, url, type, models }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.parameters.map((el) => {
-                          return (
-                            <tr
-                              data-param-name="executionSuiteRunId"
-                              data-param-in="path"
-                            >
-                              <td className="parameters-col_name">
-                                <div
-                                  class={`parameter__name ${
-                                    el.required && `required`
-                                  }`}
-                                >
-                                  {el.name}
-                                  {el.required && <span>&nbsp;*</span>}
-                                </div>
-                                <div className="parameter__type">
-                                  {el.type}
-                                  <span className="prop-format">
-                                    ({el.format})
-                                  </span>
-                                </div>
-                                <div className="parameter__deprecated"></div>
-                                <div className="parameter__in">{el.in}</div>
-                              </td>
-                              <td className="parameters-col_description">
-                                <div className="markdown">
-                                  <p>{el.description}</p>
-                                </div>
-                                {el.in == "body" ? (
-                                  <div className="model-example">
-                                    <ul className="tab" role="tablist">
-                                      <li
-                                        className="tabitem active"
-                                        role="presentation"
-                                      >
-                                        <button
-                                          aria-controls="sOXORSQ="
-                                          aria-selected="true"
-                                          className="tablinks"
-                                          data-name="example"
-                                          id="N+akoPQ="
-                                          role="tab"
+                        {data.parameters &&
+                          data.parameters.map((el) => {
+                            return (
+                              <tr
+                                data-param-name="executionSuiteRunId"
+                                data-param-in="path"
+                              >
+                                <td className="parameters-col_name">
+                                  <div
+                                    class={`parameter__name ${
+                                      el.required && `required`
+                                    }`}
+                                  >
+                                    {el.name}
+                                    {el.required && <span>&nbsp;*</span>}
+                                  </div>
+                                  <div className="parameter__type">
+                                    {el.type}
+                                    <span className="prop-format">
+                                      ({el.format})
+                                    </span>
+                                  </div>
+                                  <div className="parameter__deprecated"></div>
+                                  <div className="parameter__in">{el.in}</div>
+                                </td>
+                                <td className="parameters-col_description">
+                                  <div className="markdown">
+                                    <p>{el.description}</p>
+                                  </div>
+                                  {el.in == "body" ? (
+                                    <div className="model-example">
+                                      <ul className="tab" role="tablist">
+                                        <li
+                                          className="tabitem active"
+                                          role="presentation"
                                         >
-                                          Example Value
-                                        </button>
-                                      </li>
-                                      <li
-                                        className="tabitem"
-                                        role="presentation"
-                                      >
-                                        <button
-                                          aria-controls="vhIQdko="
-                                          aria-selected="false"
-                                          className="tablinks"
-                                          data-name="model"
-                                          id="rE2hTbo="
-                                          role="tab"
+                                          <button
+                                            aria-controls="sOXORSQ="
+                                            aria-selected="true"
+                                            className="tablinks"
+                                            data-name="example"
+                                            id="N+akoPQ="
+                                            role="tab"
+                                          >
+                                            Example Value
+                                          </button>
+                                        </li>
+                                        <li
+                                          className="tabitem"
+                                          role="presentation"
                                         >
-                                          Model
-                                        </button>
-                                      </li>
-                                    </ul>
-                                    <div
-                                      aria-hidden="false"
-                                      aria-labelledby="N+akoPQ="
-                                      data-name="examplePanel"
-                                      id="sOXORSQ="
-                                      role="tabpanel"
-                                      tabindex="0"
-                                    >
-                                      <div>
-                                        <div className="highlight-code">
-                                          <pre className="example ">
-                                            <div className="language-json">
-                                              {/* {el.schema.$ref} */}
-                                              <SchemaToJson
-                                                models={models}
-                                                schema={
-                                                  el.schema.$ref
-                                                    ? el.schema.$ref
-                                                    : el.schema.items.$ref
-                                                }
-                                                type={
-                                                  el.schema.$ref
-                                                    ? "object"
-                                                    : "array"
-                                                }
-                                                tryApi={tryApi}
-                                              />
-                                            </div>
-                                          </pre>
+                                          <button
+                                            aria-controls="vhIQdko="
+                                            aria-selected="false"
+                                            className="tablinks"
+                                            data-name="model"
+                                            id="rE2hTbo="
+                                            role="tab"
+                                          >
+                                            Model
+                                          </button>
+                                        </li>
+                                      </ul>
+                                      <div
+                                        aria-hidden="false"
+                                        aria-labelledby="N+akoPQ="
+                                        data-name="examplePanel"
+                                        id="sOXORSQ="
+                                        role="tabpanel"
+                                        tabindex="0"
+                                      >
+                                        <div>
+                                          <div className="highlight-code">
+                                            <pre className="example ">
+                                              <div className="language-json">
+                                                {/* {el.schema.$ref} */}
+                                                <SchemaToJson
+                                                  models={models}
+                                                  schema={
+                                                    el.schema.$ref
+                                                      ? el.schema.$ref
+                                                      : el.schema.items.$ref
+                                                  }
+                                                  type={
+                                                    el.schema.$ref
+                                                      ? "object"
+                                                      : "array"
+                                                  }
+                                                  tryApi={tryApi}
+                                                />
+                                              </div>
+                                            </pre>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
-                                ) : el.type == "file" ? (
-                                  <input type="file" placeholder={el.name} />
-                                ) : (
-                                  <input type="text" placeholder={el.name} />
-                                )}
-                              </td>
-                            </tr>
-                          );
-                        })}
+                                  ) : el.type == "file" ? (
+                                    <input type="file" placeholder={el.name} />
+                                  ) : (
+                                    <input type="text" placeholder={el.name} />
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}
                       </tbody>
                     </table>
                   </div>
@@ -288,9 +288,13 @@ export default function Api({ data, url, type, models }) {
                                             style={{ outline: "none" }}
                                             className="language-json"
                                           >
-                                            {data.responses[key].schema &&
-                                            data.responses[key].schema.type !=
-                                              "string" ? (
+                                            {(data.responses[key].schema &&
+                                              data.responses[key].schema.type !=
+                                                "string" &&
+                                              data.responses[key].schema
+                                                ?.$ref) ||
+                                            data.responses[key].schema?.items
+                                              ?.$ref ? (
                                               <SchemaToJson
                                                 schema={
                                                   data.responses[key].schema

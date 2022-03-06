@@ -35,7 +35,6 @@ export default function SingleModel({ data, arrays, allData, inside = false }) {
             {show &&
               arrays &&
               Object.keys(arrays.properties).map(function (key, index) {
-                console.log("modelKey", arrays.properties[key]);
                 return (
                   <tr className="property-row">
                     <td> {key}</td>
@@ -44,10 +43,6 @@ export default function SingleModel({ data, arrays, allData, inside = false }) {
                         <table className="model">
                           <tbody>
                             {Object.keys(allData).map(function (key1, index) {
-                              console.log(
-                                "condition",
-                                allData[key1].properties
-                              );
                               return (
                                 key1.toLowerCase() == key && (
                                   <SingleModel

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import SingleModel from "./singleModel";
 export default function Model({ data }) {
-  console.log("modelData", data);
-
   const [showModel, setShowModel] = useState(false);
   return (
     <div className="wrapper">
