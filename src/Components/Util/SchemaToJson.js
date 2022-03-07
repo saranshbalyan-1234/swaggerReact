@@ -7,13 +7,17 @@ export default function SchemaToJson({
   type,
   theme = "railscasts",
   requestBodyParam,
+  editable = true,
+  setJsonBody,
 }) {
   const [data, setData] = useState();
 
   let tempData = {};
   const formatSchema = (model) => {
+    console.log("schema", model);
     let temp1 = {};
     model &&
+      model.properties &&
       Object.keys(model.properties).map(function (key, index) {
         return (temp1[key] =
           model.properties[key].$ref != null
@@ -27,7 +31,9 @@ export default function SchemaToJson({
                 ]
               : [model.properties[key].items.type]
             : model.properties[key].type == "object"
-            ? {}
+            ? model.properties[key].example
+              ? model.properties[key].example
+              : model.properties[key].type
             : model.properties[key].enum
             ? model.properties[key].enum
             : model.properties[key].type);
@@ -44,11 +50,13 @@ export default function SchemaToJson({
         formatJson();
       }
     }
-    // models && formatJson();
   }, []);
+  useEffect(() => {
+    editable && setJsonBody(data);
+    // editable && console.log("jsonInApi", data);
+  }, [data]);
 
   const formatJson2 = (key1, temp) => {
-    // console.log("saransh", key1, temp);
     if (models[temp].properties[key1].$ref) {
       tempData[key1] = formatSchema(
         models[key1.charAt(0).toUpperCase() + key1.substring(1)]
@@ -58,6 +66,7 @@ export default function SchemaToJson({
         models[temp].properties[key1].items &&
         models[temp].properties[key1].items.$ref
       ) {
+        console.log("schema", models[temp].properties[key1].items.$ref);
         tempData[key1] = [
           formatSchema(
             models[models[temp].properties[key1].items.$ref.substring(14)]
@@ -65,7 +74,10 @@ export default function SchemaToJson({
         ];
       } else tempData[key1] = [models[temp].properties[key1].items.type];
     } else if (models[temp].properties[key1].type == "object") {
-      tempData[key1] = {};
+      if (models[temp].properties[key1].example)
+        tempData[key1] = models[temp].properties[key1].example;
+      // model.properties[key].type
+      else tempData[key1] = {};
     } else if (models[temp].properties[key1].enum) {
       tempData[key1] = models[temp].properties[key1].enum;
     } else {
@@ -83,7 +95,7 @@ export default function SchemaToJson({
     type == "array" ? setData([tempData]) : setData(tempData);
   };
   const check = () => {
-    if (tryApi)
+    if (tryApi && editable)
       return (update) => {
         setData(update.updated_src);
       };

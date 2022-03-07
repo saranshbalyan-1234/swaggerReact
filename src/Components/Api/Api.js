@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import SchemaToJson from "../Util/SchemaToJson";
+import axios from "axios";
 export default function Api({ data, url, type, models }) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
+  const [jsonBody, setJsonBody] = useState();
+  console.log("response", data.response);
   console.log("body", data);
+  useEffect(() => {
+    console.log("jsonInApi", jsonBody);
+  }, [jsonBody]);
   return (
     <>
       <div
@@ -167,6 +173,7 @@ export default function Api({ data, url, type, models }) {
                                                         : "array"
                                                     }
                                                     tryApi={tryApi}
+                                                    setJsonBody={setJsonBody}
                                                   />
                                                 </div>
                                               </pre>
@@ -267,17 +274,18 @@ export default function Api({ data, url, type, models }) {
                                 >
                                   <SchemaToJson
                                     models={["saransh"]}
-                                    // type={
-                                    //   data.requestBody.content?.("application/json")
-                                    //     .schema.type
-                                    // }
-
+                                    type={
+                                      data.requestBody.content[
+                                        "application/json"
+                                      ].schema.type
+                                    }
                                     tryApi={tryApi}
                                     requestBodyParam={
                                       data.requestBody.content[
                                         "application/json"
                                       ].schema
                                     }
+                                    setJsonBody={setJsonBody}
                                   />
                                 </pre>
                               </div>
@@ -350,6 +358,23 @@ export default function Api({ data, url, type, models }) {
                                   <p>{data.responses[key].description}</p>
                                 </div>
                               </div>
+                              {data.responses[key].content && (
+                                <SchemaToJson
+                                  models={["saransh"]}
+                                  type={
+                                    data.responses[key].content[
+                                      "application/json"
+                                    ].schema.type
+                                  }
+                                  tryApi={tryApi}
+                                  requestBodyParam={
+                                    data.responses[key].content[
+                                      "application/json"
+                                    ].schema
+                                  }
+                                  editable={false}
+                                />
+                              )}
                               {data.responses[key].schema && (
                                 <div className="model-example">
                                   <ul className="tab" role="tablist">
@@ -420,6 +445,7 @@ export default function Api({ data, url, type, models }) {
                                                     ? "object"
                                                     : "array"
                                                 }
+                                                editable={false}
                                               />
                                             ) : data.responses[key].schema
                                                 .type == "array" ? (

@@ -5,12 +5,20 @@ export default function Header({ basePath, setBasePath }) {
   return (
     <div className="topbar">
       <div className="wrapper">
-        <div className="topbar-wrapper">
+        <div
+          className="topbar-wrapper"
+          style={{ display: "flex", flexWrap: "wrap" }}
+        >
           <a rel="noopener noreferrer" className="link">
             <img
               height="40"
               src="https://rcteambuilder.com/img/rc-logo-1.png"
               alt="Swagger UI"
+              style={{
+                minWidth: "200px",
+                marginRight: "20px",
+                marginBottom: "7px",
+              }}
             />
           </a>
           <form className="download-url-wrapper">
@@ -22,6 +30,7 @@ export default function Header({ basePath, setBasePath }) {
                 e.preventDefault();
                 setTempBasePath(e.target.value);
               }}
+              style={{ minWidth: "250px" }}
             />
             <button
               onClick={() => {
