@@ -6,6 +6,7 @@ export default function SchemaToJson({
   tryApi = false,
   type,
   theme = "railscasts",
+  requestBodyParam,
 }) {
   const [data, setData] = useState();
 
@@ -36,7 +37,14 @@ export default function SchemaToJson({
   };
 
   useEffect(() => {
-    models && formatJson();
+    if (models) {
+      if (requestBodyParam) {
+        setData(formatSchema(requestBodyParam));
+      } else {
+        formatJson();
+      }
+    }
+    // models && formatJson();
   }, []);
 
   const formatJson2 = (key1, temp) => {

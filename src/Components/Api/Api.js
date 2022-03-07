@@ -4,6 +4,7 @@ import SchemaToJson from "../Util/SchemaToJson";
 export default function Api({ data, url, type, models }) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
+  console.log("body", data);
   return (
     <>
       <div
@@ -61,130 +62,232 @@ export default function Api({ data, url, type, models }) {
                     </Button>
                   )}
                 </div>
-                <div className="parameters-container">
-                  <div className="table-container">
-                    <table className="parameters">
-                      <thead>
-                        <tr>
-                          <th className="col_header parameters-col_name">
-                            Name
-                          </th>
-                          <th className="col_header parameters-col_description">
-                            Description
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {data.parameters &&
-                          data.parameters.map((el) => {
-                            return (
-                              <tr
-                                key={el}
-                                data-param-name="executionSuiteRunId"
-                                data-param-in="path"
-                              >
-                                <td className="parameters-col_name">
-                                  <div
-                                    class={`parameter__name ${
-                                      el.required && `required`
-                                    }`}
-                                  >
-                                    {el.name}
-                                    {el.required && <span>&nbsp;*</span>}
-                                  </div>
-                                  <div className="parameter__type">
-                                    {el.type}
-                                    <span className="prop-format">
-                                      ({el.format})
-                                    </span>
-                                  </div>
-                                  <div className="parameter__deprecated"></div>
-                                  <div className="parameter__in">{el.in}</div>
-                                </td>
-                                <td className="parameters-col_description">
-                                  <div className="markdown">
-                                    <p>{el.description}</p>
-                                  </div>
-                                  {el.in == "body" ? (
-                                    <div className="model-example">
-                                      <ul className="tab" role="tablist">
-                                        <li
-                                          className="tabitem active"
-                                          role="presentation"
-                                        >
-                                          <button
-                                            aria-controls="sOXORSQ="
-                                            aria-selected="true"
-                                            className="tablinks"
-                                            data-name="example"
-                                            id="N+akoPQ="
-                                            role="tab"
+                {data.parameters ? (
+                  <div className="parameters-container">
+                    <div className="table-container">
+                      <table className="parameters">
+                        <thead>
+                          <tr>
+                            <th className="col_header parameters-col_name">
+                              Name
+                            </th>
+                            <th className="col_header parameters-col_description">
+                              Description
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {data.parameters &&
+                            data.parameters.map((el) => {
+                              return (
+                                <tr
+                                  key={el}
+                                  data-param-name="executionSuiteRunId"
+                                  data-param-in="path"
+                                >
+                                  <td className="parameters-col_name">
+                                    <div
+                                      class={`parameter__name ${
+                                        el.required && `required`
+                                      }`}
+                                    >
+                                      {el.name}
+                                      {el.required && <span>&nbsp;*</span>}
+                                    </div>
+                                    <div className="parameter__type">
+                                      {el.type}
+                                      <span className="prop-format">
+                                        ({el.format})
+                                      </span>
+                                    </div>
+                                    <div className="parameter__deprecated"></div>
+                                    <div className="parameter__in">{el.in}</div>
+                                  </td>
+                                  <td className="parameters-col_description">
+                                    <div className="markdown">
+                                      <p>{el.description}</p>
+                                    </div>
+                                    {el.in == "body" ? (
+                                      <div className="model-example">
+                                        <ul className="tab" role="tablist">
+                                          <li
+                                            className="tabitem active"
+                                            role="presentation"
                                           >
-                                            Example Value
-                                          </button>
-                                        </li>
-                                        <li
-                                          className="tabitem"
-                                          role="presentation"
-                                        >
-                                          <button
-                                            aria-controls="vhIQdko="
-                                            aria-selected="false"
-                                            className="tablinks"
-                                            data-name="model"
-                                            id="rE2hTbo="
-                                            role="tab"
+                                            <button
+                                              aria-controls="sOXORSQ="
+                                              aria-selected="true"
+                                              className="tablinks"
+                                              data-name="example"
+                                              id="N+akoPQ="
+                                              role="tab"
+                                            >
+                                              Example Value
+                                            </button>
+                                          </li>
+                                          <li
+                                            className="tabitem"
+                                            role="presentation"
                                           >
-                                            Model
-                                          </button>
-                                        </li>
-                                      </ul>
-                                      <div
-                                        aria-hidden="false"
-                                        aria-labelledby="N+akoPQ="
-                                        data-name="examplePanel"
-                                        id="sOXORSQ="
-                                        role="tabpanel"
-                                        tabindex="0"
-                                      >
-                                        <div>
-                                          <div className="highlight-code">
-                                            <pre className="example ">
-                                              <div className="language-json">
-                                                {/* {el.schema.$ref} */}
-                                                <SchemaToJson
-                                                  models={models}
-                                                  schema={
-                                                    el.schema.$ref
-                                                      ? el.schema.$ref
-                                                      : el.schema.items.$ref
-                                                  }
-                                                  type={
-                                                    el.schema.$ref
-                                                      ? "object"
-                                                      : "array"
-                                                  }
-                                                  tryApi={tryApi}
-                                                />
-                                              </div>
-                                            </pre>
+                                            <button
+                                              aria-controls="vhIQdko="
+                                              aria-selected="false"
+                                              className="tablinks"
+                                              data-name="model"
+                                              id="rE2hTbo="
+                                              role="tab"
+                                            >
+                                              Model
+                                            </button>
+                                          </li>
+                                        </ul>
+                                        <div
+                                          aria-hidden="false"
+                                          aria-labelledby="N+akoPQ="
+                                          data-name="examplePanel"
+                                          id="sOXORSQ="
+                                          role="tabpanel"
+                                          tabindex="0"
+                                        >
+                                          <div>
+                                            <div className="highlight-code">
+                                              <pre className="example ">
+                                                <div className="language-json">
+                                                  {/* {el.schema.$ref} */}
+                                                  <SchemaToJson
+                                                    models={models}
+                                                    schema={
+                                                      el.schema.$ref
+                                                        ? el.schema.$ref
+                                                        : el.schema.items.$ref
+                                                    }
+                                                    type={
+                                                      el.schema.$ref
+                                                        ? "object"
+                                                        : "array"
+                                                    }
+                                                    tryApi={tryApi}
+                                                  />
+                                                </div>
+                                              </pre>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  ) : el.type == "file" ? (
-                                    <input type="file" placeholder={el.name} />
-                                  ) : (
-                                    <input type="text" placeholder={el.name} />
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
+                                    ) : el.type == "file" ? (
+                                      <input
+                                        type="file"
+                                        placeholder={el.name}
+                                      />
+                                    ) : (
+                                      <input
+                                        type="text"
+                                        placeholder={el.name}
+                                      />
+                                    )}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div class="opblock-description-wrapper">No Parameters</div>
+                )}
+                {data.requestBody && (
+                  <div class="opblock-section opblock-section-request-body">
+                    <div class="opblock-section-header">
+                      <h4
+                        class={`opblock-title parameter__name ${
+                          data.requestBody.required && "required"
+                        }`}
+                      >
+                        Request body
+                      </h4>
+                      <label>
+                        <div class="content-type-wrapper body-param-content-type">
+                          <select
+                            aria-label="Request content type"
+                            class="content-type"
+                          >
+                            <option value="application/json">
+                              application/json
+                            </option>
+                          </select>
+                        </div>
+                      </label>
+                    </div>
+                    <div class="opblock-description-wrapper">
+                      <div>
+                        <div class="renderedMarkdown">
+                          <p>{data.requestBody.description}</p>
+                        </div>
+                        {data.requestBody.content && (
+                          <div class="model-example">
+                            <ul class="tab" role="tablist">
+                              <li class="tabitem active" role="presentation">
+                                <button
+                                  aria-controls="UQ3TnMk="
+                                  aria-selected="true"
+                                  class="tablinks"
+                                  data-name="example"
+                                  id="WA0MVUk="
+                                  role="tab"
+                                >
+                                  Example Value
+                                </button>
+                              </li>
+                              <li class="tabitem" role="presentation">
+                                <button
+                                  aria-controls="Olyi0QQ="
+                                  aria-selected="false"
+                                  class="tablinks"
+                                  data-name="model"
+                                  id="Q+mLZRs="
+                                  role="tab"
+                                >
+                                  Schema
+                                </button>
+                              </li>
+                            </ul>
+                            <div
+                              aria-hidden="false"
+                              aria-labelledby="WA0MVUk="
+                              data-name="examplePanel"
+                              id="UQ3TnMk="
+                              role="tabpanel"
+                              tabindex="0"
+                            >
+                              <div class="highlight-code">
+                                <pre
+                                  class="microlight"
+                                  // style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(51, 51, 51); color: white;"
+                                >
+                                  <SchemaToJson
+                                    models={["saransh"]}
+                                    // type={
+                                    //   data.requestBody.content?.("application/json")
+                                    //     .schema.type
+                                    // }
+
+                                    tryApi={tryApi}
+                                    requestBodyParam={
+                                      data.requestBody.content[
+                                        "application/json"
+                                      ].schema
+                                    }
+                                  />
+                                </pre>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               {tryApi && (
                 <div className="execute-wrapper">
