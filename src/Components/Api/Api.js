@@ -159,22 +159,26 @@ export default function Api({ data, url, type, models }) {
                                             <div className="highlight-code">
                                               <pre className="example ">
                                                 <div className="language-json">
-                                                  {/* {el.schema.$ref} */}
-                                                  <SchemaToJson
-                                                    models={models}
-                                                    schema={
-                                                      el.schema.$ref
-                                                        ? el.schema.$ref
-                                                        : el.schema.items.$ref
-                                                    }
-                                                    type={
-                                                      el.schema.$ref
-                                                        ? "object"
-                                                        : "array"
-                                                    }
-                                                    tryApi={tryApi}
-                                                    setJsonBody={setJsonBody}
-                                                  />
+                                                  {el.schema.$ref ||
+                                                    (el.schema.items && (
+                                                      <SchemaToJson
+                                                        models={models}
+                                                        schema={
+                                                          el.schema.$ref
+                                                            ? el.schema.$ref
+                                                            : el.schema.items
+                                                        }
+                                                        type={
+                                                          el.schema.$ref
+                                                            ? "object"
+                                                            : "array"
+                                                        }
+                                                        tryApi={tryApi}
+                                                        setJsonBody={
+                                                          setJsonBody
+                                                        }
+                                                      />
+                                                    ))}
                                                 </div>
                                               </pre>
                                             </div>
