@@ -32,6 +32,7 @@ export default function Swagger({ basePath, setBasePath }) {
                 tag={el}
                 paths={data.paths}
                 models={data.definitions}
+                basePath={basePath}
               />
             );
           })}

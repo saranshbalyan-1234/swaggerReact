@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import ApiUrl from "./Api/ApiUrl";
 
-export default function Tag({ tag, paths, models }) {
+export default function Tag({ tag, paths, models, basePath }) {
   const [data, setData] = useState({});
   const [api, showApi] = useState(false);
   useEffect(() => {
@@ -59,7 +59,13 @@ export default function Tag({ tag, paths, models }) {
         data &&
         Object.keys(data).map(function (key, index) {
           return (
-            <ApiUrl key={index} data={data[key]} url={key} models={models} />
+            <ApiUrl
+              key={index}
+              basePath={basePath}
+              data={data[key]}
+              url={key}
+              models={models}
+            />
           );
         })}
     </>

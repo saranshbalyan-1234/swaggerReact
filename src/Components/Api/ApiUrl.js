@@ -1,6 +1,6 @@
 import React from "react";
 import Api from "./Api";
-export default function ApiUrl({ url, data, models }) {
+export default function ApiUrl({ url, data, basePath, models }) {
   return (
     <>
       {Object.keys(data).map(function (key, index) {
@@ -11,6 +11,7 @@ export default function ApiUrl({ url, data, models }) {
             type={key}
             url={url}
             models={models}
+            basePath={basePath}
           />
         );
       })}

@@ -2,20 +2,49 @@ import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import SchemaToJson from "../Util/SchemaToJson";
 import axios from "axios";
-export default function Api({ data, url, type, models }) {
+export default function Api({ data, url, type, models, basePath }) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   const [jsonBody, setJsonBody] = useState();
+  const [newURL, setNewURL] = useState(...url);
+  let formData = new formData();
+  let queryString = "";
+  let searchParam = {};
   console.log("response", data.response);
   console.log("body", data);
+  console.log("url", url);
   useEffect(() => {
     console.log("jsonInApi", jsonBody);
   }, [jsonBody]);
+
+  const executeApi = () => {
+    axios.post(basePath + newURL, jsonBody);
+  };
+  const handleParameter = (e, el) => {
+    e.preventDefault();
+    if (el.in == "path") {
+      setNewURL(url.replace(`{${el.name}}`, e.target.value));
+    } else if (el.in == "query") {
+      let object = {};
+      let name = el.name;
+      let value = e.target.value;
+      object[name] = value;
+      searchParam = { ...searchParam, ...object };
+      const params = new URLSearchParams(searchParam);
+      queryString = params.toString();
+    }
+
+    if (el.in == "formdata") {
+      if (el.type == "file") {
+        formData.append(el.name, e.target.files[0]);
+      } else formData.append(el.name, e.target.value);
+    }
+  };
   return (
     <>
       <div
         style={{ marginLeft: "20px", marginRight: "20px" }}
-        class={`opblock opblock-${type}`}
+        className={`opblock opblock-${type}`}
       >
         <div className="opblock-summary opblock-summary-get">
           <button
@@ -84,16 +113,17 @@ export default function Api({ data, url, type, models }) {
                         </thead>
                         <tbody>
                           {data.parameters &&
-                            data.parameters.map((el) => {
+                            data.parameters.map((el, index) => {
+                              console.log("parameter", el);
                               return (
                                 <tr
-                                  key={el}
+                                  key={index}
                                   data-param-name="executionSuiteRunId"
                                   data-param-in="path"
                                 >
                                   <td className="parameters-col_name">
                                     <div
-                                      class={`parameter__name ${
+                                      className={`parameter__name ${
                                         el.required && `required`
                                       }`}
                                     >
@@ -153,7 +183,6 @@ export default function Api({ data, url, type, models }) {
                                           data-name="examplePanel"
                                           id="sOXORSQ="
                                           role="tabpanel"
-                                          tabindex="0"
                                         >
                                           <div>
                                             <div className="highlight-code">
@@ -187,11 +216,13 @@ export default function Api({ data, url, type, models }) {
                                       <input
                                         type="file"
                                         placeholder={el.name}
+                                        onChange={(e) => handleParameter(e, el)}
                                       />
                                     ) : (
                                       <input
                                         type="text"
                                         placeholder={el.name}
+                                        onChange={(e) => handleParameter(e, el)}
                                       />
                                     )}
                                   </td>
@@ -203,23 +234,25 @@ export default function Api({ data, url, type, models }) {
                     </div>
                   </div>
                 ) : (
-                  <div class="opblock-description-wrapper">No Parameters</div>
+                  <div className="opblock-description-wrapper">
+                    No Parameters
+                  </div>
                 )}
                 {data.requestBody && (
-                  <div class="opblock-section opblock-section-request-body">
-                    <div class="opblock-section-header">
+                  <div className="opblock-section opblock-section-request-body">
+                    <div className="opblock-section-header">
                       <h4
-                        class={`opblock-title parameter__name ${
+                        className={`opblock-title parameter__name ${
                           data.requestBody.required && "required"
                         }`}
                       >
                         Request body
                       </h4>
                       <label>
-                        <div class="content-type-wrapper body-param-content-type">
+                        <div className="content-type-wrapper body-param-content-type">
                           <select
                             aria-label="Request content type"
-                            class="content-type"
+                            className="content-type"
                           >
                             <option value="application/json">
                               application/json
@@ -228,19 +261,22 @@ export default function Api({ data, url, type, models }) {
                         </div>
                       </label>
                     </div>
-                    <div class="opblock-description-wrapper">
+                    <div className="opblock-description-wrapper">
                       <div>
-                        <div class="renderedMarkdown">
+                        <div className="renderedMarkdown">
                           <p>{data.requestBody.description}</p>
                         </div>
                         {data.requestBody.content && (
-                          <div class="model-example">
-                            <ul class="tab" role="tablist">
-                              <li class="tabitem active" role="presentation">
+                          <div className="model-example">
+                            <ul className="tab" role="tablist">
+                              <li
+                                className="tabitem active"
+                                role="presentation"
+                              >
                                 <button
                                   aria-controls="UQ3TnMk="
                                   aria-selected="true"
-                                  class="tablinks"
+                                  className="tablinks"
                                   data-name="example"
                                   id="WA0MVUk="
                                   role="tab"
@@ -248,11 +284,11 @@ export default function Api({ data, url, type, models }) {
                                   Example Value
                                 </button>
                               </li>
-                              <li class="tabitem" role="presentation">
+                              <li className="tabitem" role="presentation">
                                 <button
                                   aria-controls="Olyi0QQ="
                                   aria-selected="false"
-                                  class="tablinks"
+                                  className="tablinks"
                                   data-name="model"
                                   id="Q+mLZRs="
                                   role="tab"
@@ -267,11 +303,10 @@ export default function Api({ data, url, type, models }) {
                               data-name="examplePanel"
                               id="UQ3TnMk="
                               role="tabpanel"
-                              tabindex="0"
                             >
-                              <div class="highlight-code">
+                              <div className="highlight-code">
                                 <pre
-                                  class="microlight"
+                                  className="microlight"
                                   // style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(51, 51, 51); color: white;"
                                 >
                                   <SchemaToJson
@@ -301,7 +336,10 @@ export default function Api({ data, url, type, models }) {
               </div>
               {tryApi && (
                 <div className="execute-wrapper">
-                  <button className="btn execute opblock-control__btn">
+                  <button
+                    className="btn execute opblock-control__btn"
+                    onClick={executeApi}
+                  >
                     Execute
                   </button>
                 </div>
@@ -320,9 +358,9 @@ export default function Api({ data, url, type, models }) {
                         id="get_api_executionSuiteRun__executionSuiteRunId__testCases_responses_select"
                       >
                         {data.produces ? (
-                          data.produces.map((el) => {
+                          data.produces.map((el, index) => {
                             return (
-                              <option key={el} value={el}>
+                              <option key={index} value={el}>
                                 {el}
                               </option>
                             );
@@ -352,7 +390,7 @@ export default function Api({ data, url, type, models }) {
                     <tbody>
                       {Object.keys(data.responses).map(function (key, index) {
                         return (
-                          <tr className="response " key={key} data-code={key}>
+                          <tr className="response " key={index} data-code={key}>
                             <td className="response-col_status">{key}</td>
                             <td className="response-col_description">
                               <div className="response-col_description__inner">
@@ -415,7 +453,6 @@ export default function Api({ data, url, type, models }) {
                                     data-name="examplePanel"
                                     id="sOXORSQ="
                                     role="tabpanel"
-                                    tabindex="0"
                                   >
                                     <div>
                                       <div className="highlight-code">
