@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "antd";
+import { Button, message, Spin } from "antd";
 import SchemaToJson from "../Util/SchemaToJson";
 import axios from "axios";
 export default function Api({ data, url, type, models, basePath }) {
@@ -7,6 +7,7 @@ export default function Api({ data, url, type, models, basePath }) {
   const [tryApi, setTryApi] = useState(false);
   const [jsonBody, setJsonBody] = useState();
   const [newURL, setNewURL] = useState(...url);
+  const [loading, setLoading] = useState(false);
   let formData = new FormData();
   let queryString = "";
   let searchParam = {};
@@ -18,7 +19,17 @@ export default function Api({ data, url, type, models, basePath }) {
   }, [jsonBody]);
 
   const executeApi = () => {
-    axios.post(basePath + newURL, jsonBody);
+    setLoading(true);
+    axios
+      .post(basePath + newURL, jsonBody)
+      .then((res) => {
+        message.success("Success");
+        setLoading(false);
+      })
+      .catch(() => {
+        message.error("Failed");
+        setLoading(false);
+      });
   };
   const handleParameter = (e, el) => {
     e.preventDefault();
@@ -97,242 +108,252 @@ export default function Api({ data, url, type, models, basePath }) {
                     </Button>
                   )}
                 </div>
-                {data.parameters ? (
-                  <div className="parameters-container">
-                    <div className="table-container">
-                      <table className="parameters">
-                        <thead>
-                          <tr>
-                            <th className="col_header parameters-col_name">
-                              Name
-                            </th>
-                            <th className="col_header parameters-col_description">
-                              Description
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {data.parameters &&
-                            data.parameters.map((el, index) => {
-                              console.log("parameter", el);
-                              return (
-                                <tr
-                                  key={index}
-                                  data-param-name="executionSuiteRunId"
-                                  data-param-in="path"
-                                >
-                                  <td className="parameters-col_name">
-                                    <div
-                                      className={`parameter__name ${
-                                        el.required && `required`
-                                      }`}
-                                    >
-                                      {el.name}
-                                      {el.required && <span>&nbsp;*</span>}
-                                    </div>
-                                    <div className="parameter__type">
-                                      {el.type}
-                                      <span className="prop-format">
-                                        ({el.format})
-                                      </span>
-                                    </div>
-                                    <div className="parameter__deprecated"></div>
-                                    <div className="parameter__in">{el.in}</div>
-                                  </td>
-                                  <td className="parameters-col_description">
-                                    <div className="markdown">
-                                      <p>{el.description}</p>
-                                    </div>
-                                    {el.in == "body" ? (
-                                      <div className="model-example">
-                                        <ul className="tab" role="tablist">
-                                          <li
-                                            className="tabitem active"
-                                            role="presentation"
-                                          >
-                                            <button
-                                              aria-controls="sOXORSQ="
-                                              aria-selected="true"
-                                              className="tablinks"
-                                              data-name="example"
-                                              id="N+akoPQ="
-                                              role="tab"
+                <Spin spinning={loading}>
+                  {data.parameters ? (
+                    <div className="parameters-container">
+                      <div className="table-container">
+                        <table className="parameters">
+                          <thead>
+                            <tr>
+                              <th className="col_header parameters-col_name">
+                                Name
+                              </th>
+                              <th className="col_header parameters-col_description">
+                                Description
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {data.parameters &&
+                              data.parameters.map((el, index) => {
+                                console.log("parameter", el);
+                                return (
+                                  <tr
+                                    key={index}
+                                    data-param-name="executionSuiteRunId"
+                                    data-param-in="path"
+                                  >
+                                    <td className="parameters-col_name">
+                                      <div
+                                        className={`parameter__name ${
+                                          el.required && `required`
+                                        }`}
+                                      >
+                                        {el.name}
+                                        {el.required && <span>&nbsp;*</span>}
+                                      </div>
+                                      <div className="parameter__type">
+                                        {el.type}
+                                        <span className="prop-format">
+                                          ({el.format})
+                                        </span>
+                                      </div>
+                                      <div className="parameter__deprecated"></div>
+                                      <div className="parameter__in">
+                                        {el.in}
+                                      </div>
+                                    </td>
+                                    <td className="parameters-col_description">
+                                      <div className="markdown">
+                                        <p>{el.description}</p>
+                                      </div>
+                                      {el.in == "body" ? (
+                                        <div className="model-example">
+                                          <ul className="tab" role="tablist">
+                                            <li
+                                              className="tabitem active"
+                                              role="presentation"
                                             >
-                                              Example Value
-                                            </button>
-                                          </li>
-                                          <li
-                                            className="tabitem"
-                                            role="presentation"
-                                          >
-                                            <button
-                                              aria-controls="vhIQdko="
-                                              aria-selected="false"
-                                              className="tablinks"
-                                              data-name="model"
-                                              id="rE2hTbo="
-                                              role="tab"
+                                              <button
+                                                aria-controls="sOXORSQ="
+                                                aria-selected="true"
+                                                className="tablinks"
+                                                data-name="example"
+                                                id="N+akoPQ="
+                                                role="tab"
+                                              >
+                                                Example Value
+                                              </button>
+                                            </li>
+                                            <li
+                                              className="tabitem"
+                                              role="presentation"
                                             >
-                                              Model
-                                            </button>
-                                          </li>
-                                        </ul>
-                                        <div
-                                          aria-hidden="false"
-                                          aria-labelledby="N+akoPQ="
-                                          data-name="examplePanel"
-                                          id="sOXORSQ="
-                                          role="tabpanel"
-                                        >
-                                          <div>
-                                            <div className="highlight-code">
-                                              <pre className="example ">
-                                                <div className="language-json">
-                                                  {(el.schema.$ref ||
-                                                    el.schema.items) && (
-                                                    <SchemaToJson
-                                                      models={models}
-                                                      schema={
-                                                        el.schema.$ref
-                                                          ? el.schema.$ref
-                                                          : el.schema.items
-                                                      }
-                                                      type={
-                                                        el.schema.$ref
-                                                          ? "object"
-                                                          : "array"
-                                                      }
-                                                      tryApi={tryApi}
-                                                      setJsonBody={setJsonBody}
-                                                    />
-                                                  )}
-                                                </div>
-                                              </pre>
+                                              <button
+                                                aria-controls="vhIQdko="
+                                                aria-selected="false"
+                                                className="tablinks"
+                                                data-name="model"
+                                                id="rE2hTbo="
+                                                role="tab"
+                                              >
+                                                Model
+                                              </button>
+                                            </li>
+                                          </ul>
+                                          <div
+                                            aria-hidden="false"
+                                            aria-labelledby="N+akoPQ="
+                                            data-name="examplePanel"
+                                            id="sOXORSQ="
+                                            role="tabpanel"
+                                          >
+                                            <div>
+                                              <div className="highlight-code">
+                                                <pre className="example ">
+                                                  <div className="language-json">
+                                                    {(el.schema.$ref ||
+                                                      el.schema.items) && (
+                                                      <SchemaToJson
+                                                        models={models}
+                                                        schema={
+                                                          el.schema.$ref
+                                                            ? el.schema.$ref
+                                                            : el.schema.items
+                                                        }
+                                                        type={
+                                                          el.schema.$ref
+                                                            ? "object"
+                                                            : "array"
+                                                        }
+                                                        tryApi={tryApi}
+                                                        setJsonBody={
+                                                          setJsonBody
+                                                        }
+                                                      />
+                                                    )}
+                                                  </div>
+                                                </pre>
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    ) : el.type == "file" ? (
-                                      <input
-                                        type="file"
-                                        placeholder={el.name}
-                                        onChange={(e) => handleParameter(e, el)}
-                                      />
-                                    ) : (
-                                      <input
-                                        type="text"
-                                        placeholder={el.name}
-                                        onChange={(e) => handleParameter(e, el)}
-                                      />
-                                    )}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="opblock-description-wrapper">
-                    No Parameters
-                  </div>
-                )}
-                {data.requestBody && (
-                  <div className="opblock-section opblock-section-request-body">
-                    <div className="opblock-section-header">
-                      <h4
-                        className={`opblock-title parameter__name ${
-                          data.requestBody.required && "required"
-                        }`}
-                      >
-                        Request body
-                      </h4>
-                      <label>
-                        <div className="content-type-wrapper body-param-content-type">
-                          <select
-                            aria-label="Request content type"
-                            className="content-type"
-                          >
-                            <option value="application/json">
-                              application/json
-                            </option>
-                          </select>
-                        </div>
-                      </label>
-                    </div>
-                    <div className="opblock-description-wrapper">
-                      <div>
-                        <div className="renderedMarkdown">
-                          <p>{data.requestBody.description}</p>
-                        </div>
-                        {data.requestBody.content && (
-                          <div className="model-example">
-                            <ul className="tab" role="tablist">
-                              <li
-                                className="tabitem active"
-                                role="presentation"
-                              >
-                                <button
-                                  aria-controls="UQ3TnMk="
-                                  aria-selected="true"
-                                  className="tablinks"
-                                  data-name="example"
-                                  id="WA0MVUk="
-                                  role="tab"
-                                >
-                                  Example Value
-                                </button>
-                              </li>
-                              <li className="tabitem" role="presentation">
-                                <button
-                                  aria-controls="Olyi0QQ="
-                                  aria-selected="false"
-                                  className="tablinks"
-                                  data-name="model"
-                                  id="Q+mLZRs="
-                                  role="tab"
-                                >
-                                  Schema
-                                </button>
-                              </li>
-                            </ul>
-                            <div
-                              aria-hidden="false"
-                              aria-labelledby="WA0MVUk="
-                              data-name="examplePanel"
-                              id="UQ3TnMk="
-                              role="tabpanel"
-                            >
-                              <div className="highlight-code">
-                                <pre
-                                  className="microlight"
-                                  // style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(51, 51, 51); color: white;"
-                                >
-                                  <SchemaToJson
-                                    models={["saransh"]}
-                                    type={
-                                      data.requestBody.content[
-                                        "application/json"
-                                      ].schema.type
-                                    }
-                                    tryApi={tryApi}
-                                    requestBodyParam={
-                                      data.requestBody.content[
-                                        "application/json"
-                                      ].schema
-                                    }
-                                    setJsonBody={setJsonBody}
-                                  />
-                                </pre>
-                              </div>
-                            </div>
-                          </div>
-                        )}
+                                      ) : el.type == "file" ? (
+                                        <input
+                                          type="file"
+                                          placeholder={el.name}
+                                          onChange={(e) =>
+                                            handleParameter(e, el)
+                                          }
+                                        />
+                                      ) : (
+                                        <input
+                                          type="text"
+                                          placeholder={el.name}
+                                          onChange={(e) =>
+                                            handleParameter(e, el)
+                                          }
+                                        />
+                                      )}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <div className="opblock-description-wrapper">
+                      No Parameters
+                    </div>
+                  )}
+                  {data.requestBody && (
+                    <div className="opblock-section opblock-section-request-body">
+                      <div className="opblock-section-header">
+                        <h4
+                          className={`opblock-title parameter__name ${
+                            data.requestBody.required && "required"
+                          }`}
+                        >
+                          Request body
+                        </h4>
+                        <label>
+                          <div className="content-type-wrapper body-param-content-type">
+                            <select
+                              aria-label="Request content type"
+                              className="content-type"
+                            >
+                              <option value="application/json">
+                                application/json
+                              </option>
+                            </select>
+                          </div>
+                        </label>
+                      </div>
+                      <div className="opblock-description-wrapper">
+                        <div>
+                          <div className="renderedMarkdown">
+                            <p>{data.requestBody.description}</p>
+                          </div>
+                          {data.requestBody.content && (
+                            <div className="model-example">
+                              <ul className="tab" role="tablist">
+                                <li
+                                  className="tabitem active"
+                                  role="presentation"
+                                >
+                                  <button
+                                    aria-controls="UQ3TnMk="
+                                    aria-selected="true"
+                                    className="tablinks"
+                                    data-name="example"
+                                    id="WA0MVUk="
+                                    role="tab"
+                                  >
+                                    Example Value
+                                  </button>
+                                </li>
+                                <li className="tabitem" role="presentation">
+                                  <button
+                                    aria-controls="Olyi0QQ="
+                                    aria-selected="false"
+                                    className="tablinks"
+                                    data-name="model"
+                                    id="Q+mLZRs="
+                                    role="tab"
+                                  >
+                                    Schema
+                                  </button>
+                                </li>
+                              </ul>
+                              <div
+                                aria-hidden="false"
+                                aria-labelledby="WA0MVUk="
+                                data-name="examplePanel"
+                                id="UQ3TnMk="
+                                role="tabpanel"
+                              >
+                                <div className="highlight-code">
+                                  <pre
+                                    className="microlight"
+                                    // style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(51, 51, 51); color: white;"
+                                  >
+                                    <SchemaToJson
+                                      models={["saransh"]}
+                                      type={
+                                        data.requestBody.content[
+                                          "application/json"
+                                        ].schema.type
+                                      }
+                                      tryApi={tryApi}
+                                      requestBodyParam={
+                                        data.requestBody.content[
+                                          "application/json"
+                                        ].schema
+                                      }
+                                      setJsonBody={setJsonBody}
+                                    />
+                                  </pre>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </Spin>
               </div>
               {tryApi && (
                 <div className="execute-wrapper">

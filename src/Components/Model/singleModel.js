@@ -37,6 +37,7 @@ export default function SingleModel({ data, allData, inside = false }) {
             schema={"#/definitions/" + data}
             models={allData}
             theme={"rjc-default"}
+            editable={false}
           />
         )}
       </span>
