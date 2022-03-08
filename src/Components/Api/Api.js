@@ -7,7 +7,7 @@ export default function Api({ data, url, type, models, basePath }) {
   const [tryApi, setTryApi] = useState(false);
   const [jsonBody, setJsonBody] = useState();
   const [newURL, setNewURL] = useState(...url);
-  let formData = new formData();
+  let formData = new FormData();
   let queryString = "";
   let searchParam = {};
   console.log("response", data.response);
