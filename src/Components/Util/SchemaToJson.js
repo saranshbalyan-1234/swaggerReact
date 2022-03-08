@@ -36,6 +36,10 @@ export default function SchemaToJson({
               : model.properties[key].type
             : model.properties[key].enum
             ? model.properties[key].enum
+            : model.properties[key].type == "integer"
+            ? 0
+            : model.properties[key].type == "boolean"
+            ? true
             : model.properties[key].type);
       });
 
@@ -81,7 +85,10 @@ export default function SchemaToJson({
     } else if (models[temp].properties[key1].enum) {
       tempData[key1] = models[temp].properties[key1].enum;
     } else {
-      tempData[key1] = models[temp].properties[key1].type;
+      if (models[temp].properties[key1].type == "integer") tempData[key1] = 0;
+      else if (models[temp].properties[key1].type == "boolean")
+        tempData[key1] = true;
+      else tempData[key1] = models[temp].properties[key1].type;
     }
   };
   const formatJson = () => {
