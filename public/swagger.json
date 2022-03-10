@@ -1,852 +1,673 @@
 {
-  "openapi": "3.0.0",
+  "swagger": "2.0",
   "info": {
-    "title": "Blood Bank API",
-    "version": "v1"
-  },
-  "servers": [
-    {
-      "url": "/api",
-      "description": "Demo API Server"
-    }
-  ],
-  "paths": {
-    "/login": {
-      "post": {
-        "tags": ["User"],
-        "summary": "Login",
-        "description": "Returns User Credentials",
-        "requestBody": {
-          "description": "Provide auth credentials",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "admin@admin.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "admin"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "loginData": {
-                      "type": "object",
-                      "example": "id: 1,name:saransh, email:admin@admin.com, age:22, address:e-15, city:delhi,state: delhi, gender:male, phone:123, blood_type:A+, token: token"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": []
-      },
-      "get": {
-        "tags": ["User"],
-        "summary": "Login",
-        "description": "Returns User Credentials",
-        "requestBody": {
-          "description": "Provide auth credentials",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "admin@admin.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "admin"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "loginData": {
-                      "type": "object",
-                      "example": "id: 1,name:saransh, email:admin@admin.com, age:22, address:e-15, city:delhi,state: delhi, gender:male, phone:123, blood_type:A+, token: token"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": []
-      }
-    },
-
-    "/findDonors": {
-      "post": {
-        "tags": ["Donor"],
-        "summary": "Get Donors",
-        "description": "Get all donors, get donors by State, City, Blood Group",
-        "requestBody": {
-          "description": "Provide only parameters to search, except enter 'all'",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "state": {
-                    "type": "string",
-                    "example": "All"
-                  },
-                  "city": {
-                    "type": "string",
-                    "example": "All"
-                  },
-                  "blood_type": {
-                    "type": "string",
-                    "example": "All"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "donorsData": {
-                      "type": "object",
-                      "example": "[{id: 1,name:admin, email:admin@admin.com, age:22, address:e-15, city:delhi,state: delhi, gender:male, phone:123, blood_type:A+}]"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-
-    "/getAllBloodType": {
-      "post": {
-        "tags": ["Donor"],
-        "summary": "Get All Blood Type",
-        "description": "Get all blood Type",
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "bloodTypeData": {
-                      "type": "object",
-                      "example": "[A+,A-,A1+,A1-,A1B+,A1B-,A2+,A2-,A2B+,A2B-,AB+,AB-,B+,B-,Bombay Blood Group,INRA,O+,O-]"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/getAllCountries": {
-      "post": {
-        "tags": ["Geographical"],
-        "summary": "Get all countries",
-        "description": "Returns All Countries Data",
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "example": "[{id: 1,name:India, phonecode:+91}]"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/getAllStatesByCountry": {
-      "post": {
-        "tags": ["Geographical"],
-        "summary": "Get all States By Country",
-        "description": "Returns all States Data",
-        "requestBody": {
-          "description": "Please Provide country_id",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "country_id": {
-                    "type": "integer",
-                    "example": 101
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "example": "[{id: 1,name:Delhi, country_id:101}]"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/getAllCityByStates": {
-      "post": {
-        "tags": ["Geographical"],
-        "summary": "Get all City By States",
-        "description": "Returns all States Data",
-        "requestBody": {
-          "description": "Please Provide state",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "state_id": {
-                    "type": "integer",
-                    "example": 4021
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "example": "[{id: 1,name:West Delhi, state_id,:4021, country_id:101}]"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/getAllNotification": {
-      "post": {
-        "tags": ["Notification"],
-        "summary": "Get all notifications",
-        "description": "Returns All Notification",
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "notificationData": {
-                      "type": "object",
-                      "example": "[{id:1, title:notification, description:description, read_exists:true}]"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "total_notification_count": {
-                      "type": "integer",
-                      "example": 2
-                    },
-                    "unread_notification_count": {
-                      "type": "integer",
-                      "example": 1
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/readNotification": {
-      "post": {
-        "tags": ["Notification"],
-        "summary": "Read Notification",
-        "description": "Read notification by notificatio_id",
-        "requestBody": {
-          "description": "Please provide notification_id",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "notification_id": {
-                    "type": "integer",
-                    "example": 1
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "notificationData": {
-                      "type": "object",
-                      "example": "{id: 1,user_id:1, notification_id:1}"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/addNotification": {
-      "post": {
-        "tags": ["Notification"],
-        "summary": "Add New Notification",
-        "description": "Add new Notification to table!",
-        "requestBody": {
-          "description": "Please provide title and description only",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "example": "title"
-                  },
-                  "description": {
-                    "type": "string",
-                    "example": "description"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "notificationData": {
-                      "type": "object",
-                      "example": "{id: 1,title:title, description:description}"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/addFeed": {
-      "post": {
-        "tags": ["Feed"],
-        "summary": "Add New Feed",
-        "description": "Add new Feed to table!",
-        "requestBody": {
-          "description": "Please provide title, description and img. img is not necessary",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "example": "title"
-                  },
-                  "description": {
-                    "type": "string",
-                    "example": "description"
-                  },
-                  "img": {
-                    "type": "string",
-                    "example": "base64string"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "feedData": {
-                      "type": "object",
-                      "example": "{id: 1,title:title, description:description,img:base64string}"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/getFeedById": {
-      "post": {
-        "tags": ["Feed"],
-        "summary": "Get Feed By Id",
-        "description": "Get Single Feed Data",
-        "requestBody": {
-          "description": "Please provide id only",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "id": {
-                    "type": "integer",
-                    "example": 1
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "feedData": {
-                      "type": "object",
-                      "example": "{id: 1,title:title, description:description,img:base64string}"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/getAllFeed": {
-      "post": {
-        "tags": ["Feed"],
-        "summary": "Get all feeds",
-        "description": "Returns All Feed",
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "feedData": {
-                      "type": "object",
-                      "example": "[{id:1, title:title, description:description, img:base64string}]"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/requestDonation": {
-      "post": {
-        "tags": ["RequestDonation"],
-        "summary": "Request donation here",
-        "description": "Returns request details",
-        "requestBody": {
-          "description": "Provide provide all parameters",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "admin.com"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "admin@admin.com"
-                  },
-                  "age": {
-                    "type": "integer",
-                    "example": 18
-                  },
-                  "gender": {
-                    "type": "string",
-                    "example": "male"
-                  },
-                  "address": {
-                    "type": "string",
-                    "example": "address"
-                  },
-                  "state": {
-                    "type": "string",
-                    "example": "Delhi"
-                  },
-                  "city": {
-                    "type": "string",
-                    "example": "delhi"
-                  },
-                  "phone": {
-                    "type": "integer",
-                    "example": 987654321
-                  },
-                  "hospital_name": {
-                    "type": "string",
-                    "example": "hospital name"
-                  },
-                  "hospital_address": {
-                    "type": "string",
-                    "example": "hospital address"
-                  },
-                  "hospital_state": {
-                    "type": "string",
-                    "example": "Delhi"
-                  },
-                  "hospital_city": {
-                    "type": "string",
-                    "example": "delhi"
-                  },
-                  "hospital_phone": {
-                    "type": "integer",
-                    "example": 987654321
-                  },
-                  "blood_type": {
-                    "type": "string",
-                    "example": "A+"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "requestDonorsData": {
-                      "type": "object",
-                      "example": "id: 1,name:admin, email:admin@admin.com, age:22, address:e-15, city:delhi,state: delhi, gender:male, phone:123, blood_type:A+, hospital_name:name, hospital_address:address, hospital_city:city, hospital_address:address, hospital_phone:809"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/getAllRequest": {
-      "post": {
-        "tags": ["RequestDonation"],
-        "summary": "Get all Request",
-        "description": "Returns All Request By User",
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "requestData": {
-                      "type": "object",
-                      "example": "[{id: 1,name:admin, email:admin@admin.com, age:22, address:e-15, city:delhi,state: delhi, gender:male, phone:123, blood_type:A+, hospital_name:name, hospital_address:address, hospital_city:city, hospital_address:address, hospital_phone:809}]"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
-    },
-    "/findRequest": {
-      "post": {
-        "tags": ["RequestDonation"],
-        "summary": "Find All User Request",
-        "description": "Get all Request, get donors by State, City, Blood Group",
-        "requestBody": {
-          "description": "Provide only parameters to search, except enter 'all'",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "state": {
-                    "type": "string",
-                    "example": "All"
-                  },
-                  "city": {
-                    "type": "string",
-                    "example": "All"
-                  },
-                  "hospital_state": {
-                    "type": "string",
-                    "example": "All"
-                  },
-                  "hospital_city": {
-                    "type": "string",
-                    "example": "All"
-                  },
-                  "blood_type": {
-                    "type": "string",
-                    "example": "All"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "requestData": {
-                      "type": "object",
-                      "example": "[{id: 1,name:admin, email:admin@admin.com, age:22, address:e-15, city:delhi,state: delhi, gender:male, phone:123, blood_type:A+, hospital_name:name, hospital_address:address, hospital_city:city, hospital_address:address, hospital_phone:809}]"
-                    },
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "sanctum": []
-          }
-        ]
-      }
+    "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "version": "1.0.6",
+    "title": "Swagger Petstore",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": { "email": "apiteam@swagger.io" },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
+  "host": "petstore.swagger.io",
+  "basePath": "/v2",
   "tags": [
     {
-      "name": "User",
-      "description": "All user related API"
+      "name": "pet",
+      "description": "Everything about your Pets",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
     },
+    { "name": "store", "description": "Access to Petstore orders" },
     {
-      "name": "Donor",
-      "description": "All Donor related API"
-    },
-    {
-      "name": "RequestDonation",
-      "description": "All request related API"
-    },
-    {
-      "name": "Geographical",
-      "description": "Geographical related API"
-    },
-    {
-      "name": "Notification",
-      "description": "Notification related API"
-    },
-    {
-      "name": "Feed",
-      "description": "Feeds related API"
+      "name": "user",
+      "description": "Operations about user",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
     }
   ],
-  "components": {
-    "securitySchemes": {
-      "sanctum": {
-        "type": "apiKey",
-        "description": "Enter token in format (Bearer <token>)",
-        "name": "Authorization",
-        "in": "header"
+  "schemes": ["https", "http"],
+  "paths": {
+    "/pet/{petId}/uploadImage": {
+      "post": {
+        "tags": ["pet"],
+        "summary": "uploads an image",
+        "description": "",
+        "operationId": "uploadFile",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet to update",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "additionalMetadata",
+            "in": "formData",
+            "description": "Additional data to pass to server",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/ApiResponse" }
+          }
+        },
+        "security": [{ "petstore_auth": ["write:pets", "read:pets"] }]
+      }
+    },
+    "/pet": {
+      "post": {
+        "tags": ["pet"],
+        "summary": "Add a new pet to the store",
+        "description": "",
+        "operationId": "addPet",
+        "consumes": ["application/json", "application/xml"],
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Pet" }
+          }
+        ],
+        "responses": { "405": { "description": "Invalid input" } },
+        "security": [{ "petstore_auth": ["write:pets", "read:pets"] }]
+      },
+      "put": {
+        "tags": ["pet"],
+        "summary": "Update an existing pet",
+        "description": "",
+        "operationId": "updatePet",
+        "consumes": ["application/json", "application/xml"],
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Pet" }
+          }
+        ],
+        "responses": {
+          "400": { "description": "Invalid ID supplied" },
+          "404": { "description": "Pet not found" },
+          "405": { "description": "Validation exception" }
+        },
+        "security": [{ "petstore_auth": ["write:pets", "read:pets"] }]
+      }
+    },
+    "/pet/findByStatus": {
+      "get": {
+        "tags": ["pet"],
+        "summary": "Finds Pets by status",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "findPetsByStatus",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["available", "pending", "sold"],
+              "default": "available"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Pet" }
+            }
+          },
+          "400": { "description": "Invalid status value" }
+        },
+        "security": [{ "petstore_auth": ["write:pets", "read:pets"] }]
+      }
+    },
+    "/pet/findByTags": {
+      "get": {
+        "tags": ["pet"],
+        "summary": "Finds Pets by tags",
+        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+        "operationId": "findPetsByTags",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "Tags to filter by",
+            "required": true,
+            "type": "array",
+            "items": { "type": "string" },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Pet" }
+            }
+          },
+          "400": { "description": "Invalid tag value" }
+        },
+        "security": [{ "petstore_auth": ["write:pets", "read:pets"] }],
+        "deprecated": true
+      }
+    },
+    "/pet/{petId}": {
+      "get": {
+        "tags": ["pet"],
+        "summary": "Find pet by ID",
+        "description": "Returns a single pet",
+        "operationId": "getPetById",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/Pet" }
+          },
+          "400": { "description": "Invalid ID supplied" },
+          "404": { "description": "Pet not found" }
+        },
+        "security": [{ "api_key": [] }]
+      },
+      "post": {
+        "tags": ["pet"],
+        "summary": "Updates a pet in the store with form data",
+        "description": "",
+        "operationId": "updatePetWithForm",
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "description": "Updated name of the pet",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "formData",
+            "description": "Updated status of the pet",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": { "405": { "description": "Invalid input" } },
+        "security": [{ "petstore_auth": ["write:pets", "read:pets"] }]
+      },
+      "delete": {
+        "tags": ["pet"],
+        "summary": "Deletes a pet",
+        "description": "",
+        "operationId": "deletePet",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "Pet id to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": { "description": "Invalid ID supplied" },
+          "404": { "description": "Pet not found" }
+        },
+        "security": [{ "petstore_auth": ["write:pets", "read:pets"] }]
+      }
+    },
+    "/store/order": {
+      "post": {
+        "tags": ["store"],
+        "summary": "Place an order for a pet",
+        "description": "",
+        "operationId": "placeOrder",
+        "consumes": ["application/json"],
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "order placed for purchasing the pet",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Order" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/Order" }
+          },
+          "400": { "description": "Invalid Order" }
+        }
+      }
+    },
+    "/store/order/{orderId}": {
+      "get": {
+        "tags": ["store"],
+        "summary": "Find purchase order by ID",
+        "description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+        "operationId": "getOrderById",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID of pet that needs to be fetched",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/Order" }
+          },
+          "400": { "description": "Invalid ID supplied" },
+          "404": { "description": "Order not found" }
+        }
+      },
+      "delete": {
+        "tags": ["store"],
+        "summary": "Delete purchase order by ID",
+        "description": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
+        "operationId": "deleteOrder",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID of the order that needs to be deleted",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": { "description": "Invalid ID supplied" },
+          "404": { "description": "Order not found" }
+        }
+      }
+    },
+    "/store/inventory": {
+      "get": {
+        "tags": ["store"],
+        "summary": "Returns pet inventories by status",
+        "description": "Returns a map of status codes to quantities",
+        "operationId": "getInventory",
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "additionalProperties": { "type": "integer", "format": "int32" }
+            }
+          }
+        },
+        "security": [{ "api_key": [] }]
+      }
+    },
+    "/user/createWithArray": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Creates list of users with given input array",
+        "description": "",
+        "operationId": "createUsersWithArrayInput",
+        "consumes": ["application/json"],
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of user object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/User" }
+            }
+          }
+        ],
+        "responses": { "default": { "description": "successful operation" } }
+      }
+    },
+    "/user/createWithList": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Creates list of users with given input array",
+        "description": "",
+        "operationId": "createUsersWithListInput",
+        "consumes": ["application/json"],
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of user object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/User" }
+            }
+          }
+        ],
+        "responses": { "default": { "description": "successful operation" } }
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get user by user name",
+        "description": "",
+        "operationId": "getUserByName",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/User" }
+          },
+          "400": { "description": "Invalid username supplied" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "put": {
+        "tags": ["user"],
+        "summary": "Updated user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "name that need to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated user object",
+            "required": true,
+            "schema": { "$ref": "#/definitions/User" }
+          }
+        ],
+        "responses": {
+          "400": { "description": "Invalid user supplied" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "delete": {
+        "tags": ["user"],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "deleteUser",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": { "description": "Invalid username supplied" },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/user/login": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "The user name for login",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {
+              "X-Expires-After": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date in UTC when token expires"
+              },
+              "X-Rate-Limit": {
+                "type": "integer",
+                "format": "int32",
+                "description": "calls per hour allowed by the user"
+              }
+            },
+            "schema": { "type": "string" }
+          },
+          "400": { "description": "Invalid username/password supplied" }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Logs out current logged in user session",
+        "description": "",
+        "operationId": "logoutUser",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [],
+        "responses": { "default": { "description": "successful operation" } }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Create user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": { "$ref": "#/definitions/User" }
+          }
+        ],
+        "responses": { "default": { "description": "successful operation" } }
       }
     }
   },
-  "security": {
-    "sanctum": [],
-    "0": []
+  "securityDefinitions": {
+    "api_key": { "type": "apiKey", "name": "api_key", "in": "header" },
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "https://petstore.swagger.io/oauth/authorize",
+      "flow": "implicit",
+      "scopes": {
+        "read:pets": "read your pets",
+        "write:pets": "modify pets in your account"
+      }
+    }
+  },
+  "definitions": {
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "integer", "format": "int32" },
+        "type": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "int64" },
+        "name": { "type": "string" }
+      },
+      "xml": { "name": "Category" }
+    },
+    "Pet": {
+      "type": "object",
+      "required": ["name", "photoUrls"],
+      "properties": {
+        "id": { "type": "integer", "format": "int64" },
+        "category": { "$ref": "#/definitions/Category" },
+        "name": { "type": "string", "example": "doggie" },
+        "photoUrls": {
+          "type": "array",
+          "xml": { "wrapped": true },
+          "items": { "type": "string", "xml": { "name": "photoUrl" } }
+        },
+        "tags": {
+          "type": "array",
+          "xml": { "wrapped": true },
+          "items": { "xml": { "name": "tag" }, "$ref": "#/definitions/Tag" }
+        },
+        "status": {
+          "type": "string",
+          "description": "pet status in the store",
+          "enum": ["available", "pending", "sold"]
+        }
+      },
+      "xml": { "name": "Pet" }
+    },
+    "Tag": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "int64" },
+        "name": { "type": "string" }
+      },
+      "xml": { "name": "Tag" }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "int64" },
+        "petId": { "type": "integer", "format": "int64" },
+        "quantity": { "type": "integer", "format": "int32" },
+        "shipDate": { "type": "string", "format": "date-time" },
+        "status": {
+          "type": "string",
+          "description": "Order Status",
+          "enum": ["placed", "approved", "delivered"]
+        },
+        "complete": { "type": "boolean" }
+      },
+      "xml": { "name": "Order" }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "int64" },
+        "username": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "phone": { "type": "string" },
+        "userStatus": {
+          "type": "integer",
+          "format": "int32",
+          "description": "User Status"
+        }
+      },
+      "xml": { "name": "User" }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
   }
 }

@@ -3,7 +3,7 @@ import { Button, message, Spin, Input, Upload } from "antd";
 import SchemaToJson from "../Util/SchemaToJson";
 import axios from "axios";
 import { UploadOutlined } from "@ant-design/icons";
-import "../Style/style.css";
+import "../../Style/style.css";
 export default function Api({ data, url, type, models, basePath }) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
@@ -18,7 +18,7 @@ export default function Api({ data, url, type, models, basePath }) {
   console.log("body", data);
   console.log("url", url);
   useEffect(() => {
-    console.log("jsonInApi", jsonBody);
+    console.log("jsonInApi", jsonBody, type);
   }, [jsonBody]);
 
   const executeApi = () => {
@@ -27,8 +27,7 @@ export default function Api({ data, url, type, models, basePath }) {
     console.log("formData", jsonBody);
     setLoading(true);
     if (jsonBody) {
-      axios
-        .post("basePath" + tempURL, jsonBody)
+      axios[type]("basePath" + tempURL, jsonBody)
         .then((res) => {
           message.success("Success");
           setLoading(false);
@@ -38,8 +37,7 @@ export default function Api({ data, url, type, models, basePath }) {
           setLoading(false);
         });
     } else if (formdata) {
-      axios
-        .post("basePath" + tempURL, formData)
+      axios[type]("basePath" + tempURL, formData)
         .then((res) => {
           message.success("Success");
           setLoading(false);
@@ -49,8 +47,7 @@ export default function Api({ data, url, type, models, basePath }) {
           setLoading(false);
         });
     } else {
-      axios
-        .post("basePath" + tempURL)
+      axios[type]("basePath" + tempURL)
         .then((res) => {
           message.success("Success");
           setLoading(false);
