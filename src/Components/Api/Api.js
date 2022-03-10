@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Button, message, Spin } from "antd";
+import { Button, message, Spin, Input, Upload } from "antd";
 import SchemaToJson from "../Util/SchemaToJson";
 import axios from "axios";
+import { UploadOutlined } from "@ant-design/icons";
+import "../Style/style.css";
 export default function Api({ data, url, type, models, basePath }) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   const [jsonBody, setJsonBody] = useState();
   const [newURL, setNewURL] = useState(...url);
   const [loading, setLoading] = useState(false);
+  const [formdata, setFormdata] = useState(false);
   let formData = new FormData();
   let queryString = "";
   let searchParam = {};
@@ -19,17 +22,50 @@ export default function Api({ data, url, type, models, basePath }) {
   }, [jsonBody]);
 
   const executeApi = () => {
+    let tempURL = newURL;
+    if (queryString != "") tempURL = newURL + "?" + queryString;
+    console.log("formData", jsonBody);
     setLoading(true);
-    axios
-      .post(basePath + newURL, jsonBody)
-      .then((res) => {
-        message.success("Success");
-        setLoading(false);
-      })
-      .catch(() => {
-        message.error("Failed");
-        setLoading(false);
-      });
+    if (jsonBody) {
+      axios
+        .post("basePath" + tempURL, jsonBody)
+        .then((res) => {
+          message.success("Success");
+          setLoading(false);
+        })
+        .catch(() => {
+          message.error("Failed");
+          setLoading(false);
+        });
+    } else if (formdata) {
+      axios
+        .post("basePath" + tempURL, formData)
+        .then((res) => {
+          message.success("Success");
+          setLoading(false);
+        })
+        .catch(() => {
+          message.error("Failed");
+          setLoading(false);
+        });
+    } else {
+      axios
+        .post("basePath" + tempURL)
+        .then((res) => {
+          message.success("Success");
+          setLoading(false);
+        })
+        .catch(() => {
+          message.error("Failed");
+          setLoading(false);
+        });
+    }
+  };
+  const handleFile = async ({ file }, el) => {
+    setFormdata(true);
+    console.log("formData", el);
+    formData.append(el.name, file);
+    console.log("formData");
   };
   const handleParameter = (e, el) => {
     e.preventDefault();
@@ -43,10 +79,12 @@ export default function Api({ data, url, type, models, basePath }) {
       searchParam = { ...searchParam, ...object };
       const params = new URLSearchParams(searchParam);
       queryString = params.toString();
+      console.log("queryString", queryString);
     }
 
-    if (el.in == "formdata") {
+    if (el.in == "formData") {
       if (el.type == "file") {
+        console.log("file", e.target.files[0]);
         formData.append(el.name, e.target.files[0]);
       } else formData.append(el.name, e.target.value);
     }
@@ -60,7 +98,7 @@ export default function Api({ data, url, type, models, basePath }) {
         <div className="opblock-summary opblock-summary-get">
           <button
             className="opblock-summary-control"
-            style={{ outline: "none" }}
+            style={{ outline: "none", overflow: "scroll" }}
             onClick={() => showBody(!body)}
           >
             <span className="opblock-summary-method">{type}</span>
@@ -99,13 +137,12 @@ export default function Api({ data, url, type, models, basePath }) {
                       </button>
                     </div>
                   ) : (
-                    <Button
-                      type="danger"
-                      ghost
+                    <button
+                      class="btn try-out__btn cancel"
                       onClick={() => setTryApi(false)}
                     >
                       Cancel
-                    </Button>
+                    </button>
                   )}
                 </div>
                 <Spin spinning={loading}>
@@ -126,7 +163,6 @@ export default function Api({ data, url, type, models, basePath }) {
                           <tbody>
                             {data.parameters &&
                               data.parameters.map((el, index) => {
-                                console.log("parameter", el);
                                 return (
                                   <tr
                                     key={index}
@@ -229,13 +265,26 @@ export default function Api({ data, url, type, models, basePath }) {
                                           </div>
                                         </div>
                                       ) : el.type == "file" ? (
-                                        <input
-                                          type="file"
-                                          placeholder={el.name}
-                                          onChange={(e) =>
-                                            handleParameter(e, el)
-                                          }
-                                        />
+                                        <>
+                                          {/* <input
+                                            type="file"
+                                            style={{ maxWidth: "100px" }}
+                                            placeholder={el.name}
+                                            onChange={(e) =>
+                                              handleParameter(e, el)
+                                            }
+                                          /> */}
+                                          <Upload
+                                            beforeUpload={() => false}
+                                            onChange={(e) => handleFile(e, el)}
+                                            style={{ maxWidth: "300px" }}
+                                            // fileList={this.state.fileList}x
+                                          >
+                                            <Button icon={<UploadOutlined />}>
+                                              Upload
+                                            </Button>
+                                          </Upload>
+                                        </>
                                       ) : (
                                         <input
                                           type="text"
@@ -243,6 +292,7 @@ export default function Api({ data, url, type, models, basePath }) {
                                           onChange={(e) =>
                                             handleParameter(e, el)
                                           }
+                                          style={{}}
                                         />
                                       )}
                                     </td>
