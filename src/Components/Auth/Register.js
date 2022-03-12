@@ -1,17 +1,38 @@
-import {
-  Form,
-  Input,
-  Select,
-  Checkbox,
-  Button,
-  Card,
-  Spin,
-  message,
-} from "antd";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Form, Input, Checkbox, Button, Card, Spin, message } from "antd";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
-const { Option } = Select;
 const Register = () => {
+  const navigate = useNavigate();
+  const [details, setDetails] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const handleDetails = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    let object = {};
+    object[name] = value;
+
+    setDetails({ ...details, ...object });
+  };
+  const onRegister = () => {
+    axios
+      .post("http://localhost:8000/api/register", details)
+      .then((res) => {
+        message.success("Registered Successfully");
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(
+          Object.keys(err.response.data.errors).map((key) => {
+            return message.error(err.response.data.errors[key]);
+          })
+        );
+      });
+  };
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -53,12 +74,29 @@ const Register = () => {
           <Form
             {...formItemLayout}
             name="register"
-            //   onFinish={onFinish}
+            onFinish={onRegister}
             initialValues={{
               residence: ["zhejiang", "hangzhou", "xihu"],
               prefix: "86",
             }}
           >
+            <Form.Item
+              name="name"
+              label="Name"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Name!",
+                },
+              ]}
+            >
+              <Input
+                name="name"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
+              />
+            </Form.Item>
             <Form.Item
               name="email"
               label="E-mail"
@@ -73,9 +111,13 @@ const Register = () => {
                 },
               ]}
             >
-              <Input />
+              <Input
+                name="email"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
+              />
             </Form.Item>
-
             <Form.Item
               name="password"
               label="Password"
@@ -87,9 +129,13 @@ const Register = () => {
               ]}
               hasFeedback
             >
-              <Input.Password />
+              <Input.Password
+                name="password"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
+              />
             </Form.Item>
-
             <Form.Item
               name="confirm"
               label="Confirm Password"
@@ -116,7 +162,6 @@ const Register = () => {
             >
               <Input.Password />
             </Form.Item>
-
             <Form.Item
               name="agreement"
               valuePropName="checked"

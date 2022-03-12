@@ -1,12 +1,39 @@
+import React, { useState } from "react";
 import { Form, Input, Button, Checkbox, Card, Spin, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const navigate = useNavigate();
+  const [details, setDetails] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const onLogin = (values) => {
+    axios
+      .post("http://localhost:8000/api/login", details)
+      .then((res) => {
+        message.success("Logged In Successfully");
+        navigate("/swagger");
+      })
+      .catch((err) => {
+        console.log(
+          Object.keys(err.response.data.errors).map((key) => {
+            return message.error(err.response.data.errors[key]);
+          })
+        );
+      });
   };
+  const handleDetails = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    let object = {};
+    object[name] = value;
 
+    setDetails({ ...details, ...object });
+  };
   return (
     <div
       style={{
@@ -32,7 +59,7 @@ const Login = () => {
             name="normal_login"
             className="login-form"
             initialValues={{ remember: true }}
-            onFinish={onFinish}
+            onFinish={onLogin}
           >
             <Form.Item
               name="email"
@@ -42,6 +69,10 @@ const Login = () => {
                 type="email"
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Email"
+                name="email"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
               />
             </Form.Item>
             <Form.Item
@@ -54,6 +85,10 @@ const Login = () => {
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                name="password"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
               />
             </Form.Item>
             <Form.Item>

@@ -99,7 +99,9 @@ export default function SchemaToJson({
     const temp = Object.keys(models).find(function (key, index) {
       return key.toLowerCase() == schema.toLowerCase().substring(14);
     });
+    console.log("check", temp);
     temp &&
+      models[temp].properties &&
       Object.keys(models[temp].properties).map(function (key1) {
         return formatJson2(key1, temp);
       });

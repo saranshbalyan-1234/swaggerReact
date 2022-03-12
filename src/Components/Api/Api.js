@@ -255,7 +255,13 @@ export default function Api({ data, url, type, models, basePath }) {
                                                         }
                                                       />
                                                     ) : (
-                                                      <textarea>
+                                                      <textarea
+                                                        onChange={(e) => {
+                                                          setJsonBody(
+                                                            e.target.value
+                                                          );
+                                                        }}
+                                                      >
                                                         {el.description}
                                                       </textarea>
                                                     )}
