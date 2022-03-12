@@ -11,7 +11,7 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const onLogin = (values) => {
+  const onLogin = () => {
     axios
       .post("http://localhost:8000/api/login", details)
       .then((res) => {
