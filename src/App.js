@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import Swagger from "./Components";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 export default function App() {
   const [basePath, setBasePath] = useState(
-    "http://184.68.122.34:9085/v2/api-docs"
+    "https://apigatewaysvc-hwr7nalbaq-el.a.run.app/gateway/onboarding/v2/api-docs"
   );
-  return <Swagger basePath={basePath} setBasePath={setBasePath} />;
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  return (
+    <Spin indicator={antIcon} spinning={false}>
+      <Swagger basePath={basePath} setBasePath={setBasePath} />
+    </Spin>
+  );
 }

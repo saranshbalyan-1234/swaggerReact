@@ -40,6 +40,8 @@ export default function SchemaToJson({
             ? 0
             : model.properties[key].type == "boolean"
             ? true
+            : model.properties[key].example
+            ? model.properties[key].example
             : model.properties[key].type);
       });
 
@@ -88,6 +90,8 @@ export default function SchemaToJson({
       if (models[temp].properties[key1].type == "integer") tempData[key1] = 0;
       else if (models[temp].properties[key1].type == "boolean")
         tempData[key1] = true;
+      else if (models[temp].properties[key1].example)
+        tempData[key1] = models[temp].properties[key1].example;
       else tempData[key1] = models[temp].properties[key1].type;
     }
   };

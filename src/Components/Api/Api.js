@@ -235,8 +235,8 @@ export default function Api({ data, url, type, models, basePath }) {
                                               <div className="highlight-code">
                                                 <pre className="example ">
                                                   <div className="language-json">
-                                                    {(el.schema.$ref ||
-                                                      el.schema.items) && (
+                                                    {el.schema.$ref ||
+                                                    el.schema.items ? (
                                                       <SchemaToJson
                                                         models={models}
                                                         schema={
@@ -254,6 +254,10 @@ export default function Api({ data, url, type, models, basePath }) {
                                                           setJsonBody
                                                         }
                                                       />
+                                                    ) : (
+                                                      <textarea>
+                                                        {el.description}
+                                                      </textarea>
                                                     )}
                                                   </div>
                                                 </pre>
