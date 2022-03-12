@@ -22,7 +22,7 @@ export default function Swagger({ basePath, setBasePath }) {
         style={{ marginBottom: "100px" }}
       >
         <Header basePath={basePath} setBasePath={setBasePath} />
-        <Info basePath={basePath} />
+        <Info basePath={basePath} datas={data} />
         <Settings servers={data.servers} schemes={data.schemes} />
         {data.tags &&
           data.tags.map((el) => {

@@ -1,9 +1,32 @@
 import React, { useState } from "react";
-import { Button, Modal } from "antd";
-export default function Info({ basePath }) {
+import { Button, Modal, Spin, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+export default function Info({ basePath, datas }) {
   const [editMode, setEditMode] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [loadingImport, setLoadingImport] = useState(false);
   const handleSave = () => {};
+  const importData = async () => {
+    setLoadingImport(true);
+    const { data } = await axios.post(
+      "http://localhost:8000/api/createProject"
+    );
+
+    await axios
+      .post("http://localhost:8000/api/import", {
+        ...datas,
+        project_id: data.id,
+      })
+      .then((res) => {
+        console.log(res.data);
+        message.success("success");
+      })
+      .catch((err) => {
+        message.error("error");
+      });
+    setLoadingImport(false);
+  };
   return (
     <>
       <div
@@ -29,32 +52,44 @@ export default function Info({ basePath }) {
                     </span>
                   </h2>
                   <div style={{ display: "flex" }}>
-                    {editMode && (
-                      <Button
-                        type="danger"
-                        ghost
-                        style={{ marginRight: "10px" }}
-                        onClick={() => setVisible(true)}
-                      >
-                        Settings
-                      </Button>
-                    )}
-                    {editMode ? (
-                      <Button
-                        type="primary"
-                        ghost
-                        onClick={() => setEditMode(false)}
-                      >
-                        Save
-                      </Button>
+                    {localStorage.getItem("token") ? (
+                      editMode ? (
+                        <>
+                          <Button
+                            type="danger"
+                            ghost
+                            onClick={() => setVisible(true)}
+                          >
+                            Settings
+                          </Button>
+                          <Button
+                            type="primary"
+                            ghost
+                            onClick={() => setEditMode(false)}
+                            style={{ marginLeft: "10px" }}
+                          >
+                            Save
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          type="primary"
+                          ghost
+                          onClick={() => setEditMode(true)}
+                        >
+                          Edit
+                        </Button>
+                      )
                     ) : (
-                      <Button
-                        type="primary"
-                        ghost
-                        onClick={() => setEditMode(true)}
-                      >
-                        Edit
-                      </Button>
+                      <Link to="/login">
+                        <Button
+                          type="primary"
+                          ghost
+                          onClick={() => setEditMode(true)}
+                        >
+                          Login
+                        </Button>
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -72,60 +107,19 @@ export default function Info({ basePath }) {
           </div>
         </section>
       </div>
+
       <Modal
-        title="Available authorizations"
+        title="Settings"
         centered
         visible={visible}
         onCancel={() => setVisible(false)}
-        footer={[
-          <div
-            className="swagger-ui"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <button
-              style={{ display: "flex", alignItems: "center" }}
-              className="btn authorize unlocked"
-              onClick={{ handleSave }}
-            >
-              <span>Authorize</span>
-
-              <i className="fa fa-unlock"></i>
-            </button>
-            <button
-              className="btn modal-btn auth btn-done button"
-              style={{ marginLeft: "10px" }}
-              onClick={() => setVisible(false)}
-            >
-              Close
-            </button>
-          </div>,
-        ]}
+        footer={false}
       >
-        <div className="swagger-ui">
-          <div>
-            <div className="wrapper">
-              <h3 style={{ fontWeight: "bold" }}>JWT (apiKey)</h3>
-
-              <div>
-                <p>
-                  Name:<code>Authorization</code>
-                </p>
-
-                <p>
-                  In:<code>header</code>
-                </p>
-
-                <label style={{ marginRight: "10px" }}>Value:</label>
-
-                <input type="text" />
-              </div>
-            </div>
-          </div>
-        </div>
+        <Spin spinning={loadingImport}>
+          <Button type="primary" onClick={importData}>
+            Import
+          </Button>
+        </Spin>
       </Modal>
     </>
   );

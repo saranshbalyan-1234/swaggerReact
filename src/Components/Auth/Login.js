@@ -16,6 +16,7 @@ const Login = () => {
       .post("http://localhost:8000/api/login", details)
       .then((res) => {
         message.success("Logged In Successfully");
+        localStorage.setItem("token", res.data.token);
         navigate("/swagger");
       })
       .catch((err) => {
