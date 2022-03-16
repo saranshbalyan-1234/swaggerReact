@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Checkbox, Button, Card, Spin, message } from "antd";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-
+import { api_base_url } from "../../constants";
 const Register = () => {
   const navigate = useNavigate();
   const [details, setDetails] = useState({
@@ -20,7 +20,7 @@ const Register = () => {
   };
   const onRegister = () => {
     axios
-      .post("http://localhost:8000/api/register", details)
+      .post(api_base_url + "/register", details)
       .then((res) => {
         message.success("Registered Successfully");
         navigate("/login");

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal, Spin, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { api_base_url } from "../../constants";
 export default function Info({ basePath, datas }) {
   const [editMode, setEditMode] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -9,12 +10,10 @@ export default function Info({ basePath, datas }) {
   const handleSave = () => {};
   const importData = async () => {
     setLoadingImport(true);
-    const { data } = await axios.post(
-      "http://localhost:8000/api/createProject"
-    );
+    const { data } = await axios.post("api_base_url/createProject");
 
     await axios
-      .post("http://localhost:8000/api/import", {
+      .post(api_base_url + "/import", {
         ...datas,
         project_id: data.id,
       })

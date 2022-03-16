@@ -90,7 +90,9 @@ export default function Api({ data, url, type, models, basePath }) {
     <>
       <div
         style={{ marginLeft: "20px", marginRight: "20px" }}
-        className={`opblock opblock-${type}`}
+        className={`opblock opblock  opblock-${type} ${
+          type.deprecated && "opblock-deprecated"
+        }`}
       >
         <div className="opblock-summary opblock-summary-get">
           <button
@@ -256,6 +258,7 @@ export default function Api({ data, url, type, models, basePath }) {
                                                       />
                                                     ) : (
                                                       <textarea
+                                                        disabled={!tryApi}
                                                         onChange={(e) => {
                                                           setJsonBody(
                                                             e.target.value
@@ -287,7 +290,10 @@ export default function Api({ data, url, type, models, basePath }) {
                                             style={{ maxWidth: "300px" }}
                                             // fileList={this.state.fileList}x
                                           >
-                                            <Button icon={<UploadOutlined />}>
+                                            <Button
+                                              disabled={!tryApi}
+                                              icon={<UploadOutlined />}
+                                            >
                                               Upload
                                             </Button>
                                           </Upload>
@@ -299,6 +305,7 @@ export default function Api({ data, url, type, models, basePath }) {
                                           onChange={(e) =>
                                             handleParameter(e, el)
                                           }
+                                          disabled={!tryApi}
                                           style={{}}
                                         />
                                       )}

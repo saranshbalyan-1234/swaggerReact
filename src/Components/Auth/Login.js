@@ -3,7 +3,7 @@ import { Form, Input, Button, Checkbox, Card, Spin, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { api_base_url } from "../../constants";
 const Login = () => {
   const navigate = useNavigate();
   const [details, setDetails] = useState({
@@ -13,7 +13,7 @@ const Login = () => {
   });
   const onLogin = () => {
     axios
-      .post("http://localhost:8000/api/login", details)
+      .post(api_base_url + "/login", details)
       .then((res) => {
         message.success("Logged In Successfully");
         localStorage.setItem("token", res.data.token);
