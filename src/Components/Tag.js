@@ -6,9 +6,12 @@ export default function Tag({ tag, paths, models, basePath }) {
   const [data, setData] = useState({});
   const [api, showApi] = useState(false);
   useEffect(() => {
+    console.log("paths", paths);
     for (const [key, value] of Object.entries(paths)) {
+      console.log("paths", key, value);
       data[key] = {};
       for (const [key1, value1] of Object.entries(value)) {
+        console.log("paths", key1, value1);
         value1.tags.forEach((el) => {
           if (el == tag.name) {
             data[key][key1] = value1;

@@ -9,9 +9,42 @@ import Model from "./Model/Model";
 export default function Swagger({ basePath, setBasePath }) {
   const [data, setData] = useState([]);
   useEffect(() => {
-    axios.get(basePath).then((res) => {
-      setData(res.data);
+    // axios.get(basePath).then((res) => {
+    //   setData(res.data);
+    // });
+    let pathTemp = {};
+    let modelTemp = {};
+    axios.get("http://127.0.0.1:8000/api/get").then((res) => {
+      console.log("test", res.data);
+
+      res.data.path.forEach((el) => {
+        let object = {};
+        object[el.type] = {
+          ...el,
+          consumes: JSON.parse(el.consumes),
+          parameters: JSON.parse(el.parameters),
+          produces: JSON.parse(el.produces),
+          responses: JSON.parse(el.responses),
+          security: JSON.parse(el.security),
+          tags: JSON.parse(el.tags),
+        };
+        pathTemp[el.path] = { ...pathTemp[el.path], ...object };
+      });
+      console.log("pathTemp", pathTemp);
+      res.data.models.forEach((el) => {
+        let object = {};
+
+        object[el.name] = { ...el, properties: JSON.parse(el.properties) };
+        modelTemp = { ...modelTemp, ...object };
+      });
+      console.log("modelTemp", modelTemp);
+      setData({
+        ...res.data,
+        paths: pathTemp,
+        definitions: modelTemp,
+      });
     });
+
     console.log("definitions", data.definitions);
   }, [basePath]);
 
