@@ -91,7 +91,7 @@ export default function Api({ data, url, type, models, basePath }) {
       <div
         style={{ marginLeft: "20px", marginRight: "20px" }}
         className={`opblock opblock  opblock-${type} ${
-          type.deprecated && "opblock-deprecated"
+          data.deprecated ? "opblock-deprecated" : ""
         }`}
       >
         <div className="opblock-summary opblock-summary-get">

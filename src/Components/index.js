@@ -11,11 +11,14 @@ import { api_base_url } from "../constants";
 export default function Swagger({ basePath, setBasePath }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // axios.get(basePath).then((res) => {
-    //   setData(res.data);
-    // });
-    getFromDataBase();
+    basePath != "" &&
+      axios.get(basePath).then((res) => {
+        setData(res.data);
+        setLoading(false);
+      });
+    // : getFromDataBase();
   }, [basePath]);
   const getFromDataBase = async () => {
     let pathTemp = {};
@@ -67,8 +70,9 @@ export default function Swagger({ basePath, setBasePath }) {
         style={{ marginBottom: "100px" }}
       >
         <Header basePath={basePath} setBasePath={setBasePath} />
+
+        <Info basePath={basePath} datas={data} />
         <Spin spinning={loading}>
-          <Info basePath={basePath} datas={data} />
           <Settings servers={data.servers} schemes={data.schemes} />
 
           {data.tags &&

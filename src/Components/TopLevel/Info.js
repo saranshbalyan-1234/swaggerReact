@@ -10,7 +10,7 @@ export default function Info({ basePath, datas }) {
   const handleSave = () => {};
   const importData = async () => {
     setLoadingImport(true);
-    const { data } = await axios.post("api_base_url/createProject");
+    const { data } = await axios.post(api_base_url + "/createProject");
 
     await axios
       .post(api_base_url + "/import", {

@@ -21,7 +21,13 @@ export default function Header({ basePath, setBasePath }) {
               }}
             />
           </a>
-          <form className="download-url-wrapper">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setBasePath(tempBasePath);
+            }}
+            className="download-url-wrapper"
+          >
             <input
               type="text"
               className="download-url-input"
