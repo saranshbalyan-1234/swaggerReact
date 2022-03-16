@@ -21,12 +21,13 @@ export default function Swagger({ basePath, setBasePath }) {
         let object = {};
         object[el.type] = {
           ...el,
-          consumes: JSON.parse(el.consumes),
-          parameters: JSON.parse(el.parameters),
-          produces: JSON.parse(el.produces),
-          responses: JSON.parse(el.responses),
-          security: JSON.parse(el.security),
-          tags: JSON.parse(el.tags),
+          consumes: JSON.parse(el.consumes ? el.consumes : null),
+          parameters: JSON.parse(el.parameters ? el.parameters : null),
+          produces: JSON.parse(el.produces ? el.produces : null),
+          responses: JSON.parse(el.responses ? el.responses : null),
+          security: JSON.parse(el.security ? el.security : null),
+          tags: JSON.parse(el.tags ? el.tags : null),
+          requestBody: JSON.parse(el.requestBody ? el.requestBody : null),
         };
         pathTemp[el.path] = { ...pathTemp[el.path], ...object };
       });
