@@ -3,8 +3,7 @@ import { Button, Modal, Spin, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api_base_url } from "../../constants";
-export default function Info({ basePath, datas }) {
-  const [editMode, setEditMode] = useState(false);
+export default function Info({ basePath, datas, setEditMode, editMode }) {
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
   const handleSave = () => {};

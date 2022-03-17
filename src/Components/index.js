@@ -11,14 +11,15 @@ import { api_base_url } from "../constants";
 export default function Swagger({ basePath, setBasePath }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    basePath != "" &&
-      axios.get(basePath).then((res) => {
-        setData(res.data);
-        setLoading(false);
-      });
-    // : getFromDataBase();
+    basePath != ""
+      ? axios.get(basePath).then((res) => {
+          setData(res.data);
+          setLoading(false);
+        })
+      : getFromDataBase();
   }, [basePath]);
   const getFromDataBase = async () => {
     let pathTemp = {};
@@ -71,7 +72,12 @@ export default function Swagger({ basePath, setBasePath }) {
       >
         <Header basePath={basePath} setBasePath={setBasePath} />
 
-        <Info basePath={basePath} datas={data} />
+        <Info
+          basePath={basePath}
+          datas={data}
+          setEditMode={setEditMode}
+          editMode={editMode}
+        />
         <Spin spinning={loading}>
           <Settings servers={data.servers} schemes={data.schemes} />
 
@@ -87,7 +93,7 @@ export default function Swagger({ basePath, setBasePath }) {
                 />
               );
             })}
-          <Model data={data.definitions} />
+          <Model data={data.definitions} editMode={editMode} />
           <div style={{ height: "10px" }}></div>
         </Spin>
       </section>
