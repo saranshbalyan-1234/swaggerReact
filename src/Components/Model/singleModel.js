@@ -1,9 +1,31 @@
 import React, { useState } from "react";
 import SchemaToJson from "../Util/SchemaToJson";
-
-export default function SingleModel({ data, allData, inside = false }) {
+import { message } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import axios from "axios";
+import { api_base_url } from "../../constants";
+export default function SingleModel({
+  data,
+  allData,
+  inside = false,
+  editMode,
+  refresh,
+  setRefresh,
+}) {
   const [show, setShow] = useState(false);
-  console.log("schema", data);
+
+  console.log("schema", allData[data]);
+  const deleteModel = (id) => {
+    axios
+      .post(api_base_url + "/deleteModel", { id: id })
+      .then((res) => {
+        message.success("Model Deleted Successfully");
+        setRefresh(!refresh);
+      })
+      .catch((err) => {
+        message.error("something Went Wrong");
+      });
+  };
   return (
     <div
       id={`model-${data}`}
@@ -20,16 +42,32 @@ export default function SingleModel({ data, allData, inside = false }) {
           style={{ outline: "none" }}
           aria-expanded="false"
           className="model-box-control"
-          onClick={() => {
-            setShow(!show);
-          }}
         >
-          <span className="pointer">
+          <span
+            className="pointer"
+            onClick={() => {
+              setShow(!show);
+            }}
+          >
             <span className="model-box">
               <span className="model model-title">{data}</span>
             </span>
           </span>
-          <span className="model-toggle collapsed"></span>
+          <span
+            onClick={() => {
+              setShow(!show);
+            }}
+            className="model-toggle collapsed"
+          ></span>
+
+          {editMode && (
+            <DeleteOutlined
+              onClick={() => {
+                deleteModel(allData[data].id);
+              }}
+            />
+          )}
+
           <span> </span>
         </button>
         {show && (

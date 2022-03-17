@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import SingleModel from "./singleModel";
-import { Button, Modal, Spin, Input, Form, Select, AutoComplete } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+
 import AddModel from "./AddModel";
-export default function Model({ data, editMode }) {
+export default function Model({ data, editMode, refresh, setRefresh }) {
   const [showModel, setShowModel] = useState(false);
   const [editModal, setEditModal] = useState(false);
 
@@ -45,13 +45,21 @@ export default function Model({ data, editMode }) {
                     allData={data}
                     inside={false}
                     key={index}
+                    editMode={editMode}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
                   />
                 );
               })}
           </div>
         )}
       </section>
-      <AddModel editModal={editModal} setEditModal={setEditModal} />
+      <AddModel
+        editModal={editModal}
+        setEditModal={setEditModal}
+        refresh={refresh}
+        setRefresh={setRefresh}
+      />
     </div>
   );
 }

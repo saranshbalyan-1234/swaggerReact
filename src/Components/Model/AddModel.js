@@ -12,7 +12,12 @@ import {
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { api_base_url } from "../../constants";
-export default function AddModel({ editModal, setEditModal }) {
+export default function AddModel({
+  editModal,
+  setEditModal,
+  refresh,
+  setRefresh,
+}) {
   const [propertiesData, setPropertiesData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allModel, setAllModel] = useState([]);
@@ -48,19 +53,20 @@ export default function AddModel({ editModal, setEditModal }) {
       project_id: 4,
       properties: JSON.stringify(temp),
     };
-    // axios
-    //   .post(api_base_url + "/importSingleModel", data)
-    //   .then((res) => {
-    //     setLoading(false);
-    //     message.success("Model Added Successfully");
-    //     setEditModal(false);
-    //   })
-    //   .catch((err) => {
-    //     setLoading(false);
-    //     message.error("Model Not Added");
-    //     setEditModal(false);
-    //   });
-    setLoading(false);
+    axios
+      .post(api_base_url + "/importSingleModel", data)
+      .then((res) => {
+        setLoading(false);
+        message.success("Model Added Successfully");
+        setEditModal(false);
+        setRefresh(!refresh);
+      })
+      .catch((err) => {
+        setLoading(false);
+        message.error("Model Not Added");
+        setEditModal(false);
+      });
+    // setLoading(false);
     console.log("property", data);
   };
   useEffect(() => {

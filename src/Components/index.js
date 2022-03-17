@@ -12,15 +12,16 @@ export default function Swagger({ basePath, setBasePath }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
-
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
+    setLoading(true);
     basePath != ""
       ? axios.get(basePath).then((res) => {
           setData(res.data);
           setLoading(false);
         })
       : getFromDataBase();
-  }, [basePath]);
+  }, [basePath, refresh]);
   const getFromDataBase = async () => {
     let pathTemp = {};
     let modelTemp = {};
@@ -93,7 +94,13 @@ export default function Swagger({ basePath, setBasePath }) {
                 />
               );
             })}
-          <Model data={data.definitions} editMode={editMode} />
+          <Model
+            data={data.definitions}
+            editMode={editMode}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            editMode={editMode}
+          />
           <div style={{ height: "10px" }}></div>
         </Spin>
       </section>

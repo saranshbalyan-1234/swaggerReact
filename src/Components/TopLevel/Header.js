@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-
+import { AutoComplete } from "antd";
 export default function Header({ basePath, setBasePath }) {
-  const [tempBasePath, setTempBasePath] = useState("");
+  console.log("saransh", basePath);
+  const [tempBasePath, setTempBasePath] = useState("basePath");
   return (
     <div className="topbar">
       <div className="wrapper">
@@ -28,7 +29,7 @@ export default function Header({ basePath, setBasePath }) {
             }}
             className="download-url-wrapper"
           >
-            <input
+            {/* <input
               type="text"
               className="download-url-input"
               defaultValue={basePath}
@@ -37,6 +38,21 @@ export default function Header({ basePath, setBasePath }) {
                 setTempBasePath(e.target.value);
               }}
               style={{ minWidth: "250px" }}
+            /> */}
+            <AutoComplete
+              defaultValue={basePath}
+              defaultActiveFirstOption={true}
+              allowClear
+              onChange={(e) => {
+                setTempBasePath(e.target.value);
+              }}
+              style={{ marginLeft: "10px", minWidth: "250px", width: "100%" }}
+              options={[{ value: "int32" }, { value: "int64" }]}
+              placeholder="Select URL or Enter New"
+              filterOption={(inputValue, option) =>
+                option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                -1
+              }
             />
             <button
               onClick={() => {
