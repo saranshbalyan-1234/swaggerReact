@@ -1,31 +1,25 @@
 import React, { useState } from "react";
 import SingleModel from "./singleModel";
-import { Button, Modal, Spin, Input, Form, Select } from "antd";
+import { Button, Modal, Spin, Input, Form, Select, AutoComplete } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 export default function Model({ data, editMode }) {
   const [showModel, setShowModel] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [propertiesCount, setPropertiesCount] = useState([1]);
-  const [propertiesData, setPropertiesData] = useState({});
-  let oldKey = "";
+
+  const [propertiesData, setPropertiesData] = useState([]);
   const { Option } = Select;
-  const addProperty = () => {
-    let temp = { ...propertiesData };
-    temp.name = {};
+  const deleteRow = (index) => {
+    console.log("index", index);
+    let temp = [...propertiesData];
+    temp.splice(index, 1);
     setPropertiesData(temp);
   };
-  const renameKey = async (e) => {
-    let newKey = e.target.value;
-    console.log("property", oldKey, newKey);
-    propertiesData[newKey] = propertiesData[oldKey];
-    delete propertiesData[oldKey];
-    console.log("property", propertiesData);
-  };
-  const removeProperty = (key) => {
-    console.log("key", key);
-    let temp = { ...propertiesData };
-    delete temp[key];
+  const handleData = (value, index, type) => {
+    let temp = [...propertiesData];
+    temp[index][type] = value;
     setPropertiesData(temp);
+  };
+  const handleSubmit = () => {
     console.log("property", propertiesData);
   };
   return (
@@ -120,94 +114,136 @@ export default function Model({ data, editMode }) {
                 layout="vertical"
                 style={{ overflow: "scroll", height: "30vh" }}
               >
-                <Form.List
-                  name="names"
-                  rules={[
-                    {
-                      validator: async (_, names) => {
-                        if (!names || names.length < 1) {
-                          return Promise.reject(
-                            new Error("At least 1 Property")
-                          );
-                        }
-                      },
-                    },
-                  ]}
-                >
-                  {(fields, { add, remove }, { errors }) => (
-                    <>
-                      {fields.map((field, index) => (
-                        <div
-                          style={{
-                            display: "flex",
-                          }}
+                <Form name="names">
+                  {propertiesData.map((data, index) => (
+                    <div
+                      style={{
+                        display: "flex",
+                      }}
+                    >
+                      <Form.Item required={true} key={index}>
+                        <Form.Item
+                          validateTrigger={["onChange", "onBlur"]}
+                          rules={[
+                            {
+                              required: true,
+                              whitespace: true,
+                              message:
+                                "Please input all all field or delete this",
+                            },
+                          ]}
+                          noStyle
                         >
-                          <Form.Item required={true} key={field.key}>
-                            <Form.Item
-                              {...field}
-                              validateTrigger={["onChange", "onBlur"]}
-                              rules={[
-                                {
-                                  required: true,
-                                  whitespace: true,
-                                  message:
-                                    "Please input all all field or delete this",
-                                },
-                              ]}
-                              noStyle
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                }}
-                              >
-                                <Input
-                                  style={{ width: "170px" }}
-                                  placeholder="Property name"
-                                />
-                                <Select
-                                  defaultValue={"object"}
-                                  placeholder="Select an option"
-                                  style={{ width: "170px", marginLeft: "10px" }}
-                                  // onChange={onGenderChange}
-                                >
-                                  <Option value="object">Object</Option>
-                                  <Option value="array">Array</Option>
-                                </Select>
-                              </div>
-                            </Form.Item>
-                          </Form.Item>
-
-                          {fields.length > 1 && (
-                            <MinusCircleOutlined
-                              style={{
-                                marginTop: "8px",
-                                marginLeft: "10px",
-                              }}
-                              className="dynamic-delete-button"
-                              onClick={() => remove(field.name)}
+                          <div
+                            style={{
+                              display: "flex",
+                            }}
+                          >
+                            <Input
+                              style={{ width: "170px" }}
+                              placeholder="Property name"
+                              onChange={(e) =>
+                                handleData(e.target.value, index, "name")
+                              }
+                              value={propertiesData[index].name}
                             />
-                          )}
-                        </div>
-                      ))}
-                      <Form.Item>
-                        <Button
-                          type="dashed"
-                          onClick={() => add()}
-                          style={{ width: "30%" }}
-                          icon={<PlusOutlined />}
-                        >
-                          Add Property
-                        </Button>
-
-                        <Form.ErrorList errors={errors} />
+                            <Select
+                              defaultValue={"object"}
+                              style={{ width: "170px", marginLeft: "10px" }}
+                              value={propertiesData[index].type}
+                              onChange={(e) => handleData(e, index, "type")}
+                            >
+                              <Option value="object">Object</Option>
+                              <Option value="array">Array</Option>
+                              <Option value="string">String</Option>
+                              <Option value="boolean">Boolean</Option>
+                              <Option value="integer">Integer</Option>
+                              <Option value="number">Number</Option>
+                            </Select>
+                            <AutoComplete
+                              style={{ width: 200 }}
+                              options={
+                                propertiesData[index].type == "integer"
+                                  ? [{ value: "int32" }, { value: "int64" }]
+                                  : propertiesData[index].type == "number"
+                                  ? [{ value: "float" }, { value: "double" }]
+                                  : propertiesData[index].type == "string" && [
+                                      {
+                                        value: "date",
+                                      },
+                                      {
+                                        value: "date-time",
+                                      },
+                                      {
+                                        value: "email",
+                                      },
+                                      {
+                                        value: "password",
+                                      },
+                                      {
+                                        value: "byte",
+                                      },
+                                      {
+                                        value: "binary",
+                                      },
+                                      {
+                                        value: "hostname",
+                                      },
+                                      {
+                                        value: "ipv4",
+                                      },
+                                      {
+                                        value: "ipv6",
+                                      },
+                                      {
+                                        value: "uri",
+                                      },
+                                      {
+                                        value: "uuid",
+                                      },
+                                    ]
+                              }
+                              placeholder="Select format"
+                              filterOption={(inputValue, option) =>
+                                option.value
+                                  .toUpperCase()
+                                  .indexOf(inputValue.toUpperCase()) !== -1
+                              }
+                            />
+                          </div>
+                        </Form.Item>
                       </Form.Item>
-                    </>
-                  )}
-                </Form.List>
+
+                      <MinusCircleOutlined
+                        style={{
+                          marginTop: "8px",
+                          marginLeft: "10px",
+                        }}
+                        className="dynamic-delete-button"
+                        onClick={() => deleteRow(index)}
+                      />
+                    </div>
+                  ))}
+
+                  <Button
+                    type="dashed"
+                    onClick={() =>
+                      setPropertiesData([
+                        ...propertiesData,
+                        { name: "", type: "object" },
+                      ])
+                    }
+                    style={{ width: "30%" }}
+                    icon={<PlusOutlined />}
+                  >
+                    Add Property
+                  </Button>
+
+                  {/* <Form.ErrorList errors={errors} /> */}
+                </Form>
               </Form>
               <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="button" onClick={handleSubmit}>
                   Submit
                 </Button>
               </Form.Item>
