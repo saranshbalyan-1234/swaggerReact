@@ -79,9 +79,9 @@ export default function Swagger({ basePath, setBasePath }) {
           editMode={editMode}
         />
         <Spin spinning={loading}>
-          {/* <Settings servers={data.servers} schemes={data.schemes} /> */}
+          <Settings servers={data.servers} schemes={data.schemes} />
 
-          {/* {data.tags &&
+          {data.tags &&
             data.tags.map((el) => {
               return (
                 <Tag
@@ -92,7 +92,7 @@ export default function Swagger({ basePath, setBasePath }) {
                   basePath={basePath}
                 />
               );
-            })} */}
+            })}
           <Model data={data.definitions} editMode={editMode} />
           <div style={{ height: "10px" }}></div>
         </Spin>

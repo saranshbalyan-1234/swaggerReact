@@ -23,20 +23,23 @@ export default function SchemaToJson({
           model.properties[key].$ref != null
             ? formatSchema(models[model.properties[key].$ref.substring(14)])
             : model.properties[key].type == "array"
-            ? model.properties[key].items && model.properties[key].items.$ref
-              ? [
-                  formatSchema(
-                    models[model.properties[key].items.$ref.substring(14)]
-                  ),
-                ]
-              : [model.properties[key].items.type]
+            ? model.properties[key].items
+              ? model.properties[key].items.$ref
+                ? [
+                    formatSchema(
+                      models[model.properties[key].items.$ref.substring(14)]
+                    ),
+                  ]
+                : [model.properties[key].items.type]
+              : [model.properties[key].type]
             : model.properties[key].type == "object"
             ? model.properties[key].example
               ? model.properties[key].example
               : model.properties[key].type
             : model.properties[key].enum
             ? model.properties[key].enum
-            : model.properties[key].type == "integer"
+            : model.properties[key].type == "integer" ||
+              model.properties[key].type == "number"
             ? 0
             : model.properties[key].type == "boolean"
             ? true
@@ -68,17 +71,16 @@ export default function SchemaToJson({
         models[key1.charAt(0).toUpperCase() + key1.substring(1)]
       );
     } else if (models[temp].properties[key1].type == "array") {
-      if (
-        models[temp].properties[key1].items &&
-        models[temp].properties[key1].items.$ref
-      ) {
-        console.log("schema", models[temp].properties[key1].items.$ref);
-        tempData[key1] = [
-          formatSchema(
-            models[models[temp].properties[key1].items.$ref.substring(14)]
-          ),
-        ];
-      } else tempData[key1] = [models[temp].properties[key1].items.type];
+      console.log("schema", "condition");
+      if (models[temp].properties[key1].items) {
+        if (models[temp].properties[key1].items.$ref) {
+          tempData[key1] = [
+            formatSchema(
+              models[models[temp].properties[key1].items.$ref.substring(14)]
+            ),
+          ];
+        } else tempData[key1] = [models[temp].properties[key1].items.type];
+      } else tempData[key1] = [models[temp].properties[key1].type];
     } else if (models[temp].properties[key1].type == "object") {
       if (models[temp].properties[key1].example)
         tempData[key1] = models[temp].properties[key1].example;
@@ -87,7 +89,11 @@ export default function SchemaToJson({
     } else if (models[temp].properties[key1].enum) {
       tempData[key1] = models[temp].properties[key1].enum;
     } else {
-      if (models[temp].properties[key1].type == "integer") tempData[key1] = 0;
+      if (
+        models[temp].properties[key1].type == "integer" ||
+        models[temp].properties[key1].type == "number"
+      )
+        tempData[key1] = 0;
       else if (models[temp].properties[key1].type == "boolean")
         tempData[key1] = true;
       else if (models[temp].properties[key1].example)
