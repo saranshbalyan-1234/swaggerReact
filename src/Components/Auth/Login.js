@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api_base_url } from "../../constants";
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [details, setDetails] = useState({
     name: "",
@@ -12,12 +13,14 @@ const Login = () => {
     password: "",
   });
   const onLogin = () => {
+    setLoading(true);
     axios
       .post(api_base_url + "/login", details)
       .then((res) => {
         message.success("Logged In Successfully");
         localStorage.setItem("token", res.data.token);
         navigate("/swagger");
+        setLoading(false);
       })
       .catch((err) => {
         console.log(
@@ -25,6 +28,7 @@ const Login = () => {
             return message.error(err.response.data.errors[key]);
           })
         );
+        setLoading(false);
       });
   };
   const handleDetails = (e) => {
@@ -45,7 +49,7 @@ const Login = () => {
         height: "100vh",
       }}
     >
-      <Spin spinning={false}>
+      <Spin spinning={loading}>
         <Card
           title="Login"
           bordered

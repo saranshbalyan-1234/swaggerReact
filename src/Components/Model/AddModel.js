@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -15,6 +15,7 @@ import { api_base_url } from "../../constants";
 export default function AddModel({ editModal, setEditModal }) {
   const [propertiesData, setPropertiesData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [allModel, setAllModel] = useState([]);
   const [name, setName] = useState("");
   const { Option } = Select;
   const deleteRow = (index) => {
@@ -25,7 +26,11 @@ export default function AddModel({ editModal, setEditModal }) {
   };
   const handleData = (value, index, type) => {
     let temp = [...propertiesData];
-    temp[index][type] = value;
+    if (type != "ref") {
+      temp[index][type] = value;
+    } else {
+      temp[index][type] = "#/definitions/" + value;
+    }
     setPropertiesData(temp);
   };
   const handleSubmit = () => {
@@ -34,7 +39,7 @@ export default function AddModel({ editModal, setEditModal }) {
     propertiesData.forEach((el) => {
       let temp1 = { ...el };
       delete temp1.name;
-
+      temp1.type == "model" && delete temp1.type;
       temp[el.name] = temp1;
     });
     console.log("temp", temp);
@@ -43,21 +48,27 @@ export default function AddModel({ editModal, setEditModal }) {
       project_id: 4,
       properties: JSON.stringify(temp),
     };
-    axios
-      .post(api_base_url + "/importSingleModel", data)
-      .then((res) => {
-        setLoading(false);
-        message.success("Model Added Successfully");
-        setEditModal(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        message.error("Model Not Added");
-        setEditModal(false);
-      });
-
-    console.log("property", propertiesData);
+    // axios
+    //   .post(api_base_url + "/importSingleModel", data)
+    //   .then((res) => {
+    //     setLoading(false);
+    //     message.success("Model Added Successfully");
+    //     setEditModal(false);
+    //   })
+    //   .catch((err) => {
+    //     setLoading(false);
+    //     message.error("Model Not Added");
+    //     setEditModal(false);
+    //   });
+    setLoading(false);
+    console.log("property", data);
   };
+  useEffect(() => {
+    axios
+      .get(api_base_url + "/getAllModels")
+      .then((res) => setAllModel(res.data));
+  }, []);
+
   return (
     <>
       <Modal
@@ -83,7 +94,7 @@ export default function AddModel({ editModal, setEditModal }) {
             <div style={{ display: "flex", marginBottom: "10px" }}>
               <span style={{ marginLeft: "5px" }}>Name</span>
               <span style={{ marginLeft: "140px" }}>Type</span>
-              <span style={{ marginLeft: "150px" }}>Format</span>
+              {/* <span style={{ marginLeft: "150px" }}>Format</span> */}
             </div>
             <Form
               name="dynamic_form_item"
@@ -135,58 +146,77 @@ export default function AddModel({ editModal, setEditModal }) {
                             <Option value="boolean">Boolean</Option>
                             <Option value="integer">Integer</Option>
                             <Option value="number">Number</Option>
+                            <Option value="model">Model</Option>
                           </Select>
-                          <AutoComplete
-                            onChange={(e) => handleData(e, index, "format")}
-                            style={{ width: "170px", marginLeft: "10px" }}
-                            options={
-                              propertiesData[index].type == "integer"
-                                ? [{ value: "int32" }, { value: "int64" }]
-                                : propertiesData[index].type == "number"
-                                ? [{ value: "float" }, { value: "double" }]
-                                : propertiesData[index].type == "string" && [
-                                    {
-                                      value: "date",
-                                    },
-                                    {
-                                      value: "date-time",
-                                    },
-                                    {
-                                      value: "email",
-                                    },
-                                    {
-                                      value: "password",
-                                    },
-                                    {
-                                      value: "byte",
-                                    },
-                                    {
-                                      value: "binary",
-                                    },
-                                    {
-                                      value: "hostname",
-                                    },
-                                    {
-                                      value: "ipv4",
-                                    },
-                                    {
-                                      value: "ipv6",
-                                    },
-                                    {
-                                      value: "uri",
-                                    },
-                                    {
-                                      value: "uuid",
-                                    },
-                                  ]
-                            }
-                            placeholder="Select format"
-                            filterOption={(inputValue, option) =>
-                              option.value
-                                .toUpperCase()
-                                .indexOf(inputValue.toUpperCase()) !== -1
-                            }
-                          />
+                          {(propertiesData[index].type == "integer" ||
+                            propertiesData[index].type == "number" ||
+                            propertiesData[index].type == "string") && (
+                            <AutoComplete
+                              onChange={(e) => handleData(e, index, "format")}
+                              style={{ width: "170px", marginLeft: "10px" }}
+                              options={
+                                propertiesData[index].type == "integer"
+                                  ? [{ value: "int32" }, { value: "int64" }]
+                                  : propertiesData[index].type == "number"
+                                  ? [{ value: "float" }, { value: "double" }]
+                                  : propertiesData[index].type == "string" && [
+                                      {
+                                        value: "date",
+                                      },
+                                      {
+                                        value: "date-time",
+                                      },
+                                      {
+                                        value: "email",
+                                      },
+                                      {
+                                        value: "password",
+                                      },
+                                      {
+                                        value: "byte",
+                                      },
+                                      {
+                                        value: "binary",
+                                      },
+                                      {
+                                        value: "hostname",
+                                      },
+                                      {
+                                        value: "ipv4",
+                                      },
+                                      {
+                                        value: "ipv6",
+                                      },
+                                      {
+                                        value: "uri",
+                                      },
+                                      {
+                                        value: "uuid",
+                                      },
+                                    ]
+                              }
+                              placeholder="Select format"
+                              filterOption={(inputValue, option) =>
+                                option.value
+                                  .toUpperCase()
+                                  .indexOf(inputValue.toUpperCase()) !== -1
+                              }
+                            />
+                          )}
+                          {propertiesData[index].type == "model" && (
+                            <Select
+                              style={{ width: "170px", marginLeft: "10px" }}
+                              placeholder="Select Model"
+                              value={propertiesData[index].ref?.substring(14)}
+                              onChange={(e) => handleData(e, index, "ref")}
+                            >
+                              {allModel.map((el) => {
+                                return (
+                                  <Option value={el.name}>{el.name}</Option>
+                                );
+                              })}
+                            </Select>
+                          )}
                         </div>
                       </Form.Item>
                     </Form.Item>

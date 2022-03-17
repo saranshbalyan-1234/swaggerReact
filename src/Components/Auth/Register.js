@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { api_base_url } from "../../constants";
 const Register = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [details, setDetails] = useState({
     name: "",
@@ -19,11 +20,13 @@ const Register = () => {
     setDetails({ ...details, ...object });
   };
   const onRegister = () => {
+    setLoading(true);
     axios
       .post(api_base_url + "/register", details)
       .then((res) => {
         message.success("Registered Successfully");
         navigate("/login");
+        setLoading(false);
       })
       .catch((err) => {
         console.log(
@@ -31,6 +34,7 @@ const Register = () => {
             return message.error(err.response.data.errors[key]);
           })
         );
+        setLoading(false);
       });
   };
   const formItemLayout = {
@@ -65,7 +69,7 @@ const Register = () => {
         height: "100vh",
       }}
     >
-      <Spin spinning={false}>
+      <Spin spinning={loading}>
         <Card
           title="Register"
           bordered

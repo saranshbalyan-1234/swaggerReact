@@ -4,9 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api_base_url } from "../../constants";
 export default function Info({ basePath, datas, setEditMode, editMode }) {
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
-  const handleSave = () => {};
+
   const importData = async () => {
     setLoadingImport(true);
     const { data } = await axios.post(api_base_url + "/createProject");
@@ -24,6 +25,18 @@ export default function Info({ basePath, datas, setEditMode, editMode }) {
         message.error("error");
       });
     setLoadingImport(false);
+  };
+  const logout = () => {
+    axios
+      .post(api_base_url + "/logout")
+      .then((res) => {
+        navigate("/login");
+        localStorage.clear();
+        message.success("Logged Out SuccessFully");
+      })
+      .catch(() => {
+        message.error("something Went Wrong");
+      });
   };
   return (
     <>
@@ -51,33 +64,43 @@ export default function Info({ basePath, datas, setEditMode, editMode }) {
                   </h2>
                   <div style={{ display: "flex" }}>
                     {localStorage.getItem("token") ? (
-                      editMode ? (
+                      <>
+                        {editMode ? (
+                          <Button
+                            type="primary"
+                            ghost
+                            onClick={() => setEditMode(false)}
+                          >
+                            Save
+                          </Button>
+                        ) : (
+                          <Button
+                            type="primary"
+                            ghost
+                            onClick={() => setEditMode(true)}
+                          >
+                            Edit
+                          </Button>
+                        )}
                         <>
                           <Button
                             type="danger"
                             ghost
+                            style={{ marginLeft: "10px" }}
                             onClick={() => setVisible(true)}
                           >
                             Settings
                           </Button>
                           <Button
-                            type="primary"
+                            type="danger"
                             ghost
-                            onClick={() => setEditMode(false)}
                             style={{ marginLeft: "10px" }}
+                            onClick={() => logout()}
                           >
-                            Save
+                            Logout
                           </Button>
                         </>
-                      ) : (
-                        <Button
-                          type="primary"
-                          ghost
-                          onClick={() => setEditMode(true)}
-                        >
-                          Edit
-                        </Button>
-                      )
+                      </>
                     ) : (
                       <Link to="/login">
                         <Button
