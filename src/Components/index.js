@@ -26,7 +26,7 @@ export default function Swagger({ basePath, setBasePath }) {
     let pathTemp = {};
     let modelTemp = {};
     await axios
-      .get(api_base_url + "/get")
+      .post(api_base_url + "/get", { project_id: 1 })
       .then((res) => {
         console.log("test", res.data);
 
