@@ -45,6 +45,11 @@ export default function AddModel({
       let temp1 = { ...el };
       delete temp1.name;
       temp1.type == "model" && delete temp1.type;
+      if (temp1.enumCheck != "yes") {
+        temp1.enumCheck && delete temp1.enumCheck;
+        temp1.enum && delete temp1.enum;
+      }
+      temp1.enumCheck && delete temp1.enumCheck;
       temp[el.name] = temp1;
     });
     console.log("temp", temp);
@@ -74,11 +79,22 @@ export default function AddModel({
       .get(api_base_url + "/getAllModels")
       .then((res) => setAllModel(res.data));
   }, []);
-
+  const handleEnum = (value, index) => {
+    console.log("enum", value, index);
+    let temp = [...value];
+    // if (propertiesData[index].enumCheck == "yes") {
+    if (propertiesData[index].type != "string") {
+      temp = value.map((el) => {
+        return Number(el);
+      });
+    }
+    // }
+    propertiesData[index].enum = temp;
+  };
   return (
     <>
       <Modal
-        width={800}
+        width={950}
         title="Add New Model"
         centered
         visible={editModal}
@@ -92,7 +108,10 @@ export default function AddModel({
               name="name"
               rules={[{ required: true, message: "Please input model name!" }]}
             >
-              <Input onChange={(e) => setName(e.target.value)} />
+              <Input
+                onChange={(e) => setName(e.target.value)}
+                // style={{ width: "400px" }}
+              />
             </Form.Item>
 
             <hr />
@@ -102,11 +121,7 @@ export default function AddModel({
               <span style={{ marginLeft: "140px" }}>Type</span>
               {/* <span style={{ marginLeft: "150px" }}>Format</span> */}
             </div>
-            <Form
-              name="dynamic_form_item"
-              layout="vertical"
-              style={{ overflow: "scroll", height: "30vh" }}
-            >
+            <Form style={{ overflow: "scroll", height: "40vh" }}>
               <Form name="names">
                 {propertiesData.map((data, index) => (
                   <div
@@ -157,56 +172,83 @@ export default function AddModel({
                           {(propertiesData[index].type == "integer" ||
                             propertiesData[index].type == "number" ||
                             propertiesData[index].type == "string") && (
-                            <AutoComplete
-                              onChange={(e) => handleData(e, index, "format")}
+                            <>
+                              <AutoComplete
+                                onChange={(e) => handleData(e, index, "format")}
+                                style={{ width: "170px", marginLeft: "10px" }}
+                                options={
+                                  propertiesData[index].type == "integer"
+                                    ? [{ value: "int32" }, { value: "int64" }]
+                                    : propertiesData[index].type == "number"
+                                    ? [{ value: "float" }, { value: "double" }]
+                                    : propertiesData[index].type ==
+                                        "string" && [
+                                        {
+                                          value: "date",
+                                        },
+                                        {
+                                          value: "date-time",
+                                        },
+                                        {
+                                          value: "email",
+                                        },
+                                        {
+                                          value: "password",
+                                        },
+                                        {
+                                          value: "byte",
+                                        },
+                                        {
+                                          value: "binary",
+                                        },
+                                        {
+                                          value: "hostname",
+                                        },
+                                        {
+                                          value: "ipv4",
+                                        },
+                                        {
+                                          value: "ipv6",
+                                        },
+                                        {
+                                          value: "uri",
+                                        },
+                                        {
+                                          value: "uuid",
+                                        },
+                                      ]
+                                }
+                                placeholder="Select format"
+                                filterOption={(inputValue, option) =>
+                                  option.value
+                                    .toUpperCase()
+                                    .indexOf(inputValue.toUpperCase()) !== -1
+                                }
+                              />
+                              <Select
+                                placeholder="ENUM?"
+                                style={{ width: "170px", marginLeft: "10px" }}
+                                onChange={(e) =>
+                                  handleData(e, index, "enumCheck")
+                                }
+                              >
+                                <Option value="no">No</Option>
+                                <Option value="yes">Yes</Option>
+                              </Select>
+                            </>
+                          )}
+                          {propertiesData[index].enumCheck == "yes" && (
+                            <Select
+                              mode="tags"
+                              onChange={(value) =>
+                                handleEnum(
+                                  value,
+
+                                  index
+                                )
+                              }
+                              placeholder="Enter Enum Values"
                               style={{ width: "170px", marginLeft: "10px" }}
-                              options={
-                                propertiesData[index].type == "integer"
-                                  ? [{ value: "int32" }, { value: "int64" }]
-                                  : propertiesData[index].type == "number"
-                                  ? [{ value: "float" }, { value: "double" }]
-                                  : propertiesData[index].type == "string" && [
-                                      {
-                                        value: "date",
-                                      },
-                                      {
-                                        value: "date-time",
-                                      },
-                                      {
-                                        value: "email",
-                                      },
-                                      {
-                                        value: "password",
-                                      },
-                                      {
-                                        value: "byte",
-                                      },
-                                      {
-                                        value: "binary",
-                                      },
-                                      {
-                                        value: "hostname",
-                                      },
-                                      {
-                                        value: "ipv4",
-                                      },
-                                      {
-                                        value: "ipv6",
-                                      },
-                                      {
-                                        value: "uri",
-                                      },
-                                      {
-                                        value: "uuid",
-                                      },
-                                    ]
-                              }
-                              placeholder="Select format"
-                              filterOption={(inputValue, option) =>
-                                option.value
-                                  .toUpperCase()
-                                  .indexOf(inputValue.toUpperCase()) !== -1
-                              }
                             />
                           )}
                           {propertiesData[index].type == "model" && (
