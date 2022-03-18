@@ -13,20 +13,40 @@ export default function Swagger({ basePath, setBasePath }) {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [canImport, setCanImport] = useState(true);
   useEffect(() => {
     setLoading(true);
-    basePath != ""
-      ? axios.get(basePath).then((res) => {
-          setData(res.data);
-          setLoading(false);
+    setCanImport(true);
+    if (basePath == "/swagger.json") {
+      axios
+        .get(api_base_url + "/getAllProjectByUser")
+        .then((res) => {
+          if (res.data.length > 0) {
+            getFromDataBase(res.data[0].id);
+            setCanImport(false);
+          } else {
+            getFromJson();
+          }
         })
-      : getFromDataBase();
+        .catch((err) => {
+          getFromJson();
+        });
+    } else {
+      getFromJson();
+    }
   }, [basePath, refresh]);
-  const getFromDataBase = async () => {
+  const getFromJson = () => {
+    alert(basePath);
+    axios.get(basePath).then((res) => {
+      setData(res.data);
+      setLoading(false);
+    });
+  };
+  const getFromDataBase = async (id) => {
     let pathTemp = {};
     let modelTemp = {};
     await axios
-      .post(api_base_url + "/get", { project_id: 1 })
+      .post(api_base_url + "/get", { project_id: id })
       .then((res) => {
         console.log("test", res.data);
 
@@ -78,6 +98,7 @@ export default function Swagger({ basePath, setBasePath }) {
           datas={data}
           setEditMode={setEditMode}
           editMode={editMode}
+          canImport={canImport}
         />
         <Spin spinning={loading}>
           <Settings servers={data.servers} schemes={data.schemes} />

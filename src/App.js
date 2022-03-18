@@ -9,7 +9,7 @@ export default function App() {
     console.log(request.headers);
     return request;
   });
-  const [basePath, setBasePath] = useState("");
+  const [basePath, setBasePath] = useState("/swagger.json");
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   return (
     <Spin indicator={antIcon} spinning={false}>

@@ -54,12 +54,15 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
           </div>
         )}
       </section>
-      <AddModel
-        editModal={editModal}
-        setEditModal={setEditModal}
-        refresh={refresh}
-        setRefresh={setRefresh}
-      />
+      editModal
+      {editModal && (
+        <AddModel
+          editModal={editModal}
+          setEditModal={setEditModal}
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
+      )}
     </div>
   );
 }

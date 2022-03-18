@@ -44,7 +44,7 @@ export default function Header({ basePath, setBasePath }) {
               defaultActiveFirstOption={true}
               allowClear
               onChange={(e) => {
-                setTempBasePath(e.target.value);
+                setTempBasePath(e);
               }}
               style={{ marginLeft: "10px", minWidth: "250px", width: "100%" }}
               options={[{ value: "int32" }, { value: "int64" }]}

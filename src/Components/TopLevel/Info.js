@@ -1,17 +1,27 @@
 import React, { useState } from "react";
-import { Button, Modal, Spin, message } from "antd";
+import { Button, Modal, Spin, message, Tabs, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api_base_url } from "../../constants";
-export default function Info({ basePath, datas, setEditMode, editMode }) {
+const { TabPane } = Tabs;
+export default function Info({
+  basePath,
+  datas,
+  setEditMode,
+  editMode,
+  canImport,
+}) {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
+  const [projectName, setProjectName] = useState("");
 
   const importData = async () => {
     setLoadingImport(true);
-    const { data } = await axios.post(api_base_url + "/createProject");
-
+    const { data } = await axios.post(api_base_url + "/createProject", {
+      projectName: projectName,
+    });
+    setProjectName("");
     await axios
       .post(api_base_url + "/import", {
         ...datas,
@@ -65,22 +75,26 @@ export default function Info({ basePath, datas, setEditMode, editMode }) {
                   <div style={{ display: "flex" }}>
                     {localStorage.getItem("token") ? (
                       <>
-                        {editMode ? (
-                          <Button
-                            type="primary"
-                            ghost
-                            onClick={() => setEditMode(false)}
-                          >
-                            Save
-                          </Button>
-                        ) : (
-                          <Button
-                            type="primary"
-                            ghost
-                            onClick={() => setEditMode(true)}
-                          >
-                            Edit
-                          </Button>
+                        {!canImport && (
+                          <>
+                            {editMode ? (
+                              <Button
+                                type="primary"
+                                ghost
+                                onClick={() => setEditMode(false)}
+                              >
+                                Save
+                              </Button>
+                            ) : (
+                              <Button
+                                type="primary"
+                                ghost
+                                onClick={() => setEditMode(true)}
+                              >
+                                Edit
+                              </Button>
+                            )}
+                          </>
                         )}
                         <>
                           <Button
@@ -135,11 +149,34 @@ export default function Info({ basePath, datas, setEditMode, editMode }) {
         visible={visible}
         onCancel={() => setVisible(false)}
         footer={false}
+        header={false}
       >
         <Spin spinning={loadingImport}>
-          <Button type="primary" onClick={importData}>
-            Import
-          </Button>
+          <Tabs
+            style={{ marginTop: "-30px" }}
+            defaultActiveKey="1"
+            // onChange={callback}
+          >
+            <TabPane tab="Import" key="1">
+              <div style={{ display: "flex" }}>
+                <Input
+                  onChange={(e) => setProjectName(e.target.value)}
+                  placeholder="Enter Project Name"
+                  style={{ width: "250px", marginRight: "10px" }}
+                />
+                <Button
+                  disabled={!canImport}
+                  type="primary"
+                  onClick={importData}
+                >
+                  Import Current Swagger
+                </Button>
+              </div>
+            </TabPane>
+            <TabPane tab="More" key="2">
+              More
+            </TabPane>
+          </Tabs>
         </Spin>
       </Modal>
     </>

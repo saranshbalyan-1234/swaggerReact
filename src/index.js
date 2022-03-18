@@ -10,13 +10,7 @@ render(
       <Route path="login" element={<Login />} />
       <Route path="test" element={<Test />} />
       <Route path="register" element={<Register />} />
-      <Route path="swagger" element={<App />}>
-        {/* <Route path="teams" element={<Teams />}>
-          <Route path=":teamId" element={<Team />} />
-          <Route path="new" element={<NewTeamForm />} />
-          <Route index element={<LeagueStandings />} />
-        </Route> */}
-      </Route>
+      <Route path="swagger" element={<App />}></Route>
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")
