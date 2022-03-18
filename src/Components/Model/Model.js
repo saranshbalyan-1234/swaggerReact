@@ -54,7 +54,7 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
           </div>
         )}
       </section>
-      editModal
+
       {editModal && (
         <AddModel
           editModal={editModal}

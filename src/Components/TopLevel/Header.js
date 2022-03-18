@@ -1,8 +1,28 @@
 import React, { useState } from "react";
-import { AutoComplete } from "antd";
-export default function Header({ basePath, setBasePath }) {
+import { AutoComplete, message } from "antd";
+export default function Header({
+  basePath,
+  setBasePath,
+  projects,
+  getFromDataBase,
+  getFromJson,
+}) {
   console.log("saransh", basePath);
   const [tempBasePath, setTempBasePath] = useState("basePath");
+  const validateURL = () => {
+    var re = new RegExp(
+      "((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)"
+    );
+    if (re.test(tempBasePath)) {
+      getFromJson(tempBasePath);
+    } else {
+      message.error("Please Enter Valid URL");
+    }
+  };
+  const onSelect = (value, option) => {
+    console.log("temp", value, option);
+    getFromDataBase(option.key);
+  };
   return (
     <div className="topbar">
       <div className="wrapper">
@@ -29,17 +49,8 @@ export default function Header({ basePath, setBasePath }) {
             }}
             className="download-url-wrapper"
           >
-            {/* <input
-              type="text"
-              className="download-url-input"
-              defaultValue={basePath}
-              onChange={(e) => {
-                e.preventDefault();
-                setTempBasePath(e.target.value);
-              }}
-              style={{ minWidth: "250px" }}
-            /> */}
             <AutoComplete
+              onSelect={(val, option) => onSelect(val, option)}
               defaultValue={basePath}
               defaultActiveFirstOption={true}
               allowClear
@@ -47,16 +58,18 @@ export default function Header({ basePath, setBasePath }) {
                 setTempBasePath(e);
               }}
               style={{ marginLeft: "10px", minWidth: "250px", width: "100%" }}
-              options={[{ value: "int32" }, { value: "int64" }]}
-              placeholder="Select URL or Enter New"
+              options={projects}
+              placeholder="Select Project or Enter JSON URL"
               filterOption={(inputValue, option) =>
                 option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
                 -1
               }
             />
+
             <button
               onClick={() => {
-                setBasePath(tempBasePath);
+                validateURL();
+                // console.log("path", tempBasePath);
               }}
               type="button"
               className="download-url-button button"

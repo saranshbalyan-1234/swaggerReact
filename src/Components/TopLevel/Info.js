@@ -160,6 +160,7 @@ export default function Info({
             <TabPane tab="Import" key="1">
               <div style={{ display: "flex" }}>
                 <Input
+                  disabled={!canImport}
                   onChange={(e) => setProjectName(e.target.value)}
                   placeholder="Enter Project Name"
                   style={{ width: "250px", marginRight: "10px" }}

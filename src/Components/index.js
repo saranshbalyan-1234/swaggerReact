@@ -14,35 +14,50 @@ export default function Swagger({ basePath, setBasePath }) {
   const [editMode, setEditMode] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [canImport, setCanImport] = useState(true);
+  const [projects, setProjects] = useState([]);
   useEffect(() => {
     setLoading(true);
     setCanImport(true);
-    if (basePath == "/swagger.json") {
-      axios
-        .get(api_base_url + "/getAllProjectByUser")
-        .then((res) => {
-          if (res.data.length > 0) {
-            getFromDataBase(res.data[0].id);
-            setCanImport(false);
-          } else {
-            getFromJson();
-          }
-        })
-        .catch((err) => {
-          getFromJson();
-        });
-    } else {
-      getFromJson();
-    }
-  }, [basePath, refresh]);
-  const getFromJson = () => {
-    alert(basePath);
-    axios.get(basePath).then((res) => {
-      setData(res.data);
-      setLoading(false);
-    });
+    // if (basePath == "/swagger.json") {
+    axios
+      .get(api_base_url + "/getAllProjectByUser")
+      .then((res) => {
+        if (res.data.length > 0) {
+          setProjects(
+            res.data.map((el) => {
+              return { value: el.name, key: el.id };
+            })
+          );
+          getFromDataBase(res.data[0].id);
+          setBasePath(res.data[0].name);
+          setCanImport(false);
+        } else {
+          getFromJson("/swagger.json");
+        }
+      })
+      .catch((err) => {
+        getFromJson("/swagger.json");
+      });
+    // } else {
+    //   getFromJson(basePath);
+    // }
+  }, [refresh]);
+  const getFromJson = (basePath) => {
+    setLoading(true);
+    setBasePath(basePath);
+    axios
+      .get(basePath)
+      .then((res) => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        message.error("Something Went Wrong");
+      });
   };
   const getFromDataBase = async (id) => {
+    setLoading(true);
     let pathTemp = {};
     let modelTemp = {};
     await axios
@@ -82,6 +97,7 @@ export default function Swagger({ basePath, setBasePath }) {
         message.error("Something Went Wrong");
         setLoading(false);
       });
+
     setLoading(false);
     console.log("definitions", data.definitions);
   };
@@ -91,7 +107,14 @@ export default function Swagger({ basePath, setBasePath }) {
         className="swagger-ui swagger-container"
         style={{ marginBottom: "100px" }}
       >
-        <Header basePath={basePath} setBasePath={setBasePath} />
+        <Header
+          basePath={basePath}
+          setBasePath={setBasePath}
+          projects={projects}
+          getFromDataBase={getFromDataBase}
+          getFromJson={getFromJson}
+          setLoading={setLoading}
+        />
 
         <Info
           basePath={basePath}
