@@ -20,29 +20,20 @@ export default function Swagger({ basePath, setBasePath }) {
   useEffect(() => {
     setLoading(true);
     setCanImport(true);
-    // if (basePath == "/swagger.json") {
-    axios
+    getAllProjectsByUser();
+  }, []);
+  const getAllProjectsByUser = async () => {
+    await axios
       .get(api_base_url + "/getAllProjectByUser")
       .then((res) => {
+        // console.log("check", projects);
+        setProjects(
+          res.data.map((el) => {
+            return { value: el.name, key: el.id };
+          })
+        );
         if (res.data.length > 0) {
-          setProjects(
-            res.data.map((el) => {
-              return { value: el.name, key: el.id };
-            })
-          );
-          if (localStorage.getItem("project")) {
-            getFromDataBase(JSON.parse(localStorage.getItem("project")).id);
-            setBasePath(JSON.parse(localStorage.getItem("project")).name);
-          } else {
-            getFromDataBase(res.data[0].id);
-            localStorage.setItem(
-              "project",
-              JSON.stringify({ id: res.data[0].id, name: res.data[0].name })
-            );
-            setBasePath(res.data[0].name);
-          }
-
-          setCanImport(false);
+          getData(res.data[0]);
         } else {
           getFromJson("/swagger.json");
         }
@@ -50,10 +41,28 @@ export default function Swagger({ basePath, setBasePath }) {
       .catch((err) => {
         getFromJson("/swagger.json");
       });
-    // } else {
-    //   getFromJson(basePath);
-    // }
+  };
+  const getData = (project) => {
+    console.log("check", projects);
+
+    if (localStorage.getItem("project")) {
+      getFromDataBase(JSON.parse(localStorage.getItem("project")).id);
+      setBasePath(JSON.parse(localStorage.getItem("project")).name);
+    } else {
+      getFromDataBase(project.id);
+      localStorage.setItem(
+        "project",
+        JSON.stringify({ id: project.id, name: project.name })
+      );
+      setBasePath(projects[0].value);
+    }
+
+    setCanImport(false);
+  };
+  useEffect(() => {
+    getData();
   }, [refresh]);
+
   const getFromJson = (basePath) => {
     setLoading(true);
     setBasePath(basePath);

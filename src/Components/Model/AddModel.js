@@ -82,7 +82,7 @@ export default function AddModel({
         message.error("Model Not Added");
         setEditModal(false);
       });
-    setLoading(false);
+    // setLoading(false);
   };
   useEffect(() => {
     axios
