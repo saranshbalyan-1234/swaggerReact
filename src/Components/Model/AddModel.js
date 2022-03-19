@@ -24,7 +24,6 @@ export default function AddModel({
   const [name, setName] = useState("");
   const { Option } = Select;
   const deleteRow = (index) => {
-    console.log("index", index);
     let temp = [...propertiesData];
     temp.splice(index, 1);
     setPropertiesData(temp);
@@ -64,7 +63,7 @@ export default function AddModel({
       temp1.arrayref && delete temp1.arrayref;
       temp[el.name] = temp1;
     });
-    console.log("temp", temp);
+
     let data = {
       name: name,
       project_id: JSON.parse(localStorage.getItem("project")).id,
@@ -84,7 +83,6 @@ export default function AddModel({
     //     setEditModal(false);
     //   });
     setLoading(false);
-    console.log("property", data);
   };
   useEffect(() => {
     axios
@@ -92,7 +90,6 @@ export default function AddModel({
       .then((res) => setAllModel(res.data));
   }, []);
   const handleEnum = (value, index) => {
-    console.log("enum", value, index);
     let temp = [...value];
     // if (propertiesData[index].enumCheck == "yes") {
     if (propertiesData[index].type != "string") {

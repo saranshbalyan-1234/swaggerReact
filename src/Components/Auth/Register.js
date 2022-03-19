@@ -29,11 +29,7 @@ const Register = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(
-          Object.keys(err.response.data.errors).map((key) => {
-            return message.error(err.response.data.errors[key]);
-          })
-        );
+        message.error("Something Went Wrong");
         setLoading(false);
       });
   };

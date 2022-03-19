@@ -14,7 +14,6 @@ export default function SchemaToJson({
 
   let tempData = {};
   const formatSchema = (model) => {
-    console.log("schema", model);
     let temp1 = {};
     model &&
       model.properties &&
@@ -73,7 +72,6 @@ export default function SchemaToJson({
         models[key1.charAt(0).toUpperCase() + key1.substring(1)]
       );
     } else if (models[temp].properties[key1].type == "array") {
-      console.log("schema", "condition");
       if (models[temp].properties[key1].items) {
         if (models[temp].properties[key1].items.$ref) {
           tempData[key1] = [
@@ -113,7 +111,6 @@ export default function SchemaToJson({
     const temp = Object.keys(models).find(function (key, index) {
       return key.toLowerCase() == schema.toLowerCase().substring(14);
     });
-    console.log("check", temp);
     temp &&
       models[temp].properties &&
       Object.keys(models[temp].properties).map(function (key1) {

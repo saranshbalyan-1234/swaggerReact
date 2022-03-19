@@ -14,17 +14,11 @@ export default function Api({ data, url, type, models, basePath }) {
   let formData = new FormData();
   let queryString = "";
   let searchParam = {};
-  console.log("response", data.response);
-  console.log("body", data);
-  console.log("url", url);
-  useEffect(() => {
-    console.log("jsonInApi", jsonBody, type);
-  }, [jsonBody]);
 
   const executeApi = () => {
     let tempURL = newURL;
     if (queryString != "") tempURL = newURL + "?" + queryString;
-    console.log("formData", jsonBody);
+
     setLoading(true);
     if (jsonBody) {
       axios[type]("basePath" + tempURL, jsonBody)
@@ -60,9 +54,8 @@ export default function Api({ data, url, type, models, basePath }) {
   };
   const handleFile = async ({ file }, el) => {
     setFormdata(true);
-    console.log("formData", el);
+
     formData.append(el.name, file);
-    console.log("formData");
   };
   const handleParameter = (e, el) => {
     e.preventDefault();
@@ -76,12 +69,10 @@ export default function Api({ data, url, type, models, basePath }) {
       searchParam = { ...searchParam, ...object };
       const params = new URLSearchParams(searchParam);
       queryString = params.toString();
-      console.log("queryString", queryString);
     }
 
     if (el.in == "formData") {
       if (el.type == "file") {
-        console.log("file", e.target.files[0]);
         formData.append(el.name, e.target.files[0]);
       } else formData.append(el.name, e.target.value);
     }

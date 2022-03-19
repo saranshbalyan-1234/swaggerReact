@@ -75,8 +75,6 @@ export default function Swagger({ basePath, setBasePath }) {
     await axios
       .post(api_base_url + "/get", { project_id: id })
       .then((res) => {
-        console.log("test", res.data);
-
         res.data.path.forEach((el) => {
           let object = {};
           object[el.type] = {
@@ -91,14 +89,12 @@ export default function Swagger({ basePath, setBasePath }) {
           };
           pathTemp[el.path] = { ...pathTemp[el.path], ...object };
         });
-        console.log("pathTemp", pathTemp);
         res.data.models.forEach((el) => {
           let object = {};
 
           object[el.name] = { ...el, properties: JSON.parse(el.properties) };
           modelTemp = { ...modelTemp, ...object };
         });
-        console.log("modelTemp", modelTemp);
         setData({
           ...res.data,
           paths: pathTemp,
@@ -111,7 +107,6 @@ export default function Swagger({ basePath, setBasePath }) {
       });
 
     setLoading(false);
-    console.log("definitions", data.definitions);
   };
   return (
     <div id="swagger-ui">

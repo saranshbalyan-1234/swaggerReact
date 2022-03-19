@@ -28,7 +28,6 @@ export default function Info({
         project_id: data.id,
       })
       .then((res) => {
-        console.log(res.data);
         message.success("success");
       })
       .catch((err) => {

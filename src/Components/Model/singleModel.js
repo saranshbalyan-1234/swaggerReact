@@ -16,7 +16,6 @@ export default function SingleModel({
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmLoading, setCofirmLoading] = useState(false);
 
-  console.log("schema", allData[data]);
   const deleteModel = (id) => {
     setCofirmLoading(true);
     axios

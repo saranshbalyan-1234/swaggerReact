@@ -8,8 +8,6 @@ export default function Test() {
     let pathTemp = {};
     let modelTemp = {};
     axios.get("http://127.0.0.1:8000/api/get").then((res) => {
-      console.log("test", res.data);
-
       res.data.path.forEach((el) => {
         let object = {};
         object[el.type] = {
@@ -23,14 +21,12 @@ export default function Test() {
         };
         pathTemp[el.path] = { ...pathTemp[el.path], ...object };
       });
-      console.log("pathTemp", pathTemp);
       res.data.models.forEach((el) => {
         let object = {};
 
         object[el.name] = { ...el, properties: JSON.parse(el.properties) };
         modelTemp = { ...modelTemp, ...object };
       });
-      console.log("modelTemp", modelTemp);
       setAlteredData({
         ...res.data,
         paths: pathTemp,

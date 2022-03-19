@@ -7,7 +7,6 @@ export default function Header({
   getFromDataBase,
   getFromJson,
 }) {
-  console.log("saransh", basePath);
   const [tempBasePath, setTempBasePath] = useState("basePath");
   const validateURL = () => {
     var re = new RegExp(
@@ -20,7 +19,6 @@ export default function Header({
     }
   };
   const onSelect = (value, option) => {
-    console.log("temp", value, option);
     getFromDataBase(option.key);
     localStorage.setItem(
       "project",
@@ -73,7 +71,7 @@ export default function Header({
             <button
               onClick={() => {
                 validateURL();
-                // console.log("path", tempBasePath);
+                // ("path", tempBasePath);
               }}
               type="button"
               className="download-url-button button"
