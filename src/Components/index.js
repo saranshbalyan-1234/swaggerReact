@@ -28,8 +28,18 @@ export default function Swagger({ basePath, setBasePath }) {
               return { value: el.name, key: el.id };
             })
           );
-          getFromDataBase(res.data[0].id);
-          setBasePath(res.data[0].name);
+          if (localStorage.getItem("project")) {
+            getFromDataBase(JSON.parse(localStorage.getItem("project")).id);
+            setBasePath(JSON.parse(localStorage.getItem("project")).name);
+          } else {
+            getFromDataBase(res.data[0].id);
+            localStorage.setItem(
+              "project",
+              JSON.stringify({ id: res.data[0].id, name: res.data[0].name })
+            );
+            setBasePath(res.data[0].name);
+          }
+
           setCanImport(false);
         } else {
           getFromJson("/swagger.json");

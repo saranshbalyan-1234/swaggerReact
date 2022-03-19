@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SchemaToJson from "../Util/SchemaToJson";
-import { message } from "antd";
+import { message, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { api_base_url } from "../../constants";
@@ -13,17 +13,24 @@ export default function SingleModel({
   setRefresh,
 }) {
   const [show, setShow] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmLoading, setCofirmLoading] = useState(false);
 
   console.log("schema", allData[data]);
   const deleteModel = (id) => {
+    setCofirmLoading(true);
     axios
       .post(api_base_url + "/deleteModel", { id: id })
       .then((res) => {
         message.success("Model Deleted Successfully");
         setRefresh(!refresh);
+        setCofirmLoading(false);
+        setShowConfirm(false);
       })
       .catch((err) => {
         message.error("something Went Wrong");
+        setCofirmLoading(false);
+        setShowConfirm(false);
       });
   };
   return (
@@ -61,11 +68,23 @@ export default function SingleModel({
           ></span>
 
           {editMode && (
-            <DeleteOutlined
-              onClick={() => {
+            <Popconfirm
+              title="Are you Sure?"
+              visible={showConfirm}
+              onConfirm={() => {
                 deleteModel(allData[data].id);
               }}
-            />
+              okText="Yes"
+              okButtonProps={{ loading: confirmLoading }}
+              onCancel={() => setShowConfirm(false)}
+            >
+              <DeleteOutlined
+                onClick={() => {
+                  // deleteModel(allData[data].id);
+                  setShowConfirm(true);
+                }}
+              />
+            </Popconfirm>
           )}
 
           <span> </span>

@@ -22,6 +22,10 @@ export default function Header({
   const onSelect = (value, option) => {
     console.log("temp", value, option);
     getFromDataBase(option.key);
+    localStorage.setItem(
+      "project",
+      JSON.stringify({ id: option.key, name: option.value })
+    );
   };
   return (
     <div className="topbar">

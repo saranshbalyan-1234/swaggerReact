@@ -37,7 +37,10 @@ export default function SchemaToJson({
               ? model.properties[key].example
               : model.properties[key].type
             : model.properties[key].enum
-            ? model.properties[key].enum
+            ? model.properties[key].type == "number" ||
+              model.properties[key].type == "integer"
+              ? Number(model.properties[key].enum[0])
+              : model.properties[key].enum[0]
             : model.properties[key].type == "integer" ||
               model.properties[key].type == "number"
             ? 0
@@ -62,7 +65,6 @@ export default function SchemaToJson({
   }, []);
   useEffect(() => {
     editable && setJsonBody(data);
-    // editable && console.log("jsonInApi", data);
   }, [data]);
 
   const formatJson2 = (key1, temp) => {
@@ -84,10 +86,16 @@ export default function SchemaToJson({
     } else if (models[temp].properties[key1].type == "object") {
       if (models[temp].properties[key1].example)
         tempData[key1] = models[temp].properties[key1].example;
-      // model.properties[key].type
       else tempData[key1] = {};
     } else if (models[temp].properties[key1].enum) {
-      tempData[key1] = models[temp].properties[key1].enum;
+      if (
+        models[temp].properties[key1].type == "number" ||
+        models[temp].properties[key1].type == "integer"
+      ) {
+        tempData[key1] = Number(models[temp].properties[key1].enum[0]);
+      } else {
+        tempData[key1] = models[temp].properties[key1].enum[0];
+      }
     } else {
       if (
         models[temp].properties[key1].type == "integer" ||

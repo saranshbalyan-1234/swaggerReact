@@ -7,10 +7,9 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
   const [showModel, setShowModel] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [search, setSearch] = useState("");
-  const onSearch = (value) => {
+  const onSearch = (e) => {
     setShowModel(true);
-    setSearch(value.toLowerCase());
-    console.log("search", value);
+    setSearch(e.target.value.toLowerCase());
   };
   return (
     <div className="wrapper">
@@ -40,12 +39,16 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
             ></i>
           </button>{" "}
           <div
-            style={{ width: "250px", position: "absolute", left: 110 }}
+            style={{
+              width: "250px",
+              position: "absolute",
+              left: editMode ? 200 : 110,
+            }}
             onClick={() => setShowModel(true)}
           >
             <Search
               placeholder="input search text"
-              onSearch={onSearch}
+              onChange={(e) => onSearch(e)}
               enterButton
             />
           </div>

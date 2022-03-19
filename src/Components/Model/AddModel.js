@@ -49,29 +49,41 @@ export default function AddModel({
         temp1.enumCheck && delete temp1.enumCheck;
         temp1.enum && delete temp1.enum;
       }
-      temp1.enumCheck && delete temp1.enumCheck;
+      if (temp1.arrayType) {
+        temp1.items = {
+          type: temp1.arrayType,
+        };
+        delete temp1.arrayType;
+      }
+      if (temp1.arrayref) {
+        temp1.items = {
+          ref: "#/definitions/" + temp1.arrayref,
+        };
+        delete temp1.arrayref;
+      }
+      temp1.arrayref && delete temp1.arrayref;
       temp[el.name] = temp1;
     });
     console.log("temp", temp);
     let data = {
       name: name,
-      project_id: 4,
+      project_id: JSON.parse(localStorage.getItem("project")).id,
       properties: JSON.stringify(temp),
     };
-    axios
-      .post(api_base_url + "/importSingleModel", data)
-      .then((res) => {
-        setLoading(false);
-        message.success("Model Added Successfully");
-        setEditModal(false);
-        setRefresh(!refresh);
-      })
-      .catch((err) => {
-        setLoading(false);
-        message.error("Model Not Added");
-        setEditModal(false);
-      });
-    // setLoading(false);
+    // axios
+    //   .post(api_base_url + "/importSingleModel", data)
+    //   .then((res) => {
+    //     setLoading(false);
+    //     message.success("Model Added Successfully");
+    //     setEditModal(false);
+    //     setRefresh(!refresh);
+    //   })
+    //   .catch((err) => {
+    //     setLoading(false);
+    //     message.error("Model Not Added");
+    //     setEditModal(false);
+    //   });
+    setLoading(false);
     console.log("property", data);
   };
   useEffect(() => {
@@ -265,6 +277,50 @@ export default function AddModel({
                               })}
                             </Select>
                           )}
+                          {propertiesData[index].type == "array" && (
+                            // <Select
+                            //   style={{ width: "170px", marginLeft: "10px" }}
+                            //   placeholder="Select Model"
+                            //   value={propertiesData[index].arrayref}
+                            //   onChange={(e) => handleData(e, index, "arrayref")}
+                            // >
+                            //   {allModel.map((el) => {
+                            //     return (
+                            //       <Option value={el.name}>{el.name}</Option>
+                            //     );
+                            //   })}
+                            // </Select>
+                            <Select
+                              style={{ width: "170px", marginLeft: "10px" }}
+                              placeholder="Select Type"
+                              value={propertiesData[index].arrayType}
+                              onChange={(e) =>
+                                handleData(e, index, "arrayType")
+                              }
+                            >
+                              <Option value="string">String</Option>
+                              <Option value="integer">Integer</Option>
+                              <Option value="number">Number</Option>
+                              <Option value="model">Model</Option>
+                            </Select>
+                          )}
+                          {propertiesData[index].type == "array" &&
+                            propertiesData[index].arrayType == "model" && (
+                              <Select
+                                style={{ width: "170px", marginLeft: "10px" }}
+                                placeholder="Select Model"
+                                value={propertiesData[index].arrayref}
+                                onChange={(e) =>
+                                  handleData(e, index, "arrayref")
+                                }
+                              >
+                                {allModel.map((el) => {
+                                  return (
+                                    <Option value={el.name}>{el.name}</Option>
+                                  );
+                                })}
+                              </Select>
+                            )}
                         </div>
                       </Form.Item>
                     </Form.Item>
