@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Tooltip, Input, Form, Button, message } from "antd";
-export default function Settings({ servers, schemes }) {
-  const [visible, setVisible] = useState(false);
+import { Modal, Tooltip, Input, Form, Button, message, Spin } from "antd";
+import axios from "axios";
+import { api_base_url } from "../../constants";
+export default function Settings({
+  servers,
+  schemes,
+  editMode,
+  refresh,
+  setRefresh,
+}) {
+  const [authVisible, setAuthVisible] = useState(false);
+  const [addTagVisible, setAddTagVisible] = useState(false);
   const [currentServer, setCurrentServer] = useState("");
   const [token, setToken] = useState({ value: "", status: "unauthorized" });
+  const [addTagDetails, setAddTagDetails] = useState({});
+  const [addTagLoading, setAddTagLoading] = useState(false);
   useEffect(() => {
     servers && setCurrentServer(servers[0].url);
   }, [servers]);
@@ -17,6 +28,43 @@ export default function Settings({ servers, schemes }) {
     } else {
       setToken({ ...token, value: "Bearer " + value });
     }
+  };
+  const handleDetails = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    let object = {};
+    object[name] = value;
+
+    setAddTagDetails({ ...addTagDetails, ...object });
+  };
+  const addTag = () => {
+    setAddTagLoading(true);
+    let data = {
+      ...addTagDetails,
+      project_id: JSON.parse(localStorage.getItem("project")).id,
+    };
+    axios
+      .post(api_base_url + "/addTag", data)
+      .then((res) => {
+        setRefresh(!refresh);
+        message.success("Tag Added SuccessFully");
+        setAddTagLoading(false);
+        setAddTagVisible(false);
+      })
+      .catch((err) => {
+        setAddTagLoading(false);
+        message.error("Somwthing Went Wronf");
+      });
+  };
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 0 },
+      sm: { span: 5 },
+    },
+    wrapperCol: {
+      xs: { span: 0 },
+      sm: { span: 18 },
+    },
   };
   return (
     <>
@@ -79,7 +127,7 @@ export default function Settings({ servers, schemes }) {
             <button
               style={{ display: "flex", alignItems: "center" }}
               className="btn authorize unlocked"
-              onClick={() => setVisible(true)}
+              onClick={() => setAuthVisible(true)}
             >
               <span>Authorize</span>
 
@@ -87,13 +135,41 @@ export default function Settings({ servers, schemes }) {
             </button>
           </div>
         </section>
+        {editMode && (
+          <>
+            <Button
+              style={{
+                marginTop: "20px",
+                marginLeft: "20px",
+                marginBottom: "-10px",
+              }}
+              type="primary"
+              ghost
+              onClick={() => setAddTagVisible(true)}
+            >
+              New Tag
+            </Button>
+            <Button
+              style={{
+                marginTop: "20px",
+                marginLeft: "20px",
+                marginBottom: "-10px",
+              }}
+              type="primary"
+              ghost
+              onClick={() => setAddTagVisible(true)}
+            >
+              New Server
+            </Button>
+          </>
+        )}
       </div>
 
       <Modal
         title="Available authorizations"
         centered
-        visible={visible}
-        onCancel={() => setVisible(false)}
+        visible={authVisible}
+        onCancel={() => setAuthVisible(false)}
         footer={false}
       >
         <Form
@@ -106,7 +182,6 @@ export default function Settings({ servers, schemes }) {
               JSON.stringify({ ...token, status: "authorized" })
             );
           }}
-          // onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <Form.Item
@@ -170,13 +245,86 @@ export default function Settings({ servers, schemes }) {
               <Button
                 className="btn modal-btn auth btn-done button"
                 style={{ marginLeft: "10px" }}
-                onClick={() => setVisible(false)}
+                onClick={() => setAuthVisible(false)}
               >
                 Close
               </Button>
             </Form.Item>
           </div>
         </Form>
+      </Modal>
+      <Modal
+        title="Add New Tag"
+        centered
+        visible={addTagVisible}
+        onCancel={() => setAddTagVisible(false)}
+        footer={false}
+      >
+        <Spin spinning={addTagLoading}>
+          <Form
+            {...formItemLayout}
+            name="register"
+            onFinish={addTag}
+            initialValues={{
+              residence: ["zhejiang", "hangzhou", "xihu"],
+              prefix: "86",
+            }}
+          >
+            <Form.Item
+              name="name"
+              label="Name"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Name!",
+                },
+              ]}
+            >
+              <Input
+                name="name"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
+              />
+            </Form.Item>
+
+            <Form.Item name="description" label="Description">
+              <Input
+                name="description"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
+              />
+            </Form.Item>
+            <Form.Item name="external_desc" label="External Desc">
+              <Input
+                name="external_desc"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
+              />
+            </Form.Item>
+            <Form.Item name="external_url" label="External URL">
+              <Input
+                name="external_url"
+                onChange={(e) => {
+                  handleDetails(e);
+                }}
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+                style={{ marginLeft: "100px" }}
+              >
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Spin>
       </Modal>
     </>
   );

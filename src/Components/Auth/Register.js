@@ -66,11 +66,7 @@ const Register = () => {
       }}
     >
       <Spin spinning={loading}>
-        <Card
-          title="Register"
-          bordered
-          style={{ width: "500px", height: "400px" }}
-        >
+        <Card title="Register" bordered>
           <Form
             {...formItemLayout}
             name="register"

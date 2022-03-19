@@ -69,19 +69,19 @@ export default function AddModel({
       project_id: JSON.parse(localStorage.getItem("project")).id,
       properties: JSON.stringify(temp),
     };
-    // axios
-    //   .post(api_base_url + "/importSingleModel", data)
-    //   .then((res) => {
-    //     setLoading(false);
-    //     message.success("Model Added Successfully");
-    //     setEditModal(false);
-    //     setRefresh(!refresh);
-    //   })
-    //   .catch((err) => {
-    //     setLoading(false);
-    //     message.error("Model Not Added");
-    //     setEditModal(false);
-    //   });
+    axios
+      .post(api_base_url + "/importSingleModel", data)
+      .then((res) => {
+        setLoading(false);
+        message.success("Model Added Successfully");
+        setEditModal(false);
+        setRefresh(!refresh);
+      })
+      .catch((err) => {
+        setLoading(false);
+        message.error("Model Not Added");
+        setEditModal(false);
+      });
     setLoading(false);
   };
   useEffect(() => {
@@ -130,7 +130,7 @@ export default function AddModel({
               <span style={{ marginLeft: "140px" }}>Type</span>
               {/* <span style={{ marginLeft: "150px" }}>Format</span> */}
             </div>
-            <Form style={{ overflow: "scroll", height: "40vh" }}>
+            <Form style={{ overflow: "scroll", maxHeight: "40vh" }}>
               <Form name="names">
                 {propertiesData.map((data, index) => (
                   <div

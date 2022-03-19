@@ -47,9 +47,9 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
             onClick={() => setShowModel(true)}
           >
             <Search
-              placeholder="input search text"
+              placeholder="Search Model"
               onChange={(e) => onSearch(e)}
-              enterButton
+              // enterButton
             />
           </div>
         </h4>

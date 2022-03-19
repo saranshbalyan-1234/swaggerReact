@@ -46,16 +46,7 @@ const Login = () => {
       }}
     >
       <Spin spinning={loading}>
-        <Card
-          title="Login"
-          bordered
-          class="shadow"
-          style={{
-            width: "350px",
-            height: "330px",
-            boxShadow: "0px 0px 20px 20px black;",
-          }}
-        >
+        <Card title="Login" bordered class="shadow">
           <Form
             name="normal_login"
             className="login-form"
