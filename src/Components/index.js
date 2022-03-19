@@ -7,6 +7,7 @@ import "antd/dist/antd.css";
 import Tag from "./Tag";
 import { Spin, message } from "antd";
 import Model from "./Model/Model";
+import { LoadingOutlined } from "@ant-design/icons";
 import { api_base_url } from "../constants";
 export default function Swagger({ basePath, setBasePath }) {
   const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ export default function Swagger({ basePath, setBasePath }) {
   const [refresh, setRefresh] = useState(false);
   const [canImport, setCanImport] = useState(true);
   const [projects, setProjects] = useState([]);
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   useEffect(() => {
     setLoading(true);
     setCanImport(true);
@@ -133,7 +135,7 @@ export default function Swagger({ basePath, setBasePath }) {
           editMode={editMode}
           canImport={canImport}
         />
-        <Spin spinning={loading}>
+        <Spin indicator={antIcon} spinning={loading}>
           <Settings servers={data.servers} schemes={data.schemes} />
 
           {data.tags &&
