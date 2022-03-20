@@ -8,6 +8,7 @@ export default function Settings({
   editMode,
   refresh,
   setRefresh,
+  setTagSearch,
 }) {
   const [authVisible, setAuthVisible] = useState(false);
   const [addTagVisible, setAddTagVisible] = useState(false);
@@ -15,6 +16,10 @@ export default function Settings({
   const [token, setToken] = useState({ value: "", status: "unauthorized" });
   const [addTagDetails, setAddTagDetails] = useState({});
   const [addTagLoading, setAddTagLoading] = useState(false);
+
+  const onSearch = (e) => {
+    setTagSearch(e.target.value.toLowerCase());
+  };
   useEffect(() => {
     servers && setCurrentServer(servers[0].url);
   }, [servers]);
@@ -71,12 +76,22 @@ export default function Settings({
       <div className="scheme-container" style={{ marginTop: "-50px" }}>
         <section className="schemes wrapper block col-12">
           <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <Input.Search
+              placeholder="Search Tags"
+              onChange={(e) => onSearch(e)}
+              // enterButton
+              style={{
+                marginRight: "20px",
+                marginTop: "14px",
+                width: "250px",
+                // marginBottom: "-20px",
+              }}
+            />
             <div>
               <span className="servers-title">Servers</span>
               <div className="servers">
                 <label for="servers">
-                  <Tooltip placement="right" title={currentServer + "sa"}>
-                    {" "}
+                  <Tooltip placement="right" title={currentServer}>
                     <select
                       value={currentServer}
                       onChange={(e) => {
@@ -135,6 +150,7 @@ export default function Settings({
             </button>
           </div>
         </section>
+
         {editMode && (
           <>
             <Button

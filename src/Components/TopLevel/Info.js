@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, Spin, message, Tabs, Input } from "antd";
+import { Button, Modal, Spin, message, Tabs, Input, Tag } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api_base_url } from "../../constants";
@@ -60,16 +60,28 @@ export default function Info({
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <h2 className="title">
+                  <h2 className="title" style={{ position: "relative" }}>
                     Swagger
-                    <span>
-                      <small>
-                        <pre className="version">v1</pre>
-                      </small>
-                      <small className="version-stamp">
-                        <pre className="version">By Saransh</pre>
-                      </small>
-                    </span>
+                    <Tag
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        marginLeft: "10px",
+                      }}
+                      color="blue"
+                    >
+                      v1
+                    </Tag>
+                    <Tag
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        marginLeft: "45px",
+                      }}
+                      color="green"
+                    >
+                      By Saransh
+                    </Tag>
                   </h2>
                   <div style={{ display: "flex" }}>
                     {localStorage.getItem("token") ? (
@@ -133,7 +145,7 @@ export default function Info({
                   rel="noopener noreferrer"
                   className="link"
                 >
-                  <span className="url">{basePath}</span>
+                  {basePath && <Tag color="red">{basePath}</Tag>}
                 </a>
               </hgroup>
               <div className="description"></div>

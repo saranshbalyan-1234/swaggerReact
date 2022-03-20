@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 import ApiUrl from "./Api/ApiUrl";
-import {
-  Button,
-  Modal,
-  Spin,
-  Form,
-  Input,
-  Select,
-  Popconfirm,
-  message,
-} from "antd";
+import { Input, Select, Popconfirm, message } from "antd";
+import AddApi from "./Api/AddApi/AddApi";
 import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { api_base_url } from "../constants";
@@ -30,11 +22,12 @@ export default function Tag({
   const [api, showApi] = useState(false);
   const [addApi, setAddApi] = useState(false);
   const [search, setSearch] = useState("");
+
   const onSearch = (e) => {
     showApi(true);
     setSearch(e.target.value.toLowerCase());
   };
-  const { Option } = Select;
+
   const { Search } = Input;
 
   useEffect(() => {
@@ -168,147 +161,16 @@ export default function Tag({
             )
           );
         })}
-      <Modal
-        width={950}
-        title="Add New API"
-        centered
-        visible={addApi}
-        onCancel={() => setAddApi(false)}
-        footer={false}
-      >
-        <Spin
-          spinning={false}
-          // spinning={loading}
-        >
-          <Form name="basic" {...formItemLayout}>
-            <div style={{ display: "flex" }}>
-              <Form.Item
-                style={{ width: "45%" }}
-                label="End Point"
-                name="path"
-                rules={[
-                  { required: true, message: "Please input API End Point!" },
-                ]}
-              >
-                <Input
-                  placeholder="API End Point"
-                  // onChange={(e) => setName(e.target.value)}
-                  // style={{ width: "400px" }}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Type"
-                name="type"
-                style={{ width: "45%", marginLeft: "20px" }}
-                rules={[{ required: true, message: "Please Select Type!" }]}
-              >
-                <Select name="type" defaultValue="get">
-                  <Option value="get">GET</Option>
-                  <Option value="post">POST</Option>
-                  <Option value="put">PUT</Option>
-                  <Option value="delete">DELETE</Option>
-                  {/* <Option value="patch">PATCH</Option>
-                <Option value="head">HEAD</Option>
-                <Option value="options">OPTIONS</Option> */}
-                </Select>
-              </Form.Item>
-            </div>
-            <div style={{ display: "flex" }}>
-              <Form.Item
-                style={{ width: "45%" }}
-                label="Summary"
-                name="summary"
-              >
-                <Input
-                  placeholder="Summary"
-                  // onChange={(e) => setName(e.target.value)}
-                  // style={{ width: "400px" }}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Description"
-                name="description"
-                style={{ width: "45%", marginLeft: "20px" }}
-              >
-                <Input
-                  placeholder="Description"
-                  // onChange={(e) => setName(e.target.value)}
-                  // style={{ width: "400px" }}
-                />
-              </Form.Item>
-            </div>
-            <div style={{ display: "flex" }}>
-              <Form.Item
-                label="Consumes"
-                name="consumes"
-                style={{ width: "45%" }}
-                rules={[
-                  { required: true, message: "Please Select Consumes Type!" },
-                ]}
-              >
-                <Select mode="tags" name="type" defaultValue="application/json">
-                  <Option>application/json</Option>
-                  <Option>application/xml</Option>
-                  <Option>application/x-www-form-urlencoded</Option>
-                  <Option>multipart/form-data</Option>
-                  <Option>text/plain; charset=utf-8</Option>
-                  <Option>text/html</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="Produces"
-                name="produces"
-                style={{ width: "45%", marginLeft: "20px" }}
-                rules={[
-                  { required: true, message: "Please Select Produces Type!" },
-                ]}
-              >
-                <Select
-                  mode="tags"
-                  name="Produces"
-                  defaultValue="application/json"
-                >
-                  <Option>application/json</Option>
-                  <Option>application/xml</Option>
-                  <Option>application/x-www-form-urlencoded</Option>
-                  <Option>multipart/form-data</Option>
-                  <Option>text/plain; charset=utf-8</Option>
-                  <Option>text/html</Option>
-                </Select>
-              </Form.Item>
-            </div>
-            <Form.Item
-              label="Tags"
-              name="tags"
-              style={{ width: "45%" }}
-              rules={[{ required: true, message: "Please Select Tags!" }]}
-            >
-              <Select mode="tags" name="type" defaultValue={tag.name}>
-                {tags.map((el) => {
-                  return <Option>{el.name}</Option>;
-                })}
-              </Select>
-            </Form.Item>
-            <hr />
-            <h3>Properties</h3>
-            <div style={{ display: "flex", marginBottom: "10px" }}>
-              <span style={{ marginLeft: "5px" }}>Name</span>
-              <span style={{ marginLeft: "140px" }}>Type</span>
-              {/* <span style={{ marginLeft: "150px" }}>Format</span> */}
-            </div>
-            <Form style={{ overflow: "scroll", maxHeight: "40vh" }}></Form>
-            <Form.Item wrapperCol={{ offset: 10, span: 8 }}>
-              <Button
-                type="primary"
-                htmlType="button"
-                //  onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-        </Spin>
-      </Modal>
+      {addApi && (
+        <AddApi
+          refresh={refresh}
+          setRefresh={setRefresh}
+          addApi={addApi}
+          setAddApi={setAddApi}
+          tags={tags}
+          tag={tag}
+        />
+      )}
     </>
   );
 }

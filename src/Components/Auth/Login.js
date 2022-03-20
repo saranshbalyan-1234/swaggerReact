@@ -19,7 +19,7 @@ const Login = () => {
       .then((res) => {
         message.success("Logged In Successfully");
         localStorage.setItem("token", res.data.token);
-        navigate("/swagger");
+        navigate("/");
         setLoading(false);
       })
       .catch((err) => {

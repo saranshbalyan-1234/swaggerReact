@@ -5,7 +5,7 @@ import Info from "./TopLevel/Info";
 import Settings from "./TopLevel/Settings";
 import "antd/dist/antd.css";
 import Tag from "./Tag";
-import { Spin, message, Button } from "antd";
+import { Spin, message, Button, Input } from "antd";
 import Model from "./Model/Model";
 import { LoadingOutlined } from "@ant-design/icons";
 import { api_base_url } from "../constants";
@@ -16,6 +16,7 @@ export default function Swagger({ basePath, setBasePath }) {
   const [refresh, setRefresh] = useState(false);
   const [canImport, setCanImport] = useState(true);
   const [projects, setProjects] = useState([]);
+  const [tagSearch, setTagSearch] = useState("");
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   useEffect(() => {
     setLoading(true);
@@ -60,7 +61,7 @@ export default function Swagger({ basePath, setBasePath }) {
     setCanImport(false);
   };
   useEffect(() => {
-    getData();
+    projects.length > 0 && getData();
   }, [refresh]);
 
   const getFromJson = (basePath) => {
@@ -139,6 +140,7 @@ export default function Swagger({ basePath, setBasePath }) {
           editMode={editMode}
           canImport={canImport}
         />
+
         <Spin indicator={antIcon} spinning={loading}>
           <Settings
             servers={data.servers}
@@ -146,22 +148,25 @@ export default function Swagger({ basePath, setBasePath }) {
             editMode={editMode}
             refresh={refresh}
             setRefresh={setRefresh}
+            setTagSearch={setTagSearch}
           />
 
           {data.tags &&
             data.tags.map((el, index) => {
               return (
-                <Tag
-                  key={index}
-                  tag={el}
-                  paths={data.paths}
-                  models={data.definitions}
-                  tags={data.tags}
-                  basePath={basePath}
-                  editMode={editMode}
-                  refresh={refresh}
-                  setRefresh={setRefresh}
-                />
+                el.name.toLowerCase().includes(tagSearch) && (
+                  <Tag
+                    key={index}
+                    tag={el}
+                    paths={data.paths}
+                    models={data.definitions}
+                    tags={data.tags}
+                    basePath={basePath}
+                    editMode={editMode}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                  />
+                )
               );
             })}
           <Model

@@ -70,7 +70,7 @@ export default function AddModel({
       properties: JSON.stringify(temp),
     };
     axios
-      .post(api_base_url + "/importSingleModel", data)
+      .post(api_base_url + "/addModel", data)
       .then((res) => {
         setLoading(false);
         message.success("Model Added Successfully");
@@ -80,7 +80,6 @@ export default function AddModel({
       .catch((err) => {
         setLoading(false);
         message.error("Model Not Added");
-        setEditModal(false);
       });
     // setLoading(false);
   };
@@ -130,142 +129,181 @@ export default function AddModel({
               <span style={{ marginLeft: "140px" }}>Type</span>
               {/* <span style={{ marginLeft: "150px" }}>Format</span> */}
             </div>
-            <Form style={{ overflow: "scroll", maxHeight: "40vh" }}>
-              <Form name="names">
-                {propertiesData.map((data, index) => (
-                  <div
-                    style={{
-                      display: "flex",
-                    }}
-                  >
-                    <Form.Item required={true} key={index}>
-                      <Form.Item
-                        validateTrigger={["onChange", "onBlur"]}
-                        rules={[
-                          {
-                            required: true,
-                            whitespace: true,
-                            message:
-                              "Please input all all field or delete this",
-                          },
-                        ]}
-                        noStyle
+            {/* <Form> */}
+            <Form
+              name="names"
+              style={{ overflow: "scroll", maxHeight: "40vh" }}
+            >
+              {propertiesData.map((data, index) => (
+                <div
+                  style={{
+                    display: "flex",
+                  }}
+                >
+                  <Form.Item required={true} key={index}>
+                    <Form.Item
+                      validateTrigger={["onChange", "onBlur"]}
+                      rules={[
+                        {
+                          required: true,
+                          whitespace: true,
+                          message: "Please input all all field or delete this",
+                        },
+                      ]}
+                      noStyle
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                        }}
                       >
-                        <div
-                          style={{
-                            display: "flex",
-                          }}
+                        <Input
+                          style={{ width: "170px" }}
+                          placeholder="Property name"
+                          onChange={(e) =>
+                            handleData(e.target.value, index, "name")
+                          }
+                          value={propertiesData[index].name}
+                        />
+                        <Select
+                          defaultValue={"object"}
+                          style={{ width: "170px", marginLeft: "10px" }}
+                          value={propertiesData[index].type}
+                          onChange={(e) => handleData(e, index, "type")}
                         >
-                          <Input
-                            style={{ width: "170px" }}
-                            placeholder="Property name"
-                            onChange={(e) =>
-                              handleData(e.target.value, index, "name")
-                            }
-                            value={propertiesData[index].name}
-                          />
+                          <Option value="object">Object</Option>
+                          <Option value="array">Array</Option>
+                          <Option value="string">String</Option>
+                          <Option value="boolean">Boolean</Option>
+                          <Option value="integer">Integer</Option>
+                          <Option value="number">Number</Option>
+                          <Option value="model">Model</Option>
+                        </Select>
+                        {(propertiesData[index].type == "integer" ||
+                          propertiesData[index].type == "number" ||
+                          propertiesData[index].type == "string") && (
+                          <>
+                            <AutoComplete
+                              onChange={(e) => handleData(e, index, "format")}
+                              style={{ width: "170px", marginLeft: "10px" }}
+                              options={
+                                propertiesData[index].type == "integer"
+                                  ? [{ value: "int32" }, { value: "int64" }]
+                                  : propertiesData[index].type == "number"
+                                  ? [{ value: "float" }, { value: "double" }]
+                                  : propertiesData[index].type == "string" && [
+                                      {
+                                        value: "date",
+                                      },
+                                      {
+                                        value: "date-time",
+                                      },
+                                      {
+                                        value: "email",
+                                      },
+                                      {
+                                        value: "password",
+                                      },
+                                      {
+                                        value: "byte",
+                                      },
+                                      {
+                                        value: "binary",
+                                      },
+                                      {
+                                        value: "hostname",
+                                      },
+                                      {
+                                        value: "ipv4",
+                                      },
+                                      {
+                                        value: "ipv6",
+                                      },
+                                      {
+                                        value: "uri",
+                                      },
+                                      {
+                                        value: "uuid",
+                                      },
+                                    ]
+                              }
+                              placeholder="Select format"
+                              filterOption={(inputValue, option) =>
+                                option.value
+                                  .toUpperCase()
+                                  .indexOf(inputValue.toUpperCase()) !== -1
+                              }
+                            />
+                            <Select
+                              placeholder="ENUM?"
+                              style={{ width: "170px", marginLeft: "10px" }}
+                              onChange={(e) =>
+                                handleData(e, index, "enumCheck")
+                              }
+                            >
+                              <Option value="no">No</Option>
+                              <Option value="yes">Yes</Option>
+                            </Select>
+                          </>
+                        )}
+                        {propertiesData[index].enumCheck == "yes" && (
                           <Select
-                            defaultValue={"object"}
+                            mode="tags"
+                            onChange={(value) =>
+                              handleEnum(
+                                value,
+
+                                index
+                              )
+                            }
+                            placeholder="Enter Enum Values"
                             style={{ width: "170px", marginLeft: "10px" }}
-                            value={propertiesData[index].type}
-                            onChange={(e) => handleData(e, index, "type")}
+                          />
+                        )}
+                        {propertiesData[index].type == "model" && (
+                          <Select
+                            style={{ width: "170px", marginLeft: "10px" }}
+                            placeholder="Select Model"
+                            value={propertiesData[index].ref?.substring(14)}
+                            onChange={(e) => handleData(e, index, "ref")}
                           >
-                            <Option value="object">Object</Option>
-                            <Option value="array">Array</Option>
+                            {allModel.map((el) => {
+                              return <Option value={el.name}>{el.name}</Option>;
+                            })}
+                          </Select>
+                        )}
+                        {propertiesData[index].type == "array" && (
+                          // <Select
+                          //   style={{ width: "170px", marginLeft: "10px" }}
+                          //   placeholder="Select Model"
+                          //   value={propertiesData[index].arrayref}
+                          //   onChange={(e) => handleData(e, index, "arrayref")}
+                          // >
+                          //   {allModel.map((el) => {
+                          //     return (
+                          //       <Option value={el.name}>{el.name}</Option>
+                          //     );
+                          //   })}
+                          // </Select>
+                          <Select
+                            style={{ width: "170px", marginLeft: "10px" }}
+                            placeholder="Select Type"
+                            value={propertiesData[index].arrayType}
+                            onChange={(e) => handleData(e, index, "arrayType")}
+                          >
                             <Option value="string">String</Option>
-                            <Option value="boolean">Boolean</Option>
                             <Option value="integer">Integer</Option>
                             <Option value="number">Number</Option>
                             <Option value="model">Model</Option>
                           </Select>
-                          {(propertiesData[index].type == "integer" ||
-                            propertiesData[index].type == "number" ||
-                            propertiesData[index].type == "string") && (
-                            <>
-                              <AutoComplete
-                                onChange={(e) => handleData(e, index, "format")}
-                                style={{ width: "170px", marginLeft: "10px" }}
-                                options={
-                                  propertiesData[index].type == "integer"
-                                    ? [{ value: "int32" }, { value: "int64" }]
-                                    : propertiesData[index].type == "number"
-                                    ? [{ value: "float" }, { value: "double" }]
-                                    : propertiesData[index].type ==
-                                        "string" && [
-                                        {
-                                          value: "date",
-                                        },
-                                        {
-                                          value: "date-time",
-                                        },
-                                        {
-                                          value: "email",
-                                        },
-                                        {
-                                          value: "password",
-                                        },
-                                        {
-                                          value: "byte",
-                                        },
-                                        {
-                                          value: "binary",
-                                        },
-                                        {
-                                          value: "hostname",
-                                        },
-                                        {
-                                          value: "ipv4",
-                                        },
-                                        {
-                                          value: "ipv6",
-                                        },
-                                        {
-                                          value: "uri",
-                                        },
-                                        {
-                                          value: "uuid",
-                                        },
-                                      ]
-                                }
-                                placeholder="Select format"
-                                filterOption={(inputValue, option) =>
-                                  option.value
-                                    .toUpperCase()
-                                    .indexOf(inputValue.toUpperCase()) !== -1
-                                }
-                              />
-                              <Select
-                                placeholder="ENUM?"
-                                style={{ width: "170px", marginLeft: "10px" }}
-                                onChange={(e) =>
-                                  handleData(e, index, "enumCheck")
-                                }
-                              >
-                                <Option value="no">No</Option>
-                                <Option value="yes">Yes</Option>
-                              </Select>
-                            </>
-                          )}
-                          {propertiesData[index].enumCheck == "yes" && (
-                            <Select
-                              mode="tags"
-                              onChange={(value) =>
-                                handleEnum(
-                                  value,
-
-                                  index
-                                )
-                              }
-                              placeholder="Enter Enum Values"
-                              style={{ width: "170px", marginLeft: "10px" }}
-                            />
-                          )}
-                          {propertiesData[index].type == "model" && (
+                        )}
+                        {propertiesData[index].type == "array" &&
+                          propertiesData[index].arrayType == "model" && (
                             <Select
                               style={{ width: "170px", marginLeft: "10px" }}
                               placeholder="Select Model"
-                              value={propertiesData[index].ref?.substring(14)}
-                              onChange={(e) => handleData(e, index, "ref")}
+                              value={propertiesData[index].arrayref}
+                              onChange={(e) => handleData(e, index, "arrayref")}
                             >
                               {allModel.map((el) => {
                                 return (
@@ -274,82 +312,38 @@ export default function AddModel({
                               })}
                             </Select>
                           )}
-                          {propertiesData[index].type == "array" && (
-                            // <Select
-                            //   style={{ width: "170px", marginLeft: "10px" }}
-                            //   placeholder="Select Model"
-                            //   value={propertiesData[index].arrayref}
-                            //   onChange={(e) => handleData(e, index, "arrayref")}
-                            // >
-                            //   {allModel.map((el) => {
-                            //     return (
-                            //       <Option value={el.name}>{el.name}</Option>
-                            //     );
-                            //   })}
-                            // </Select>
-                            <Select
-                              style={{ width: "170px", marginLeft: "10px" }}
-                              placeholder="Select Type"
-                              value={propertiesData[index].arrayType}
-                              onChange={(e) =>
-                                handleData(e, index, "arrayType")
-                              }
-                            >
-                              <Option value="string">String</Option>
-                              <Option value="integer">Integer</Option>
-                              <Option value="number">Number</Option>
-                              <Option value="model">Model</Option>
-                            </Select>
-                          )}
-                          {propertiesData[index].type == "array" &&
-                            propertiesData[index].arrayType == "model" && (
-                              <Select
-                                style={{ width: "170px", marginLeft: "10px" }}
-                                placeholder="Select Model"
-                                value={propertiesData[index].arrayref}
-                                onChange={(e) =>
-                                  handleData(e, index, "arrayref")
-                                }
-                              >
-                                {allModel.map((el) => {
-                                  return (
-                                    <Option value={el.name}>{el.name}</Option>
-                                  );
-                                })}
-                              </Select>
-                            )}
-                        </div>
-                      </Form.Item>
+                      </div>
                     </Form.Item>
+                  </Form.Item>
 
-                    {propertiesData.length > 1 && (
-                      <MinusCircleOutlined
-                        style={{
-                          marginTop: "8px",
-                          marginLeft: "10px",
-                        }}
-                        className="dynamic-delete-button"
-                        onClick={() => deleteRow(index)}
-                      />
-                    )}
-                  </div>
-                ))}
+                  {propertiesData.length > 1 && (
+                    <MinusCircleOutlined
+                      style={{
+                        marginTop: "8px",
+                        marginLeft: "10px",
+                      }}
+                      className="dynamic-delete-button"
+                      onClick={() => deleteRow(index)}
+                    />
+                  )}
+                </div>
+              ))}
 
-                <Button
-                  type="dashed"
-                  onClick={() =>
-                    setPropertiesData([
-                      ...propertiesData,
-                      { name: "", type: "object" },
-                    ])
-                  }
-                  style={{ width: "30%" }}
-                  icon={<PlusOutlined />}
-                >
-                  Add Property
-                </Button>
-              </Form>
+              <Button
+                type="dashed"
+                onClick={() =>
+                  setPropertiesData([
+                    ...propertiesData,
+                    { name: "", type: "object" },
+                  ])
+                }
+                style={{ width: "30%" }}
+                icon={<PlusOutlined />}
+              >
+                Add Property
+              </Button>
             </Form>
+            {/* </Form> */}
             <Form.Item wrapperCol={{ offset: 10, span: 8 }}>
               <Button type="primary" htmlType="button" onClick={handleSubmit}>
                 Submit
