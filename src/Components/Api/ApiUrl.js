@@ -1,6 +1,14 @@
 import React from "react";
 import Api from "./Api";
-export default function ApiUrl({ url, data, basePath, models }) {
+export default function ApiUrl({
+  url,
+  data,
+  basePath,
+  models,
+  refresh,
+  setRefresh,
+  editMode,
+}) {
   return (
     <>
       {Object.keys(data).map(function (key, index) {
@@ -12,6 +20,9 @@ export default function ApiUrl({ url, data, basePath, models }) {
             url={url}
             models={models}
             basePath={basePath}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            editMode={editMode}
           />
         );
       })}

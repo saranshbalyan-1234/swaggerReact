@@ -26,7 +26,10 @@ export default function AddParameter({ setParameterData, parameterData }) {
     if (type != "ref") {
       temp[index][type] = value;
     } else {
-      temp[index][type] = "#/definitions/" + value;
+      temp[index].schema = {
+        $ref: "#/definitions/" + value,
+      };
+      // temp[index][type] = "#/definitions/" + value;
     }
     setParameterData(temp);
   };
@@ -75,12 +78,17 @@ export default function AddParameter({ setParameterData, parameterData }) {
                   defaultValue={"body"}
                   style={{ width: "170px" }}
                   value={parameterData[index].in}
-                  onChange={(e) => handleData(e, index, "in")}
+                  onChange={(e) => {
+                    handleData(e, index, "in");
+                    e == "body"
+                      ? handleData("model", index, "type")
+                      : handleData("object", index, "type");
+                  }}
                 >
-                  <Option value="body">Body</Option>
                   <Option value="path">Path</Option>
                   <Option value="query">Query</Option>
-                  <Option value="header">Header</Option>
+                  <Option value="body">Body</Option>
+                  {/* <Option value="header">Header</Option> */}
                 </Select>
                 <Input
                   style={{ width: "170px", marginLeft: "10px" }}
@@ -89,18 +97,25 @@ export default function AddParameter({ setParameterData, parameterData }) {
                   value={parameterData[index].name}
                 />
                 <Select
-                  defaultValue={"object"}
+                  defaultValue={
+                    parameterData[index].in == "body" ? "object" : "string"
+                  }
                   style={{ width: "170px", marginLeft: "10px" }}
                   value={parameterData[index].type}
                   onChange={(e) => handleData(e, index, "type")}
                 >
-                  <Option value="object">Object</Option>
-                  <Option value="array">Array</Option>
-                  <Option value="string">String</Option>
-                  <Option value="boolean">Boolean</Option>
-                  <Option value="integer">Integer</Option>
-                  <Option value="number">Number</Option>
-                  <Option value="model">Model</Option>
+                  {parameterData[index].in == "body" ? (
+                    <Option value="model">Model</Option>
+                  ) : (
+                    <>
+                      <Option value="object">Object</Option>
+                      <Option value="array">Array</Option>
+                      <Option value="string">String</Option>
+                      <Option value="boolean">Boolean</Option>
+                      <Option value="integer">Integer</Option>
+                      <Option value="number">Number</Option>
+                    </>
+                  )}
                 </Select>
                 {(parameterData[index].type == "integer" ||
                   parameterData[index].type == "number" ||
@@ -253,7 +268,7 @@ export default function AddParameter({ setParameterData, parameterData }) {
         onClick={() =>
           setParameterData([
             ...parameterData,
-            { in: "body", name: "", type: "object" },
+            { in: "body", name: "", type: "model" },
           ])
         }
         style={{ width: "30%" }}

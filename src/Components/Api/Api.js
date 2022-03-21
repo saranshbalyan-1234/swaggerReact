@@ -1,16 +1,49 @@
 import React, { useState, useEffect } from "react";
-import { Button, message, Spin, Input, Upload } from "antd";
+import { Button, message, Spin, Input, Upload, Popconfirm } from "antd";
 import SchemaToJson from "../Util/SchemaToJson";
 import axios from "axios";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  DeleteOutlined,
+  UnlockFilled,
+} from "@ant-design/icons";
 import "../../Style/style.css";
-export default function Api({ data, url, type, models, basePath }) {
+import { api_base_url } from "../../constants";
+export default function Api({
+  data,
+  url,
+  type,
+  models,
+  basePath,
+  refresh,
+  setRefresh,
+  editMode,
+}) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   const [jsonBody, setJsonBody] = useState();
   const [newURL, setNewURL] = useState(...url);
   const [loading, setLoading] = useState(false);
   const [formdata, setFormdata] = useState(false);
+  const [confirmLoading, setCofirmLoading] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const deletePath = () => {
+    setCofirmLoading(true);
+    axios
+      .post(api_base_url + "/deletePath", { id: data.id })
+      .then((res) => {
+        message.success("API Deleted Successfully");
+        setRefresh(!refresh);
+        setCofirmLoading(false);
+        setShowConfirm(false);
+      })
+      .catch((err) => {
+        message.error("something Went Wrong");
+        setCofirmLoading(false);
+        setShowConfirm(false);
+      });
+  };
   let formData = new FormData();
   let queryString = "";
   let searchParam = {};
@@ -105,9 +138,30 @@ export default function Api({ data, url, type, models, basePath }) {
               className="fa-solid fa-angle-down"
             ></i>
           </button>
-          <button className="authorization__btn unlocked">
-            <i className="fa fa-unlock"></i>
-          </button>
+
+          <UnlockFilled style={{ marginLeft: "5px", marginRight: "5px" }} />
+
+          {editMode && (
+            <Popconfirm
+              title="Are you Sure?"
+              visible={showConfirm}
+              onConfirm={() => {
+                deletePath();
+              }}
+              placement="left"
+              okText="Yes"
+              okButtonProps={{ loading: confirmLoading }}
+              onCancel={() => setShowConfirm(false)}
+            >
+              <DeleteOutlined
+                onClick={() => {
+                  // deleteModel(allData[data].id);
+                  setShowConfirm(true);
+                }}
+                style={{ marginRight: "5px" }}
+              />
+            </Popconfirm>
+          )}
         </div>
         <div className="no-margin">
           {body && (

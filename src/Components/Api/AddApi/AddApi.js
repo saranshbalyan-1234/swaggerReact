@@ -40,8 +40,8 @@ export default function AddApi({
   };
   const handleSubmit = () => {
     setLoading(true);
-    let temp = {};
-    parameterData.forEach((el) => {
+
+    const temp = parameterData.map((el) => {
       let temp1 = { ...el };
       delete temp1.name;
       temp1.type == "model" && delete temp1.type;
@@ -62,7 +62,7 @@ export default function AddApi({
         delete temp1.arrayref;
       }
       temp1.arrayref && delete temp1.arrayref;
-      temp[el.name] = temp1;
+      return temp1;
     });
     let temp1 = {};
     responseData.forEach((el) => {

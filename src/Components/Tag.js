@@ -157,6 +157,9 @@ export default function Tag({
                 data={data[key]}
                 url={key}
                 models={models}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                editMode={editMode}
               />
             )
           );
