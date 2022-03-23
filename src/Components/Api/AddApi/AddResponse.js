@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Modal,
-  Spin,
-  Input,
-  Form,
-  Select,
-  AutoComplete,
-  message,
-  Switch,
-} from "antd";
+import { Button, Input, Form, Select, message, Switch } from "antd";
 import axios from "axios";
 import { api_base_url } from "../../../constants";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
