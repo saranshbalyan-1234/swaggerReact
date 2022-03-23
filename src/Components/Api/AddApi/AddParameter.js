@@ -18,7 +18,9 @@ export default function AddParameter({ setParameterData, parameterData }) {
 
   useEffect(() => {
     axios
-      .get(api_base_url + "/getAllModels")
+      .post(api_base_url + "/getAllModels", {
+        project_id: JSON.parse(localStorage.getItem("project")).id,
+      })
       .then((res) => setAllModel(res.data));
   }, []);
   const handleData = (value, index, type) => {

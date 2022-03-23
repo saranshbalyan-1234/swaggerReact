@@ -135,10 +135,12 @@ export default function Swagger({ basePath, setBasePath }) {
 
         <Info
           basePath={basePath}
+          setBasePath={setBasePath}
           datas={data}
           setEditMode={setEditMode}
           editMode={editMode}
           canImport={canImport}
+          getFromDataBase={getFromDataBase}
         />
 
         <Spin indicator={antIcon} spinning={loading}>

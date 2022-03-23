@@ -10,6 +10,8 @@ export default function Info({
   setEditMode,
   editMode,
   canImport,
+  getFromDataBase,
+  setBasePath,
 }) {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
@@ -17,22 +19,33 @@ export default function Info({
   const [projectName, setProjectName] = useState("");
 
   const importData = async () => {
+    console.log("canImport", canImport);
     setLoadingImport(true);
+
     const { data } = await axios.post(api_base_url + "/createProject", {
       projectName: projectName,
     });
+
     setProjectName("");
-    await axios
-      .post(api_base_url + "/import", {
-        ...datas,
-        project_id: data.id,
-      })
-      .then((res) => {
-        message.success("success");
-      })
-      .catch((err) => {
-        message.error("error");
-      });
+    setBasePath(projectName);
+    canImport &&
+      (await axios
+        .post(api_base_url + "/import", {
+          ...datas,
+          project_id: data.id,
+        })
+        .then((res) => {
+          message.success("success");
+        })
+        .catch((err) => {
+          message.error("error");
+        }));
+    getFromDataBase(data.id);
+    localStorage.setItem(
+      "project",
+      JSON.stringify({ id: data.id, name: data.name })
+    );
+    setVisible(false);
     setLoadingImport(false);
   };
   const logout = () => {
@@ -171,17 +184,17 @@ export default function Info({
             <TabPane tab="Import" key="1">
               <div style={{ display: "flex" }}>
                 <Input
-                  disabled={!canImport}
+                  // disabled={!canImport}
                   onChange={(e) => setProjectName(e.target.value)}
                   placeholder="Enter Project Name"
                   style={{ width: "250px", marginRight: "10px" }}
                 />
                 <Button
-                  disabled={!canImport}
+                  // disabled={!canImport}
                   type="primary"
                   onClick={importData}
                 >
-                  Import Current Swagger
+                  {canImport ? "Import Current Swagger" : "New Project"}
                 </Button>
               </div>
             </TabPane>
