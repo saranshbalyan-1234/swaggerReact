@@ -22,7 +22,7 @@ export default function Api({
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   const [jsonBody, setJsonBody] = useState();
-  const [newURL, setNewURL] = useState(...url);
+  const [newURL, setNewURL] = useState(url);
   const [loading, setLoading] = useState(false);
   const [formdata, setFormdata] = useState(false);
   const [confirmLoading, setCofirmLoading] = useState(false);
@@ -51,11 +51,16 @@ export default function Api({
 
   const executeApi = () => {
     let tempURL = newURL;
+
+    if (tempURL.includes("{") && tempURL.includes("}")) {
+      message.error("Invalid Path Variable");
+      return;
+    }
     if (queryString != "") tempURL = newURL + "?" + queryString;
 
     setLoading(true);
     if (jsonBody) {
-      axios[type]("basePath" + tempURL, jsonBody)
+      axios[type](basePath + tempURL, jsonBody)
         .then((res) => {
           message.success("Success");
           setLoading(false);
@@ -65,7 +70,7 @@ export default function Api({
           setLoading(false);
         });
     } else if (formdata) {
-      axios[type]("basePath" + tempURL, formData)
+      axios[type](basePath + tempURL, formData)
         .then((res) => {
           message.success("Success");
           setLoading(false);
@@ -75,7 +80,7 @@ export default function Api({
           setLoading(false);
         });
     } else {
-      axios[type]("basePath" + tempURL)
+      axios[type](basePath + tempURL)
         .then((res) => {
           message.success("Success");
           setLoading(false);
