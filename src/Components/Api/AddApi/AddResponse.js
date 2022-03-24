@@ -16,7 +16,6 @@ export default function AddResponse({ responseData, setResponseData }) {
       .then((res) => setAllModel(res.data));
   }, []);
   const handleData = (value, index, type) => {
-    console.log("response", value);
     let temp = [...responseData];
     temp[index][type] = value;
     setResponseData(temp);

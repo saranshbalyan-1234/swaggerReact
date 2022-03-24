@@ -28,6 +28,7 @@ export default function Api({
   const [confirmLoading, setCofirmLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  console.log("data", data);
   const deletePath = () => {
     setCofirmLoading(true);
     axios

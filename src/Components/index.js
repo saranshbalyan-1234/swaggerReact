@@ -27,7 +27,6 @@ export default function Swagger({ basePath, setBasePath }) {
     await axios
       .get(api_base_url + "/getAllProjectByUser")
       .then((res) => {
-        // console.log("check", projects);
         setProjects(
           res.data.map((el) => {
             return { value: el.name, key: el.id };
@@ -44,8 +43,6 @@ export default function Swagger({ basePath, setBasePath }) {
       });
   };
   const getData = (project) => {
-    console.log("check", projects);
-
     if (localStorage.getItem("project")) {
       getFromDataBase(JSON.parse(localStorage.getItem("project")).id);
       setBasePath(JSON.parse(localStorage.getItem("project")).name);

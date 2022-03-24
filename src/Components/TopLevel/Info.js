@@ -19,7 +19,6 @@ export default function Info({
   const [projectName, setProjectName] = useState("");
 
   const importData = async (type) => {
-    console.log("canImport", canImport);
     setLoadingImport(true);
 
     const { data } = await axios.post(api_base_url + "/createProject", {

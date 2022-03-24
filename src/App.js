@@ -13,7 +13,7 @@ export default function App() {
       : (request.headers.Authorization = JSON.parse(
           localStorage.getItem("appToken")
         )?.value);
-    console.log("apis", request);
+
     return request;
   });
   const [basePath, setBasePath] = useState("");
