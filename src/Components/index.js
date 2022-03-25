@@ -82,7 +82,7 @@ export default function Swagger({ basePath, setBasePath }) {
     await axios
       .post(api_base_url + "/get", { project_id: id })
       .then((res) => {
-        setBasePath(res.data.host);
+        setBasePath(res.data.host + res.data.basePath);
         res.data.path.forEach((el) => {
           let object = {};
           object[el.type] = {
