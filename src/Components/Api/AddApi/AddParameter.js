@@ -84,7 +84,7 @@ export default function AddParameter({ setParameterData, parameterData }) {
                     handleData(e, index, "in");
                     e == "body"
                       ? handleData("model", index, "type")
-                      : handleData("object", index, "type");
+                      : handleData("string", index, "type");
                   }}
                 >
                   <Option value="path">Path</Option>
@@ -106,18 +106,25 @@ export default function AddParameter({ setParameterData, parameterData }) {
                   value={parameterData[index].type}
                   onChange={(e) => handleData(e, index, "type")}
                 >
-                  {parameterData[index].in == "body" ? (
+                  {parameterData[index].in == "body" && (
                     <Option value="model">Model</Option>
-                  ) : (
+                  )}
+                  {(parameterData[index].in == "path" ||
+                    parameterData[index].in == "query") && (
                     <>
-                      <Option value="object">Object</Option>
-                      <Option value="array">Array</Option>
                       <Option value="string">String</Option>
                       <Option value="boolean">Boolean</Option>
                       <Option value="integer">Integer</Option>
                       <Option value="number">Number</Option>
                     </>
                   )}
+
+                  {/* <Option value="object">Object</Option>
+                      <Option value="array">Array</Option>
+                      <Option value="string">String</Option>
+                      <Option value="boolean">Boolean</Option>
+                      <Option value="integer">Integer</Option>
+                      <Option value="number">Number</Option> */}
                 </Select>
                 {(parameterData[index].type == "integer" ||
                   parameterData[index].type == "number" ||
