@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import ApiUrl from "./Api/ApiUrl";
-import { Input, Select, Popconfirm, message, Empty } from "antd";
+import { Input, Switch, Popconfirm, message, Empty } from "antd";
 import AddApi from "./Api/AddApi/AddApi";
 import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -69,6 +69,7 @@ export default function Tag({
       sm: { span: 18 },
     },
   };
+
   return (
     <>
       <h3
@@ -107,7 +108,7 @@ export default function Tag({
               style={{ marginRight: "10px" }}
             />
             {editMode && (
-              <>
+              <div style={{ display: "flex" }}>
                 <PlusCircleOutlined
                   onClick={() => {
                     setAddApi(true);
@@ -125,7 +126,6 @@ export default function Tag({
                   okButtonProps={{ loading: confirmLoading }}
                   onCancel={() => setShowConfirm(false)}
                 >
-                  {" "}
                   <DeleteOutlined
                     onClick={() => {
                       setShowConfirm(true);
@@ -133,7 +133,7 @@ export default function Tag({
                     style={{ marginRight: "10px" }}
                   />
                 </Popconfirm>
-              </>
+              </div>
             )}
             <i
               onClick={() => showApi(!api)}

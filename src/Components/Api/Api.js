@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, message, Spin, Input, Upload, Popconfirm } from "antd";
+import { Button, message, Spin, Upload, Popconfirm, Switch } from "antd";
 import SchemaToJson from "../Util/SchemaToJson";
 import axios from "axios";
 import {
@@ -117,6 +117,17 @@ export default function Api({
       } else formData.append(el.name, e.target.value);
     }
   };
+  const handleDeprecated = (e) => {
+    axios
+      .post(api_base_url + "/update", { id: data.id, deprecated: e ? 1 : 0 })
+      .then((res) => {
+        message.success("Status Changed");
+        setRefresh(!refresh);
+      })
+      .catch((err) => {
+        message.error("something Went Wrong");
+      });
+  };
   return (
     <>
       <div
@@ -149,25 +160,35 @@ export default function Api({
           <UnlockFilled style={{ marginLeft: "5px", marginRight: "5px" }} />
 
           {editMode && (
-            <Popconfirm
-              title="Are you Sure?"
-              visible={showConfirm}
-              onConfirm={() => {
-                deletePath();
-              }}
-              placement="left"
-              okText="Yes"
-              okButtonProps={{ loading: confirmLoading }}
-              onCancel={() => setShowConfirm(false)}
-            >
-              <DeleteOutlined
-                onClick={() => {
-                  // deleteModel(allData[data].id);
-                  setShowConfirm(true);
+            <div style={{ display: "flex" }}>
+              {" "}
+              <Popconfirm
+                title="Are you Sure?"
+                visible={showConfirm}
+                onConfirm={() => {
+                  deletePath();
                 }}
-                style={{ marginRight: "5px" }}
+                placement="left"
+                okText="Yes"
+                okButtonProps={{ loading: confirmLoading }}
+                onCancel={() => setShowConfirm(false)}
+              >
+                <DeleteOutlined
+                  onClick={() => {
+                    // deleteModel(allData[data].id);
+                    setShowConfirm(true);
+                  }}
+                  style={{ marginRight: "5px" }}
+                />
+              </Popconfirm>
+              <Switch
+                defaultChecked
+                style={{ marginRight: "10px" }}
+                onChange={(e) => {
+                  handleDeprecated(e);
+                }}
               />
-            </Popconfirm>
+            </div>
           )}
         </div>
         <div className="no-margin">
