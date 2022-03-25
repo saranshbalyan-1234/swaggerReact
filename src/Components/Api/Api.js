@@ -18,6 +18,7 @@ export default function Api({
   refresh,
   setRefresh,
   editMode,
+  scheme,
 }) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
@@ -60,7 +61,7 @@ export default function Api({
 
     setLoading(true);
     if (jsonBody) {
-      axios[type](basePath + tempURL, jsonBody)
+      axios[type](scheme + basePath + tempURL, jsonBody)
         .then((res) => {
           message.success("Success");
           setLoading(false);
@@ -70,7 +71,7 @@ export default function Api({
           setLoading(false);
         });
     } else if (formdata) {
-      axios[type](basePath + tempURL, formData)
+      axios[type](scheme + basePath + tempURL, formData)
         .then((res) => {
           message.success("Success");
           setLoading(false);
@@ -80,7 +81,7 @@ export default function Api({
           setLoading(false);
         });
     } else {
-      axios[type](basePath + tempURL)
+      axios[type](scheme + basePath + tempURL)
         .then((res) => {
           message.success("Success");
           setLoading(false);

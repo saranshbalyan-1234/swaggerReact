@@ -12,6 +12,7 @@ export default function Info({
   canImport,
   getFromDataBase,
   setBasePath,
+  scheme,
 }) {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
@@ -210,7 +211,7 @@ export default function Info({
                 </div>
                 <a
                   target="_blank"
-                  href={basePath}
+                  href={scheme + basePath}
                   rel="noopener noreferrer"
                   className="link"
                 >

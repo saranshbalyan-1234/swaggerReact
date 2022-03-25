@@ -17,6 +17,7 @@ export default function Swagger({ basePath, setBasePath }) {
   const [canImport, setCanImport] = useState(true);
   const [projects, setProjects] = useState([]);
   const [tagSearch, setTagSearch] = useState("");
+  const [scheme, setScheme] = useState("http://");
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   useEffect(() => {
     setLoading(true);
@@ -141,6 +142,7 @@ export default function Swagger({ basePath, setBasePath }) {
           editMode={editMode}
           canImport={canImport}
           getFromDataBase={getFromDataBase}
+          scheme={scheme}
         />
 
         <Spin indicator={antIcon} spinning={loading}>
@@ -151,6 +153,7 @@ export default function Swagger({ basePath, setBasePath }) {
             refresh={refresh}
             setRefresh={setRefresh}
             setTagSearch={setTagSearch}
+            setScheme={setScheme}
           />
 
           {data.tags &&
@@ -167,6 +170,7 @@ export default function Swagger({ basePath, setBasePath }) {
                     editMode={editMode}
                     refresh={refresh}
                     setRefresh={setRefresh}
+                    scheme={scheme}
                   />
                 )
               );

@@ -15,6 +15,7 @@ export default function Tag({
   tags,
   refresh,
   setRefresh,
+  scheme,
 }) {
   const [data, setData] = useState({});
   const [showConfirm, setShowConfirm] = useState(false);
@@ -159,6 +160,7 @@ export default function Tag({
                   refresh={refresh}
                   setRefresh={setRefresh}
                   editMode={editMode}
+                  scheme={scheme}
                 />
               )
             );

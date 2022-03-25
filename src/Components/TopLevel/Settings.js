@@ -9,6 +9,7 @@ export default function Settings({
   refresh,
   setRefresh,
   setTagSearch,
+  setScheme,
 }) {
   const [authVisible, setAuthVisible] = useState(false);
   const [addTagVisible, setAddTagVisible] = useState(false);
@@ -121,7 +122,11 @@ export default function Settings({
               <div>Schemes</div>
               <div className="schemes">
                 <label for="schemes">
-                  <select>
+                  <select
+                    onChange={(e) => {
+                      setScheme(e.target.value + "://");
+                    }}
+                  >
                     {schemes ? (
                       schemes.map((el, index) => {
                         return (
