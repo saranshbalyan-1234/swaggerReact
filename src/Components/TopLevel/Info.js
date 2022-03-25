@@ -68,7 +68,7 @@ export default function Info({
           message.success("Project Created");
         })
         .catch((err) => {
-          message.error("error");
+          message.error("Something Went Wrong");
         });
     }
     getFromDataBase(data.id);

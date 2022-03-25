@@ -29,7 +29,7 @@ export default function Swagger({ basePath, setBasePath }) {
       .then((res) => {
         setProjects(
           res.data.map((el) => {
-            return { value: el.name, key: el.id };
+            return { value: el.info.title, key: el.id };
           })
         );
         if (res.data.length > 0) {

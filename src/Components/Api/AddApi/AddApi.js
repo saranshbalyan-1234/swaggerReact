@@ -72,13 +72,13 @@ export default function AddApi({
           temp3.schema = {
             type: "array",
             items: {
-              ref: "#/definitions/" + temp3.model,
+              $ref: "#/definitions/" + temp3.model,
             },
           };
           delete temp3.array;
         } else {
           temp3.schema = {
-            ref: "#/definitions/" + temp3.model,
+            $ref: "#/definitions/" + temp3.model,
           };
         }
         delete temp3.model;

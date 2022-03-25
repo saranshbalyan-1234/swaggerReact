@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SingleModel from "./singleModel";
-import { Button, Input } from "antd";
+import { Button, Input, Empty } from "antd";
 import AddModel from "./AddModel";
 const { Search } = Input;
 export default function Model({ data, editMode, refresh, setRefresh }) {
@@ -55,7 +55,7 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
         </h4>
         {showModel && (
           <div style={{ marginBottom: "20px" }}>
-            {data &&
+            {Object.keys(data).length > 0 ? (
               Object.keys(data).map(function (key, index) {
                 return (
                   key.toLowerCase().includes(search) && (
@@ -71,7 +71,10 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
                     />
                   )
                 );
-              })}
+              })
+            ) : (
+              <Empty />
+            )}
           </div>
         )}
       </section>

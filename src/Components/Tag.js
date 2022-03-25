@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import ApiUrl from "./Api/ApiUrl";
-import { Input, Select, Popconfirm, message } from "antd";
+import { Input, Select, Popconfirm, message, Empty } from "antd";
 import AddApi from "./Api/AddApi/AddApi";
 import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -146,23 +146,26 @@ export default function Tag({
       </h3>
 
       {api &&
-        data &&
-        Object.keys(data).map(function (key, index) {
-          return (
-            key.toLowerCase().includes(search) && (
-              <ApiUrl
-                key={index}
-                basePath={basePath}
-                data={data[key]}
-                url={key}
-                models={models}
-                refresh={refresh}
-                setRefresh={setRefresh}
-                editMode={editMode}
-              />
-            )
-          );
-        })}
+        (data && Object.keys(data).length > 0 ? (
+          Object.keys(data).map(function (key, index) {
+            return (
+              key.toLowerCase().includes(search) && (
+                <ApiUrl
+                  key={index}
+                  basePath={basePath}
+                  data={data[key]}
+                  url={key}
+                  models={models}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  editMode={editMode}
+                />
+              )
+            );
+          })
+        ) : (
+          <Empty />
+        ))}
       {addApi && (
         <AddApi
           refresh={refresh}
