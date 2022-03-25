@@ -20,7 +20,7 @@ export default function Info({
   console.log("datas", datas);
   const [details, setDetails] = useState({
     name: "My Project",
-    description: "",
+    description: "My Description",
     version: "1",
     title: "Swagger",
     host: "www.google.com",
@@ -343,7 +343,7 @@ export default function Info({
                   rules={[
                     {
                       required: true,
-                      message: "Please Version",
+                      message: "Please enter Version",
                     },
                   ]}
                 >
@@ -353,6 +353,24 @@ export default function Info({
                       handleDetails(e);
                     }}
                     defaultValue="1"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="description"
+                  label="Description"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Description",
+                    },
+                  ]}
+                >
+                  <Input.TextArea
+                    name="version"
+                    onChange={(e) => {
+                      handleDetails(e);
+                    }}
+                    defaultValue="My Description"
                   />
                 </Form.Item>
 
