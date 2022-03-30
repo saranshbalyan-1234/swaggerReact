@@ -7,6 +7,7 @@ import {
   DeleteOutlined,
   UnlockFilled,
 } from "@ant-design/icons";
+import ReactJson from "react-json-view";
 import "../../Style/style.css";
 import { api_base_url } from "../../constants";
 export default function Api({
@@ -28,6 +29,7 @@ export default function Api({
   const [formdata, setFormdata] = useState(false);
   const [confirmLoading, setCofirmLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [response, setResponse] = useState();
 
   console.log("data", data);
   const deletePath = () => {
@@ -65,30 +67,36 @@ export default function Api({
         .then((res) => {
           message.success("Success");
           setLoading(false);
+          setResponse(res.data);
         })
-        .catch(() => {
+        .catch((err) => {
           message.error("Failed");
           setLoading(false);
+          setResponse(err.response.data);
         });
     } else if (formdata) {
       axios[type](scheme + basePath + tempURL, formData)
         .then((res) => {
           message.success("Success");
           setLoading(false);
+          setResponse(res.data);
         })
-        .catch(() => {
+        .catch((err) => {
           message.error("Failed");
           setLoading(false);
+          setResponse(err.response.data);
         });
     } else {
       axios[type](scheme + basePath + tempURL)
         .then((res) => {
           message.success("Success");
           setLoading(false);
+          setResponse(res.data);
         })
-        .catch(() => {
+        .catch((err) => {
           message.error("Failed");
           setLoading(false);
+          setResponse(err.response.data);
         });
     }
   };
@@ -531,6 +539,19 @@ export default function Api({
                   </label>
                 </div>
                 <div className="responses-inner">
+                  <div>
+                    {response && (
+                      <ReactJson
+                        style={{ padding: "20px" }}
+                        src={response}
+                        theme="railscasts"
+                        displayObjectSize={true}
+                        displayDataTypes={false}
+                        enableClipboard={true}
+                        name={null}
+                      />
+                    )}
+                  </div>
                   <table
                     aria-live="polite"
                     className="responses-table"
