@@ -56,7 +56,7 @@ export default function AddModel({
       }
       if (temp1.arrayref) {
         temp1.items = {
-          ref: "#/definitions/" + temp1.arrayref,
+          $ref: "#/definitions/" + temp1.arrayref,
         };
         delete temp1.arrayref;
       }
