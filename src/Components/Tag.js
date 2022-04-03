@@ -32,17 +32,23 @@ export default function Tag({
   const { Search } = Input;
 
   useEffect(() => {
+    dataToObject();
+  }, [paths]);
+  const dataToObject = async () => {
+    let temp = {};
     for (const [key, value] of Object.entries(paths)) {
-      data[key] = {};
+      temp[key] = {};
       for (const [key1, value1] of Object.entries(value)) {
         value1.tags.forEach((el) => {
           if (el == tag.name) {
-            data[key][key1] = value1;
+            temp[key][key1] = value1;
           }
         });
       }
     }
-  }, [paths]);
+    setData(temp);
+  };
+
   const deleteTag = (id) => {
     setCofirmLoading(true);
     axios
