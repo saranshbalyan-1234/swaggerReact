@@ -92,12 +92,14 @@ export default function AddParameter({ setParameterData, parameterData }) {
                   <Option value="body">Body</Option>
                   {/* <Option value="header">Header</Option> */}
                 </Select>
-                <Input
-                  style={{ width: "170px", marginLeft: "10px" }}
-                  placeholder="Property name"
-                  onChange={(e) => handleData(e.target.value, index, "name")}
-                  value={parameterData[index].name}
-                />
+                {parameterData[index].in !== "body" && (
+                  <Input
+                    style={{ width: "170px", marginLeft: "10px" }}
+                    placeholder="Property name"
+                    onChange={(e) => handleData(e.target.value, index, "name")}
+                    value={parameterData[index].name}
+                  />
+                )}
                 <Select
                   defaultValue={
                     parameterData[index].in == "body" ? "object" : "string"

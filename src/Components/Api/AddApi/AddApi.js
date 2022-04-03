@@ -256,11 +256,11 @@ export default function AddApi({
           <hr />
           <Tabs defaultActiveKey="1">
             <TabPane tab="Request" key="1">
-              <div style={{ display: "flex", marginBottom: "10px" }}>
-                <span style={{ marginLeft: "5px" }}>In</span>
-                <span style={{ marginLeft: "167px" }}>Name</span>
-                <span style={{ marginLeft: "140px" }}>Type</span>
-              </div>
+              {/* <div style={{ display: "flex", marginBottom: "10px" }}> */}
+              {/* <span style={{ marginLeft: "5px" }}>In</span> */}
+              {/* <span style={{ marginLeft: "167px" }}>Name</span> */}
+              {/* <span style={{ marginLeft: "140px" }}>Type</span> */}
+              {/* </div> */}
               <AddParameter
                 setParameterData={setParameterData}
                 parameterData={parameterData}

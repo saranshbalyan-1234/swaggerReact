@@ -35,6 +35,7 @@ export default function Swagger({ basePath, setBasePath }) {
         );
         if (res.data.length > 0) {
           getData(res.data[0]);
+          setEditMode(true);
         } else {
           getFromJson("/swagger.json");
         }
