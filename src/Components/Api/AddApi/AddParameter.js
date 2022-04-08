@@ -84,12 +84,15 @@ export default function AddParameter({ setParameterData, parameterData }) {
                     handleData(e, index, "in");
                     e == "body"
                       ? handleData("model", index, "type")
-                      : handleData("string", index, "type");
+                      : e == "query" || e == "path"
+                      ? handleData("string", index, "type")
+                      : handleData("file", index, "type");
                   }}
                 >
                   <Option value="path">Path</Option>
                   <Option value="query">Query</Option>
                   <Option value="body">Body</Option>
+                  <Option value="formData">FormData</Option>
                   {/* <Option value="header">Header</Option> */}
                 </Select>
                 {parameterData[index].in !== "body" && (
@@ -102,17 +105,29 @@ export default function AddParameter({ setParameterData, parameterData }) {
                 )}
                 <Select
                   defaultValue={
-                    parameterData[index].in == "body" ? "object" : "string"
+                    parameterData[index].in == "body"
+                      ? "object"
+                      : parameterData[index].in == "formData"
+                      ? "file"
+                      : "string"
                   }
                   style={{ width: "170px", marginLeft: "10px" }}
-                  value={parameterData[index].type}
+                  value={
+                    parameterData[index].type != "formData"
+                      ? parameterData[index].type
+                      : "file"
+                  }
                   onChange={(e) => handleData(e, index, "type")}
                 >
                   {parameterData[index].in == "body" && (
                     <Option value="model">Model</Option>
                   )}
+                  {parameterData[index].in == "formData" && (
+                    <Option value="file">File</Option>
+                  )}
                   {(parameterData[index].in == "path" ||
-                    parameterData[index].in == "query") && (
+                    parameterData[index].in == "query" ||
+                    parameterData[index].in == "formData") && (
                     <>
                       <Option value="string">String</Option>
                       <Option value="boolean">Boolean</Option>

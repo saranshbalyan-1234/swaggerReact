@@ -27,10 +27,11 @@ export default function Api({
   const [jsonBody, setJsonBody] = useState();
   const [newURL, setNewURL] = useState(url);
   const [loading, setLoading] = useState(false);
-  const [formdata, setFormdata] = useState(false);
+  const [formdata, setformdata] = useState(false);
   const [confirmLoading, setCofirmLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [response, setResponse] = useState();
+  const [formData, setFormdata] = useState(new FormData());
 
   const deletePath = () => {
     setCofirmLoading(true);
@@ -48,7 +49,7 @@ export default function Api({
         setShowConfirm(false);
       });
   };
-  let formData = new FormData();
+  // let formData = new FormData();
   let queryString = "";
   let searchParam = {};
 
@@ -79,6 +80,7 @@ export default function Api({
           setResponse(err.response.data);
         });
     } else if (formdata) {
+      console.log("formData", formData);
       axios[type](scheme + basePath + tempURL, formData)
         .then((res) => {
           message.success("Success");
@@ -104,10 +106,12 @@ export default function Api({
         });
     }
   };
-  const handleFile = async ({ file }, el) => {
-    setFormdata(true);
-
-    formData.append(el.name, file);
+  const handleFile = ({ file }, el) => {
+    console.log("formData");
+    setformdata(true);
+    formData.set(el.name, file);
+    // formData.append(el.name, file);
+    setFormdata(formData);
   };
   const handleParameter = (e, el) => {
     e.preventDefault();
@@ -126,8 +130,8 @@ export default function Api({
 
     if (el.in == "formData") {
       if (el.type == "file") {
-        formData.append(el.name, e.target.files[0]);
-      } else formData.append(el.name, e.target.value);
+        formData.set(el.name, e.target.files[0]);
+      } else formData.set(el.name, e.target.value);
     }
   };
   const handleDeprecated = (e) => {
