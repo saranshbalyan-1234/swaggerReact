@@ -43,7 +43,7 @@ export default function AddApi({
 
     const temp = parameterData.map((el) => {
       let temp1 = { ...el };
-      delete temp1.name;
+      // delete temp1.name;
       temp1.type == "model" && delete temp1.type;
       if (temp1.enumCheck != "yes") {
         temp1.enumCheck && delete temp1.enumCheck;

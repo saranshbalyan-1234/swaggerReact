@@ -68,7 +68,6 @@ export default function SchemaToJson({
 
   const formatJson2 = (key1, temp) => {
     if (models[temp].properties[key1].$ref) {
-      console.log("test", models[temp].properties[key1].$ref);
       tempData[key1] = formatSchema(
         models[models[temp].properties[key1].$ref.substring(14)]
       );

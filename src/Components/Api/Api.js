@@ -31,7 +31,6 @@ export default function Api({
   const [showConfirm, setShowConfirm] = useState(false);
   const [response, setResponse] = useState();
 
-  console.log("data", data);
   const deletePath = () => {
     setCofirmLoading(true);
     axios
@@ -53,6 +52,7 @@ export default function Api({
   let searchParam = {};
 
   const executeApi = () => {
+    console.log(newURL);
     let tempURL = newURL;
 
     if (tempURL.includes("{") && tempURL.includes("}")) {
@@ -108,6 +108,7 @@ export default function Api({
   const handleParameter = (e, el) => {
     e.preventDefault();
     if (el.in == "path") {
+      console.log("url", el.name);
       setNewURL(url.replace(`{${el.name}}`, e.target.value));
     } else if (el.in == "query") {
       let object = {};

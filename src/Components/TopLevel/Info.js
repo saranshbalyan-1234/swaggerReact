@@ -17,8 +17,7 @@ export default function Info({
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
-  // const [projectName, setProjectName] = useState("");
-  console.log("datas", datas);
+
   const [details, setDetails] = useState({
     name: "My Project",
     description: "My Description",
