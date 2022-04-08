@@ -39,9 +39,8 @@ export default function Tag({
     for (const [key, value] of Object.entries(paths)) {
       temp[key] = {};
       for (const [key1, value1] of Object.entries(value)) {
-        key1 != "parameters" &&
+        value1.tags &&
           value1.tags.forEach((el) => {
-            console.log("saransh", value1);
             if (el == tag.name) {
               temp[key][key1] = value1;
             }
