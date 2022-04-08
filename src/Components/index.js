@@ -144,6 +144,7 @@ export default function Swagger({ basePath, setBasePath }) {
           canImport={canImport}
           getFromDataBase={getFromDataBase}
           scheme={scheme}
+          getAllProjectsByUser={getAllProjectsByUser}
         />
 
         <Spin indicator={antIcon} spinning={loading}>

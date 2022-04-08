@@ -21,6 +21,7 @@ export default function Api({
   editMode,
   scheme,
 }) {
+  console.log("check", data);
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   const [jsonBody, setJsonBody] = useState();
@@ -64,7 +65,9 @@ export default function Api({
     setLoading(true);
     if (jsonBody) {
       console.log("check", jsonBody);
-      axios[type](scheme + basePath + tempURL, jsonBody)
+      axios[type](scheme + basePath + tempURL, jsonBody, {
+        headers: { "Content-Type": "application/json" },
+      })
         .then((res) => {
           message.success("Success");
           setLoading(false);

@@ -13,6 +13,7 @@ export default function Info({
   getFromDataBase,
   setBasePath,
   scheme,
+  getAllProjectsByUser,
 }) {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
@@ -53,6 +54,7 @@ export default function Info({
         })
         .then((res) => {
           message.success("Project Imported");
+          getAllProjectsByUser();
         })
         .catch((err) => {
           message.error("error");
@@ -66,6 +68,7 @@ export default function Info({
         })
         .then((res) => {
           message.success("Project Created");
+          getAllProjectsByUser();
         })
         .catch((err) => {
           message.error("Something Went Wrong");
