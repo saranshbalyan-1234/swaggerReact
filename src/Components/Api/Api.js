@@ -63,6 +63,7 @@ export default function Api({
 
     setLoading(true);
     if (jsonBody) {
+      console.log("check", jsonBody);
       axios[type](scheme + basePath + tempURL, jsonBody)
         .then((res) => {
           message.success("Success");
@@ -347,7 +348,11 @@ export default function Api({
                                                           );
                                                         }}
                                                       >
-                                                        {el.description}
+                                                        {el.description
+                                                          ? el.description
+                                                          : el.schema
+                                                          ? el.schema.type
+                                                          : ""}
                                                       </textarea>
                                                     )}
                                                   </div>
