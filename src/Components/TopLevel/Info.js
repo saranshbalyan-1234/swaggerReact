@@ -74,11 +74,27 @@ export default function Info({
           message.error("Something Went Wrong");
         });
     }
-    getFromDataBase(data.id);
+    // getFromDataBase(data.id);
     localStorage.setItem(
       "project",
       JSON.stringify({ id: data.id, name: data.name })
     );
+    setVisible(false);
+    setLoadingImport(false);
+  };
+  const deleteProject = async () => {
+    setLoadingImport(true);
+    await axios
+      .post(api_base_url + "/deleteProjectById", {
+        id: JSON.parse(localStorage.getItem("project"))?.id,
+      })
+      .then((res) => {
+        getAllProjectsByUser();
+        localStorage.removeItem("project");
+      })
+      .catch((err) => {
+        message.error("Something Went Wrong");
+      });
     setVisible(false);
     setLoadingImport(false);
   };
@@ -245,28 +261,7 @@ export default function Info({
             defaultActiveKey="1"
             // onChange={callback}
           >
-            <TabPane tab="Import" key="1">
-              {/* <Input
-                disabled={!canImport}
-                onChange={(e) => setProjectName(e.target.value)}
-                placeholder="Enter Project Name"
-                // style={{ width: "250px", marginRight: "10px" }}
-              />
-              <div
-                style={{
-                  display: "flex",
-
-                  marginTop: "10px",
-                }}
-              > */}
-              {/* <Button
-                  type="primary"
-                  style={{ marginRight: "10px" }}
-                  onClick={() => importData("new")}
-                >
-                  New Project
-                </Button> */}
-
+            <TabPane tab="Import Project" key="1">
               <Button
                 disabled={!canImport}
                 type="primary"
@@ -274,9 +269,17 @@ export default function Info({
               >
                 Import Current Swagger
               </Button>
-              {/* </div> */}
             </TabPane>
-            <TabPane tab="New Project" key="2">
+            <TabPane tab="Delete Project" key="2">
+              <Button
+                disabled={canImport}
+                type="danger"
+                onClick={deleteProject}
+              >
+                Delete Current Project
+              </Button>
+            </TabPane>
+            <TabPane tab="New Project" key="3">
               <Form
                 {...formItemLayout}
                 name="register"
