@@ -89,8 +89,8 @@ export default function Settings({
               }}
             />
             <div>
-              <span className="servers-title">Servers</span>
-              <div className="servers">
+              {/* <span className="servers-title">Servers</span> */}
+              {/* <div className="servers">
                 <label for="servers">
                   <Tooltip placement="right" title={currentServer}>
                     <select
@@ -113,7 +113,7 @@ export default function Settings({
                     </select>{" "}
                   </Tooltip>
                 </label>
-              </div>
+              </div> */}
             </div>
             <div>
               <div style={{ fontSize: "12px", fontWeight: "700" }} className="">

@@ -67,7 +67,7 @@ export default function Api({
     if (jsonBody) {
       console.log("check", jsonBody);
       axios[type](scheme + basePath + tempURL, jsonBody, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain" },
       })
         .then((res) => {
           message.success("Success");

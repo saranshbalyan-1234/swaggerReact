@@ -91,6 +91,7 @@ export default function Info({
       .then((res) => {
         getAllProjectsByUser();
         localStorage.removeItem("project");
+        message.success("Project Deleted");
       })
       .catch((err) => {
         message.error("Something Went Wrong");
@@ -304,7 +305,7 @@ export default function Info({
                     onChange={(e) => {
                       handleDetails(e);
                     }}
-                    defaultValue="My Project"
+                    placeholder="My Project"
                   />
                 </Form.Item>
                 <Form.Item
@@ -322,7 +323,7 @@ export default function Info({
                     onChange={(e) => {
                       handleDetails(e);
                     }}
-                    defaultValue="www.google.com"
+                    placeholder="www.google.com"
                   />
                 </Form.Item>
                 <Form.Item
@@ -340,7 +341,7 @@ export default function Info({
                     onChange={(e) => {
                       handleDetails(e);
                     }}
-                    defaultValue="/api"
+                    placeholder="/api"
                   />
                 </Form.Item>
                 <Form.Item
@@ -358,7 +359,7 @@ export default function Info({
                     onChange={(e) => {
                       handleDetails(e);
                     }}
-                    defaultValue="1"
+                    placeholder="1.0"
                   />
                 </Form.Item>
                 <Form.Item
@@ -372,11 +373,11 @@ export default function Info({
                   ]}
                 >
                   <Input.TextArea
-                    name="version"
+                    name="description"
                     onChange={(e) => {
                       handleDetails(e);
                     }}
-                    defaultValue="My Description"
+                    placeholder="My Description"
                   />
                 </Form.Item>
 
