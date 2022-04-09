@@ -14,6 +14,7 @@ import { api_base_url } from "../../../constants";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 export default function AddParameter({ setParameterData, parameterData }) {
   const [allModel, setAllModel] = useState([]);
+  const [canAddBody, setCanAddBody] = useState(true);
   const { Option } = Select;
 
   useEffect(() => {
@@ -23,6 +24,14 @@ export default function AddParameter({ setParameterData, parameterData }) {
       })
       .then((res) => setAllModel(res.data));
   }, []);
+  useEffect(() => {
+    const check = parameterData.some((el) => {
+      return el.in == "body";
+    });
+    console.log("checkBody", check, parameterData);
+    setCanAddBody(!check);
+  }, [parameterData]);
+
   const handleData = (value, index, type) => {
     let temp = [...parameterData];
     if (type != "ref") {
@@ -77,7 +86,7 @@ export default function AddParameter({ setParameterData, parameterData }) {
                 }}
               >
                 <Select
-                  defaultValue={"body"}
+                  // defaultValue={canAddBody ? "body" : "path"}
                   style={{ width: "170px" }}
                   value={parameterData[index].in}
                   onChange={(e) => {
@@ -91,7 +100,7 @@ export default function AddParameter({ setParameterData, parameterData }) {
                 >
                   <Option value="path">Path</Option>
                   <Option value="query">Query</Option>
-                  <Option value="body">Body</Option>
+                  {canAddBody && <Option value="body">Body</Option>}
                   <Option value="formData">FormData</Option>
                   {/* <Option value="header">Header</Option> */}
                 </Select>
@@ -125,16 +134,16 @@ export default function AddParameter({ setParameterData, parameterData }) {
                   {parameterData[index].in == "formData" && (
                     <Option value="file">File</Option>
                   )}
-                  {(parameterData[index].in == "path" ||
+                  {/* {(parameterData[index].in == "path" ||
                     parameterData[index].in == "query" ||
                     parameterData[index].in == "formData") && (
-                    <>
-                      <Option value="string">String</Option>
-                      <Option value="boolean">Boolean</Option>
-                      <Option value="integer">Integer</Option>
-                      <Option value="number">Number</Option>
-                    </>
-                  )}
+                    <> */}
+                  <Option value="string">String</Option>
+                  <Option value="boolean">Boolean</Option>
+                  <Option value="integer">Integer</Option>
+                  <Option value="number">Number</Option>
+                  {/* </>
+                  )} */}
 
                   {/* <Option value="object">Object</Option>
                       <Option value="array">Array</Option>
@@ -143,6 +152,14 @@ export default function AddParameter({ setParameterData, parameterData }) {
                       <Option value="integer">Integer</Option>
                       <Option value="number">Number</Option> */}
                 </Select>
+                {parameterData[index].type != "model" && (
+                  <Input
+                    style={{ width: "170px", marginLeft: "10px" }}
+                    placeholder="Enter Name"
+                    onChange={(e) => handleData(e.target.value, index, "name")}
+                    name="name"
+                  />
+                )}
                 {(parameterData[index].type == "integer" ||
                   parameterData[index].type == "number" ||
                   parameterData[index].type == "string") && (
@@ -294,7 +311,11 @@ export default function AddParameter({ setParameterData, parameterData }) {
         onClick={() =>
           setParameterData([
             ...parameterData,
-            { in: "body", name: "", type: "model" },
+            {
+              in: canAddBody ? "body" : "path",
+              name: "",
+              type: canAddBody ? "model" : "string",
+            },
           ])
         }
         style={{ width: "30%" }}

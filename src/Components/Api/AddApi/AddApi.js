@@ -85,6 +85,7 @@ export default function AddApi({
       }
       temp1[el.statusCode] = temp3;
     });
+
     let data = {
       ...details,
       tags: JSON.stringify(details.tags),

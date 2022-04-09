@@ -179,7 +179,6 @@ export default function Api({
 
           {editMode && (
             <div style={{ display: "flex" }}>
-              {" "}
               <Popconfirm
                 title="Are you Sure?"
                 visible={showConfirm}
@@ -193,10 +192,9 @@ export default function Api({
               >
                 <DeleteOutlined
                   onClick={() => {
-                    // deleteModel(allData[data].id);
                     setShowConfirm(true);
                   }}
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: "5px", marginTop: "3px" }}
                 />
               </Popconfirm>
               <Switch
@@ -345,8 +343,10 @@ export default function Api({
                                               <div className="highlight-code">
                                                 <pre className="example ">
                                                   <div className="language-json">
-                                                    {el.schema.$ref ||
-                                                    el.schema.items ? (
+                                                    {(el.schema &&
+                                                      el.schema.$ref) ||
+                                                    (el.schema &&
+                                                      el.schema.items) ? (
                                                       <SchemaToJson
                                                         models={models}
                                                         schema={
