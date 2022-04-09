@@ -31,6 +31,7 @@ export default function Api({
   const [confirmLoading, setCofirmLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [response, setResponse] = useState();
+  const [consumes, setConsumes] = useState(data.consumes[0]);
   const [formData, setFormdata] = useState(new FormData());
 
   const deletePath = () => {
@@ -67,7 +68,7 @@ export default function Api({
     if (jsonBody) {
       console.log("check", jsonBody);
       axios[type](scheme + basePath + tempURL, jsonBody, {
-        headers: { "Content-Type": "text/plain" },
+        headers: { "Content-Type": consumes },
       })
         .then((res) => {
           message.success("Success");
@@ -315,6 +316,23 @@ export default function Api({
                                                 Model
                                               </button>
                                             </li>
+                                            <div className="content-type-wrapper body-param-content-type">
+                                              <select
+                                                aria-label="Request content type"
+                                                className="content-type"
+                                                onChange={(e) => {
+                                                  setConsumes(e.target.value);
+                                                }}
+                                              >
+                                                {data.consumes.map((el) => {
+                                                  return (
+                                                    <option value={el}>
+                                                      {el}
+                                                    </option>
+                                                  );
+                                                })}
+                                              </select>
+                                            </div>
                                           </ul>
                                           <div
                                             aria-hidden="false"
