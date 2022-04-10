@@ -16,6 +16,7 @@ export default function Tag({
   refresh,
   setRefresh,
   scheme,
+  admin,
 }) {
   const [data, setData] = useState({});
   const [showConfirm, setShowConfirm] = useState(false);
@@ -114,7 +115,7 @@ export default function Tag({
               // enterButton
               style={{ marginRight: "10px" }}
             />
-            {editMode && (
+            {editMode && admin && (
               <div style={{ display: "flex" }}>
                 <PlusCircleOutlined
                   onClick={() => {
@@ -168,6 +169,7 @@ export default function Tag({
                   setRefresh={setRefresh}
                   editMode={editMode}
                   scheme={scheme}
+                  admin={admin}
                 />
               )
             );

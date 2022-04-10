@@ -9,6 +9,7 @@ export default function ApiUrl({
   setRefresh,
   editMode,
   scheme,
+  admin,
 }) {
   return (
     <>
@@ -25,6 +26,7 @@ export default function ApiUrl({
             setRefresh={setRefresh}
             editMode={editMode}
             scheme={scheme}
+            admin={admin}
           />
         );
       })}

@@ -6,6 +6,9 @@ export default function Header({
   projects,
   getFromDataBase,
   getFromJson,
+  setAdmin,
+  admin,
+  setEditMode,
 }) {
   const [tempBasePath, setTempBasePath] = useState("basePath");
   const validateURL = () => {
@@ -19,11 +22,23 @@ export default function Header({
     }
   };
   const onSelect = (value, option) => {
+    console.log("option", option);
     getFromDataBase(option.key);
     localStorage.setItem(
       "project",
-      JSON.stringify({ id: option.key, name: option.value })
+      JSON.stringify({
+        id: option.key,
+        name: option.value,
+        admin: option.admin,
+      })
     );
+    if (option.admin) {
+      setAdmin(true);
+      setEditMode(true);
+    } else {
+      setAdmin(false);
+      setEditMode(true);
+    }
   };
   return (
     <div className="topbar">

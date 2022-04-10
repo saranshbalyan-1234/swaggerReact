@@ -25,6 +25,8 @@ export default function Info({
   scheme,
   getAllProjectsByUser,
   setLoading,
+  setAdmin,
+  admin,
 }) {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
@@ -91,8 +93,15 @@ export default function Info({
     // getFromDataBase(data.id);
     localStorage.setItem(
       "project",
-      JSON.stringify({ id: data.id, name: data.name })
+      JSON.stringify({ id: data.id, name: data.name, admin: data.admin })
     );
+    if (data.admin) {
+      setAdmin(true);
+      setEditMode(true);
+    } else {
+      setAdmin(false);
+      setEditMode(false);
+    }
     setVisible(false);
     setLoadingImport(false);
   };
@@ -192,7 +201,7 @@ export default function Info({
                   <div style={{ display: "flex" }}>
                     {localStorage.getItem("token") ? (
                       <>
-                        {!canImport && (
+                        {!canImport && admin && (
                           <>
                             {editMode ? (
                               <Button

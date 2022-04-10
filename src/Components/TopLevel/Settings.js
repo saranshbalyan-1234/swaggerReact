@@ -10,6 +10,7 @@ export default function Settings({
   setRefresh,
   setTagSearch,
   setScheme,
+  admin,
 }) {
   const [authVisible, setAuthVisible] = useState(false);
   const [addTagVisible, setAddTagVisible] = useState(false);
@@ -142,7 +143,7 @@ export default function Settings({
                 </label>
               </div>
             </div>
-            {editMode && (
+            {editMode && admin && (
               <>
                 <Button
                   style={{
@@ -172,7 +173,7 @@ export default function Settings({
           </div>
         </section>
         {/* 
-        {editMode && (
+        {editMode && admin&&(
           <>
             <Button
               style={{

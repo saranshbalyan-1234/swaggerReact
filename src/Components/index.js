@@ -16,7 +16,7 @@ export default function Swagger({
   setLoading,
 }) {
   const [data, setData] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [admin, setAdmin] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [canImport, setCanImport] = useState(true);
@@ -35,7 +35,7 @@ export default function Swagger({
       .then((res) => {
         setProjects(
           res.data.map((el) => {
-            return { value: el.info.title, key: el.id };
+            return { value: el.info.title, key: el.id, admin: el.admin };
           })
         );
         if (res.data.length > 0) {
@@ -43,26 +43,41 @@ export default function Swagger({
         } else {
           getFromJson("/swagger.json");
           setEditMode(false);
+          setAdmin(false);
           setCanImport(true);
         }
       })
       .catch((err) => {
         getFromJson("/swagger.json");
         setEditMode(false);
+        setAdmin(false);
         setCanImport(true);
       });
   };
   const getData = (project) => {
-    setEditMode(true);
+    setAdmin(false);
     if (localStorage.getItem("project")) {
-      getFromDataBase(JSON.parse(localStorage.getItem("project")).id);
-      setBasePath(JSON.parse(localStorage.getItem("project")).name);
+      let temp = JSON.parse(localStorage.getItem("project"));
+      getFromDataBase(temp.id);
+      setBasePath(temp.name);
+      if (temp.admin) {
+        setAdmin(true);
+        setEditMode(true);
+      }
     } else {
       getFromDataBase(project.id);
       localStorage.setItem(
         "project",
-        JSON.stringify({ id: project.id, name: project.name })
+        JSON.stringify({
+          id: project.id,
+          name: project.name,
+          admin: project.admin,
+        })
       );
+      if (project.admin) {
+        setAdmin(true);
+        setEditMode(true);
+      }
       setBasePath(projects[0].value);
     }
 
@@ -142,6 +157,9 @@ export default function Swagger({
           getFromDataBase={getFromDataBase}
           getFromJson={getFromJson}
           setLoading={setLoading}
+          admin={admin}
+          setAdmin={setAdmin}
+          setEditMode={setEditMode}
         />
 
         <Info
@@ -155,6 +173,8 @@ export default function Swagger({
           scheme={scheme}
           setLoading={setLoading}
           getAllProjectsByUser={getAllProjectsByUser}
+          admin={admin}
+          setAdmin={setAdmin}
         />
 
         {/* <Spin indicator={antIcon} spinning={loading}> */}
@@ -166,6 +186,7 @@ export default function Swagger({
           setRefresh={setRefresh}
           setTagSearch={setTagSearch}
           setScheme={setScheme}
+          admin={admin}
         />
 
         {data.tags &&
@@ -183,6 +204,7 @@ export default function Swagger({
                   refresh={refresh}
                   setRefresh={setRefresh}
                   scheme={scheme}
+                  admin={admin}
                 />
               )
             );
@@ -193,6 +215,7 @@ export default function Swagger({
           refresh={refresh}
           setRefresh={setRefresh}
           editMode={editMode}
+          admin={admin}
         />
         <div style={{ height: "10px" }}></div>
         {/* </Spin> */}

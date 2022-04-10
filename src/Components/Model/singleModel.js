@@ -11,6 +11,7 @@ export default function SingleModel({
   editMode,
   refresh,
   setRefresh,
+  admin,
 }) {
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -66,7 +67,7 @@ export default function SingleModel({
             className="model-toggle collapsed"
           ></span>
 
-          {editMode && (
+          {editMode && admin && (
             <Popconfirm
               title="Are you Sure?"
               visible={showConfirm}

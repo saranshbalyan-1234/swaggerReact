@@ -20,6 +20,7 @@ export default function Api({
   setRefresh,
   editMode,
   scheme,
+  admin,
 }) {
   console.log("check", data);
   const [body, showBody] = useState(false);
@@ -177,7 +178,7 @@ export default function Api({
 
           <UnlockFilled style={{ marginLeft: "5px", marginRight: "5px" }} />
 
-          {editMode && (
+          {editMode && admin && (
             <div style={{ display: "flex" }}>
               <Popconfirm
                 title="Are you Sure?"

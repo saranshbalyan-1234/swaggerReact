@@ -3,7 +3,7 @@ import SingleModel from "./singleModel";
 import { Button, Input, Empty } from "antd";
 import AddModel from "./AddModel";
 const { Search } = Input;
-export default function Model({ data, editMode, refresh, setRefresh }) {
+export default function Model({ data, editMode, refresh, setRefresh, admin }) {
   const [showModel, setShowModel] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [search, setSearch] = useState("");
@@ -24,7 +24,7 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
             <span style={{ display: "flex" }}>
               <div style={{ marginRight: "10px" }}>Models</div>
 
-              {editMode && (
+              {editMode && admin && (
                 <Button type="primary" ghost onClick={() => setEditModal(true)}>
                   Add New
                 </Button>
@@ -68,6 +68,7 @@ export default function Model({ data, editMode, refresh, setRefresh }) {
                       editMode={editMode}
                       refresh={refresh}
                       setRefresh={setRefresh}
+                      admin={admin}
                     />
                   )
                 );
