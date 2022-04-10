@@ -35,16 +35,20 @@ export default function Swagger({ basePath, setBasePath }) {
         );
         if (res.data.length > 0) {
           getData(res.data[0]);
-          setEditMode(true);
         } else {
           getFromJson("/swagger.json");
+          setEditMode(false);
+          setCanImport(true);
         }
       })
       .catch((err) => {
         getFromJson("/swagger.json");
+        setEditMode(false);
+        setCanImport(true);
       });
   };
   const getData = (project) => {
+    setEditMode(true);
     if (localStorage.getItem("project")) {
       getFromDataBase(JSON.parse(localStorage.getItem("project")).id);
       setBasePath(JSON.parse(localStorage.getItem("project")).name);
@@ -144,6 +148,7 @@ export default function Swagger({ basePath, setBasePath }) {
           canImport={canImport}
           getFromDataBase={getFromDataBase}
           scheme={scheme}
+          setLoading={setLoading}
           getAllProjectsByUser={getAllProjectsByUser}
         />
 

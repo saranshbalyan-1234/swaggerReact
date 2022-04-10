@@ -35,7 +35,7 @@ export default function Header({
           <a rel="noopener noreferrer" className="link">
             <img
               height="40"
-              src="https://rcteambuilder.com/img/rc-logo-1.png"
+              src="/logo.png"
               alt="Swagger UI"
               style={{
                 minWidth: "200px",

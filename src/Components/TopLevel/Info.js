@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Button, Modal, Spin, message, Tabs, Input, Tag, Form } from "antd";
+import {
+  Button,
+  Modal,
+  Spin,
+  message,
+  Tabs,
+  Input,
+  Tag,
+  Form,
+  Popconfirm,
+} from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api_base_url } from "../../constants";
@@ -14,10 +24,13 @@ export default function Info({
   setBasePath,
   scheme,
   getAllProjectsByUser,
+  setLoading,
 }) {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const [details, setDetails] = useState({
     name: "My Project",
@@ -41,7 +54,7 @@ export default function Info({
 
   const importData = async (type) => {
     setLoadingImport(true);
-
+    setLoading(true);
     const { data } = await axios.post(api_base_url + "/createProject");
     message.info("Processing");
     // setProjectName("");
@@ -58,6 +71,7 @@ export default function Info({
         })
         .catch((err) => {
           message.error("error");
+          setLoading(false);
         });
     } else {
       axios
@@ -84,6 +98,7 @@ export default function Info({
   };
   const deleteProject = async () => {
     setLoadingImport(true);
+    setLoading(true);
     await axios
       .post(api_base_url + "/deleteProjectById", {
         id: JSON.parse(localStorage.getItem("project"))?.id,
@@ -95,7 +110,9 @@ export default function Info({
       })
       .catch((err) => {
         message.error("Something Went Wrong");
+        setLoading(false);
       });
+    setShowConfirm(false);
     setVisible(false);
     setLoadingImport(false);
   };
@@ -166,7 +183,7 @@ export default function Info({
                           }}
                           color="blue"
                         >
-                          v{datas?.info?.version}
+                          {datas?.info?.version}
                         </Tag>
                       </>
                     )}
@@ -272,13 +289,23 @@ export default function Info({
               </Button>
             </TabPane>
             <TabPane tab="Delete Project" key="2">
-              <Button
-                disabled={canImport}
-                type="danger"
-                onClick={deleteProject}
+              <Popconfirm
+                title="All Related Api Will Be Deleted too! Are you Sure? "
+                placement="left"
+                visible={showConfirm}
+                onConfirm={deleteProject}
+                okText="Yes"
+                okButtonProps={{ loading: loadingImport }}
+                onCancel={() => setShowConfirm(false)}
               >
-                Delete Current Project
-              </Button>
+                <Button
+                  disabled={canImport}
+                  type="danger"
+                  onClick={() => setShowConfirm(true)}
+                >
+                  Delete Current Project
+                </Button>
+              </Popconfirm>
             </TabPane>
             <TabPane tab="New Project" key="3">
               <Form
