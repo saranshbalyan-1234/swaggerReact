@@ -142,6 +142,22 @@ export default function Settings({
                 </label>
               </div>
             </div>
+            {editMode && (
+              <>
+                <Button
+                  style={{
+                    marginTop: "20px",
+                    marginLeft: "20px",
+                    marginBottom: "-10px",
+                  }}
+                  type="primary"
+                  ghost
+                  onClick={() => setAddTagVisible(true)}
+                >
+                  New Tag
+                </Button>
+              </>
+            )}
           </div>
           <div className="auth-wrapper">
             <button
@@ -155,7 +171,7 @@ export default function Settings({
             </button>
           </div>
         </section>
-
+        {/* 
         {editMode && (
           <>
             <Button
@@ -170,7 +186,7 @@ export default function Settings({
             >
               New Tag
             </Button>
-            <Button
+      <Button
               style={{
                 marginTop: "20px",
                 marginLeft: "20px",
@@ -181,9 +197,9 @@ export default function Settings({
               onClick={() => setAddTagVisible(true)}
             >
               New Server
-            </Button>
+            </Button> 
           </>
-        )}
+        )} */}
       </div>
 
       <Modal

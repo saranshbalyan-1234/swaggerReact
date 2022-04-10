@@ -290,7 +290,7 @@ export default function Info({
             </TabPane>
             <TabPane tab="Delete Project" key="2">
               <Popconfirm
-                title="All Related Api Will Be Deleted too! Are you Sure? "
+                title="Are you Sure? "
                 placement="left"
                 visible={showConfirm}
                 onConfirm={deleteProject}

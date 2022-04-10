@@ -9,16 +9,21 @@ import { Spin, message, Button, Input } from "antd";
 import Model from "./Model/Model";
 import { LoadingOutlined } from "@ant-design/icons";
 import { api_base_url } from "../constants";
-export default function Swagger({ basePath, setBasePath }) {
+export default function Swagger({
+  basePath,
+  setBasePath,
+  loading,
+  setLoading,
+}) {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [canImport, setCanImport] = useState(true);
   const [projects, setProjects] = useState([]);
   const [tagSearch, setTagSearch] = useState("");
   const [scheme, setScheme] = useState("http://");
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   useEffect(() => {
     setLoading(true);
     setCanImport(true);
@@ -152,45 +157,45 @@ export default function Swagger({ basePath, setBasePath }) {
           getAllProjectsByUser={getAllProjectsByUser}
         />
 
-        <Spin indicator={antIcon} spinning={loading}>
-          <Settings
-            servers={data.servers}
-            schemes={data.schemes}
-            editMode={editMode}
-            refresh={refresh}
-            setRefresh={setRefresh}
-            setTagSearch={setTagSearch}
-            setScheme={setScheme}
-          />
+        {/* <Spin indicator={antIcon} spinning={loading}> */}
+        <Settings
+          servers={data.servers}
+          schemes={data.schemes}
+          editMode={editMode}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          setTagSearch={setTagSearch}
+          setScheme={setScheme}
+        />
 
-          {data.tags &&
-            data.tags.map((el, index) => {
-              return (
-                el.name.toLowerCase().includes(tagSearch) && (
-                  <Tag
-                    key={index}
-                    tag={el}
-                    paths={data.paths}
-                    models={data.definitions}
-                    tags={data.tags}
-                    basePath={basePath}
-                    editMode={editMode}
-                    refresh={refresh}
-                    setRefresh={setRefresh}
-                    scheme={scheme}
-                  />
-                )
-              );
-            })}
-          <Model
-            data={data.definitions}
-            editMode={editMode}
-            refresh={refresh}
-            setRefresh={setRefresh}
-            editMode={editMode}
-          />
-          <div style={{ height: "10px" }}></div>
-        </Spin>
+        {data.tags &&
+          data.tags.map((el, index) => {
+            return (
+              el.name.toLowerCase().includes(tagSearch) && (
+                <Tag
+                  key={index}
+                  tag={el}
+                  paths={data.paths}
+                  models={data.definitions}
+                  tags={data.tags}
+                  basePath={basePath}
+                  editMode={editMode}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  scheme={scheme}
+                />
+              )
+            );
+          })}
+        <Model
+          data={data.definitions}
+          editMode={editMode}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          editMode={editMode}
+        />
+        <div style={{ height: "10px" }}></div>
+        {/* </Spin> */}
       </section>
     </div>
   );
