@@ -35,14 +35,14 @@ export default function Info({
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const [details, setDetails] = useState({
-    name: "My Project",
-    description: "My Description",
-    version: "1",
-    title: "Swagger",
-    host: "www.google.com",
-    basePath: "/api",
+    name: "",
+    description: "",
+    version: "",
+    title: "",
+    host: "",
+    basePath: "",
     schemes: ["http", "https"],
-    project_id: 0,
+    project_id: null,
   });
 
   const handleDetails = (e) => {
@@ -59,6 +59,7 @@ export default function Info({
     setLoading(true);
     const { data } = await axios.post(api_base_url + "/createProject");
     message.info("Processing");
+    console.log("data", data);
     // setProjectName("");
     // setBasePath(projectName);
     if (type == "import") {
@@ -76,7 +77,7 @@ export default function Info({
           setLoading(false);
         });
     } else {
-      axios
+      await axios
         .post(api_base_url + "/addInfo", {
           ...details,
           project_id: data.id,
@@ -93,7 +94,7 @@ export default function Info({
     // getFromDataBase(data.id);
     localStorage.setItem(
       "project",
-      JSON.stringify({ id: data.id, name: data.name, admin: data.admin })
+      JSON.stringify({ id: data.id, name: details.title, admin: 1 })
     );
     if (data.admin) {
       setAdmin(true);

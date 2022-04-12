@@ -108,6 +108,9 @@ export default function Swagger({
     await axios
       .post(api_base_url + "/get", { project_id: id })
       .then((res) => {
+        let localTemp = JSON.parse(localStorage.getItem("project"));
+        localTemp.name = res.data.info.title;
+        localStorage.setItem("project", JSON.stringify(localTemp));
         setBasePath(res.data.host + res.data.basePath);
         res.data.path.forEach((el) => {
           let object = {};
