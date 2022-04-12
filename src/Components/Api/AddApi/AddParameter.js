@@ -28,7 +28,7 @@ export default function AddParameter({ setParameterData, parameterData }) {
     const check = parameterData.some((el) => {
       return el.in == "body";
     });
-    console.log("checkBody", check, parameterData);
+
     setCanAddBody(!check);
   }, [parameterData]);
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -9,6 +9,7 @@ import {
   Tag,
   Form,
   Popconfirm,
+  Select,
 } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -28,12 +29,13 @@ export default function Info({
   setAdmin,
   admin,
 }) {
+  const { Option } = Select;
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-
+  const [allUser, setAllUser] = useState([]);
+  const [projectUser, setProjectUser] = useState([]);
   const [details, setDetails] = useState({
     name: "",
     description: "",
@@ -53,13 +55,28 @@ export default function Info({
 
     setDetails({ ...details, ...object });
   };
+  useEffect(() => {
+    if (visible) {
+      axios
+        .post(api_base_url + "/getAllUser", {
+          project_id: JSON.parse(localStorage.getItem("project")).id,
+        })
+        .then((res) => {
+          setAllUser(res.data.allUser);
+          setProjectUser(res.data.projectUser);
+        })
+        .catch((err) => {
+          message.error("Cannot Get User List");
+        });
+    }
+  }, [visible]);
 
   const importData = async (type) => {
     setLoadingImport(true);
     setLoading(true);
     const { data } = await axios.post(api_base_url + "/createProject");
     message.info("Processing");
-    console.log("data", data);
+
     // setProjectName("");
     // setBasePath(projectName);
     if (type == "import") {
@@ -159,6 +176,12 @@ export default function Info({
         offset: 8,
       },
     },
+  };
+
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+    setProjectUser(value);
+    // setProjectUser(value);
   };
   return (
     <>
@@ -289,7 +312,73 @@ export default function Info({
             defaultActiveKey="1"
             // onChange={callback}
           >
-            <TabPane tab="Import Project" key="1">
+            <TabPane tab="Current Project" key="1">
+              <div>
+                <div style={{ display: "flex" }}>
+                  {projectUser.length > 0 && allUser.length > 0 && (
+                    <Select
+                      showSearch
+                      mode="multiple"
+                      style={{ width: 200 }}
+                      placeholder="Search Email"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.children
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
+                      filterSort={(optionA, optionB) =>
+                        optionA.children
+                          .toLowerCase()
+                          .localeCompare(optionB.children.toLowerCase())
+                      }
+                      value={projectUser}
+                      onChange={handleChange}
+                    >
+                      {allUser.map((user) => {
+                        return (
+                          <Option
+                            disabled={user.id == localStorage.getItem("user")}
+                            value={user.id}
+                          >
+                            {user.email}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  )}
+                  <div style={{ marginLeft: "10px" }}>
+                    <Button
+                      disabled={canImport && admin}
+                      type="primary"
+                      onClick={() => setShowConfirm(true)}
+                    >
+                      Add Users To Project
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div style={{ marginTop: "20px" }}>
+                <Popconfirm
+                  title="Are you Sure? "
+                  placement="left"
+                  visible={showConfirm}
+                  onConfirm={deleteProject}
+                  okText="Yes"
+                  okButtonProps={{ loading: loadingImport }}
+                  onCancel={() => setShowConfirm(false)}
+                >
+                  <Button
+                    disabled={canImport && admin}
+                    type="danger"
+                    onClick={() => setShowConfirm(true)}
+                  >
+                    Delete Current Project
+                  </Button>
+                </Popconfirm>
+              </div>
+            </TabPane>
+            <TabPane tab="Import Project" key="2">
               <Button
                 disabled={!canImport}
                 type="primary"
@@ -298,25 +387,7 @@ export default function Info({
                 Import Current Swagger
               </Button>
             </TabPane>
-            <TabPane tab="Delete Project" key="2">
-              <Popconfirm
-                title="Are you Sure? "
-                placement="left"
-                visible={showConfirm}
-                onConfirm={deleteProject}
-                okText="Yes"
-                okButtonProps={{ loading: loadingImport }}
-                onCancel={() => setShowConfirm(false)}
-              >
-                <Button
-                  disabled={canImport}
-                  type="danger"
-                  onClick={() => setShowConfirm(true)}
-                >
-                  Delete Current Project
-                </Button>
-              </Popconfirm>
-            </TabPane>
+
             <TabPane tab="New Project" key="3">
               <Form
                 {...formItemLayout}

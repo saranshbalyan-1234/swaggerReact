@@ -22,7 +22,6 @@ export default function Api({
   scheme,
   admin,
 }) {
-  console.log("check", data);
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
   const [jsonBody, setJsonBody] = useState();
@@ -56,7 +55,6 @@ export default function Api({
   let searchParam = {};
 
   const executeApi = () => {
-    console.log(newURL);
     let tempURL = newURL;
 
     if (tempURL.includes("{") && tempURL.includes("}")) {
@@ -67,7 +65,6 @@ export default function Api({
 
     setLoading(true);
     if (jsonBody) {
-      console.log("check", jsonBody);
       axios[type](scheme + basePath + tempURL, jsonBody, {
         headers: { "Content-Type": consumes },
       })
@@ -82,7 +79,6 @@ export default function Api({
           setResponse(err.response.data);
         });
     } else if (formdata) {
-      console.log("formData", formData);
       axios[type](scheme + basePath + tempURL, formData)
         .then((res) => {
           message.success("Success");
@@ -109,7 +105,6 @@ export default function Api({
     }
   };
   const handleFile = ({ file }, el) => {
-    console.log("formData");
     setformdata(true);
     formData.set(el.name, file);
     // formData.append(el.name, file);
@@ -118,7 +113,6 @@ export default function Api({
   const handleParameter = (e, el) => {
     e.preventDefault();
     if (el.in == "path") {
-      console.log("url", el.name);
       setNewURL(url.replace(`{${el.name}}`, e.target.value));
     } else if (el.in == "query") {
       let object = {};

@@ -19,6 +19,7 @@ const Login = () => {
       .then((res) => {
         message.success("Logged In Successfully");
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", res.data.id);
         navigate("/");
         setLoading(false);
       })

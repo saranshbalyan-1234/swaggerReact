@@ -22,7 +22,6 @@ export default function Header({
     }
   };
   const onSelect = (value, option) => {
-    console.log("option", option);
     getFromDataBase(option.key);
     localStorage.setItem(
       "project",
