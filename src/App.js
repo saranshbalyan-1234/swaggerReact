@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Swagger from "./Components";
-import { Spin } from "antd";
+import { message, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { api_base_url } from "./constants";
@@ -18,6 +18,14 @@ export default function App() {
         )?.value);
 
     return request;
+  });
+  axios.interceptors.response.use((response) => {
+    console.log("response", response.data);
+    if (response.data.message == "Unauthenticated") {
+      localStorage.clear();
+      navigate("/login");
+      message.error("Please Login Again, Token Expired");
+    } else return response;
   });
   useEffect(() => {
     !localStorage.getItem("token") && navigate("/login");
