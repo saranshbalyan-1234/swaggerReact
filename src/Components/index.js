@@ -35,7 +35,11 @@ export default function Swagger({
       .then((res) => {
         setProjects(
           res.data.map((el) => {
-            return { value: el.info.title, key: el.id, admin: el.admin };
+            return {
+              value: el.info.title,
+              key: el.project_id,
+              admin: el.admin,
+            };
           })
         );
         if (res.data.length > 0) {
@@ -58,19 +62,19 @@ export default function Swagger({
     setAdmin(false);
     if (localStorage.getItem("project")) {
       let temp = JSON.parse(localStorage.getItem("project"));
-      getFromDataBase(temp.id);
+      getFromDataBase(temp.project_id);
       setBasePath(temp.name);
       if (temp.admin) {
         setAdmin(true);
         setEditMode(true);
       }
     } else {
-      getFromDataBase(project.id);
+      getFromDataBase(project.project_id);
       localStorage.setItem(
         "project",
         JSON.stringify({
-          id: project.id,
-          name: project.name,
+          id: project.project_id,
+          name: project.info.title,
           admin: project.admin,
         })
       );

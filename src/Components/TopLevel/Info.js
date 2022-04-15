@@ -31,6 +31,7 @@ export default function Info({
 }) {
   const { Option } = Select;
   const navigate = useNavigate();
+  const [addUserId, setAddUserId] = useState(0);
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -46,7 +47,19 @@ export default function Info({
     schemes: ["http", "https"],
     project_id: null,
   });
-
+  const color = [
+    "magenta",
+    "red",
+    "volcano",
+    "orange",
+    "gold",
+    "lime",
+    "green",
+    "cyan",
+    "blue",
+    "geekblue",
+    "purple",
+  ];
   const handleDetails = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -59,7 +72,7 @@ export default function Info({
     if (visible) {
       axios
         .post(api_base_url + "/getAllUser", {
-          project_id: JSON.parse(localStorage.getItem("project")).id,
+          project_id: JSON.parse(localStorage.getItem("project"))?.id,
         })
         .then((res) => {
           setAllUser(res.data.allUser);
@@ -74,7 +87,9 @@ export default function Info({
   const importData = async (type) => {
     setLoadingImport(true);
     setLoading(true);
-    const { data } = await axios.post(api_base_url + "/createProject");
+    const { data } = await axios.post(api_base_url + "/createProject", {
+      admin: 1,
+    });
     message.info("Processing");
 
     // setProjectName("");
@@ -178,10 +193,18 @@ export default function Info({
     },
   };
 
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setProjectUser(value);
-    // setProjectUser(value);
+  const handleChange = (e) => {
+    setAddUserId(e);
+  };
+  const addUserToProject = () => {
+    axios
+      .post(api_base_url + "/createProject", {
+        user_id: addUserId,
+        project_id: JSON.parse(localStorage.getItem("project")).id,
+      })
+      .then((res) => {
+        message.success("User Addedd Successfulyy");
+      });
   };
   return (
     <>
@@ -315,47 +338,32 @@ export default function Info({
             <TabPane tab="Current Project" key="1">
               <div>
                 <div style={{ display: "flex" }}>
-                  {projectUser.length > 0 && allUser.length > 0 && (
+                  {allUser.length > 0 && (
                     <Select
                       showSearch
-                      mode="multiple"
                       style={{ width: 200 }}
                       placeholder="Search Email"
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        option.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                          .toLowerCase()
-                          .localeCompare(optionB.children.toLowerCase())
-                      }
-                      value={projectUser}
-                      onChange={handleChange}
+                      onSelect={handleChange}
                     >
+                      <Option>saransh</Option>
                       {allUser.map((user) => {
-                        return (
-                          <Option
-                            disabled={user.id == localStorage.getItem("user")}
-                            value={user.id}
-                          >
-                            {user.email}
-                          </Option>
-                        );
+                        return <Option value={user.id}>{user.name}</Option>;
                       })}
                     </Select>
                   )}
                   <div style={{ marginLeft: "10px" }}>
                     <Button
-                      disabled={canImport && admin}
-                      type="primary"
-                      onClick={() => setShowConfirm(true)}
+                      disabled={canImport || admin}
+                      onClick={addUserToProject}
                     >
-                      Add Users To Project
+                      Add User To Project
                     </Button>
                   </div>
+                </div>
+                <div style={{ marginTop: "20px" }}>
+                  {projectUser.map((user) => {
+                    return <Tag color="red">Saransh</Tag>;
+                  })}
                 </div>
               </div>
               <div style={{ marginTop: "20px" }}>
@@ -369,7 +377,7 @@ export default function Info({
                   onCancel={() => setShowConfirm(false)}
                 >
                   <Button
-                    disabled={canImport && admin}
+                    disabled={canImport || admin}
                     type="danger"
                     onClick={() => setShowConfirm(true)}
                   >
@@ -380,7 +388,7 @@ export default function Info({
             </TabPane>
             <TabPane tab="Import Project" key="2">
               <Button
-                disabled={!canImport}
+                disabled={!canImport || admin}
                 type="primary"
                 onClick={() => importData("import")}
               >
