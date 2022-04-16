@@ -62,7 +62,7 @@ export default function Swagger({
     setAdmin(false);
     if (localStorage.getItem("project")) {
       let temp = JSON.parse(localStorage.getItem("project"));
-      getFromDataBase(temp.project_id);
+      getFromDataBase(temp.id);
       setBasePath(temp.name);
       if (temp.admin) {
         setAdmin(true);

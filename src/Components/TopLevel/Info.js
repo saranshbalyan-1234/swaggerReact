@@ -10,6 +10,7 @@ import {
   Form,
   Popconfirm,
   Select,
+  Switch,
 } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -31,7 +32,7 @@ export default function Info({
 }) {
   const { Option } = Select;
   const navigate = useNavigate();
-  const [addUserId, setAddUserId] = useState(0);
+  const [addUser, setAddUser] = useState({ id: 0, admin: 1 });
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -60,6 +61,7 @@ export default function Info({
     "geekblue",
     "purple",
   ];
+
   const handleDetails = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -194,17 +196,45 @@ export default function Info({
   };
 
   const handleChange = (e) => {
-    setAddUserId(e);
+    setAddUser({ ...addUser, id: e });
   };
   const addUserToProject = () => {
     axios
-      .post(api_base_url + "/createProject", {
-        user_id: addUserId,
+      .post(api_base_url + "/addUserToProject", {
+        user_id: addUser.id,
         project_id: JSON.parse(localStorage.getItem("project")).id,
+        admin: addUser.admin,
       })
       .then((res) => {
-        message.success("User Addedd Successfulyy");
+        console.log("admin", [
+          ...projectUser,
+          {
+            user_id: addUser.id,
+            user: {
+              name: document.getElementById(addUser.id, +"option").innerText,
+            },
+          },
+        ]);
+        setProjectUser([
+          ...projectUser,
+          {
+            user_id: addUser.id,
+            user: {
+              name: document.getElementById(addUser.id, +"option").innerText,
+            },
+          },
+        ]);
+        message.success("User Added Successfully");
+      })
+      .catch((err) => {
+        message.error("Something Went Wrong");
       });
+  };
+  const changeAdmin = (value) => {
+    console.log("admin", value);
+    value
+      ? setAddUser({ ...addUser, admin: 1 })
+      : setAddUser({ ...addUser, admin: 0 });
   };
   return (
     <>
@@ -336,55 +366,75 @@ export default function Info({
             // onChange={callback}
           >
             <TabPane tab="Current Project" key="1">
-              <div>
-                <div style={{ display: "flex" }}>
-                  {allUser.length > 0 && (
-                    <Select
-                      showSearch
-                      style={{ width: 200 }}
-                      placeholder="Search Email"
-                      onSelect={handleChange}
-                    >
-                      <Option>saransh</Option>
-                      {allUser.map((user) => {
-                        return <Option value={user.id}>{user.name}</Option>;
-                      })}
-                    </Select>
-                  )}
-                  <div style={{ marginLeft: "10px" }}>
-                    <Button
-                      disabled={canImport || admin}
-                      onClick={addUserToProject}
-                    >
-                      Add User To Project
-                    </Button>
+              <Spin spinning={!allUser.length > 0}>
+                <div>
+                  <div style={{ display: "flex" }}>
+                    {allUser.length > 0 && (
+                      <Select
+                        showSearch
+                        style={{ width: 200 }}
+                        placeholder="Search Email"
+                        onSelect={(e) => handleChange(e)}
+                        // onChange={(e) => handleChange(e)}
+                      >
+                        <Option>Saransh</Option>
+                        {allUser.map((user) => {
+                          return (
+                            <Option id={user.id + "option"} value={user.id}>
+                              {user.name}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    )}
+                    <Switch
+                      style={{ marginTop: "5px", marginLeft: "10px" }}
+                      defaultChecked
+                      checkedChildren="Admin"
+                      unCheckedChildren="Admin"
+                      onChange={changeAdmin}
+                    />
+                    <div style={{ marginLeft: "10px" }}>
+                      <Button
+                        disabled={canImport && !admin}
+                        onClick={addUserToProject}
+                        type="primary"
+                      >
+                        Add User To Project
+                      </Button>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: "20px" }}>
+                    {projectUser.map((user) => {
+                      return (
+                        <Tag color={color[Math.floor(Math.random() * 11)]}>
+                          {user.user.name}
+                        </Tag>
+                      );
+                    })}
                   </div>
                 </div>
+
                 <div style={{ marginTop: "20px" }}>
-                  {projectUser.map((user) => {
-                    return <Tag color="red">Saransh</Tag>;
-                  })}
-                </div>
-              </div>
-              <div style={{ marginTop: "20px" }}>
-                <Popconfirm
-                  title="Are you Sure? "
-                  placement="left"
-                  visible={showConfirm}
-                  onConfirm={deleteProject}
-                  okText="Yes"
-                  okButtonProps={{ loading: loadingImport }}
-                  onCancel={() => setShowConfirm(false)}
-                >
-                  <Button
-                    disabled={canImport || admin}
-                    type="danger"
-                    onClick={() => setShowConfirm(true)}
+                  <Popconfirm
+                    title="Are you Sure? "
+                    placement="left"
+                    visible={showConfirm}
+                    onConfirm={deleteProject}
+                    okText="Yes"
+                    okButtonProps={{ loading: loadingImport }}
+                    onCancel={() => setShowConfirm(false)}
                   >
-                    Delete Current Project
-                  </Button>
-                </Popconfirm>
-              </div>
+                    <Button
+                      disabled={canImport || !admin}
+                      type="danger"
+                      onClick={() => setShowConfirm(true)}
+                    >
+                      Delete Current Project
+                    </Button>
+                  </Popconfirm>
+                </div>
+              </Spin>
             </TabPane>
             <TabPane tab="Import Project" key="2">
               <Button
