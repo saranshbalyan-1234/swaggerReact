@@ -196,7 +196,11 @@ export default function Info({
   };
 
   const handleChange = (e) => {
-    setAddUser({ ...addUser, id: e });
+    setAddUser({
+      ...addUser,
+      id: e,
+      name: document.getElementById(`${e}option`).title,
+    });
   };
   const addUserToProject = () => {
     axios
@@ -206,21 +210,12 @@ export default function Info({
         admin: addUser.admin,
       })
       .then((res) => {
-        console.log("admin", [
-          ...projectUser,
-          {
-            user_id: addUser.id,
-            user: {
-              name: document.getElementById(addUser.id, +"option").innerText,
-            },
-          },
-        ]);
         setProjectUser([
           ...projectUser,
           {
             user_id: addUser.id,
             user: {
-              name: document.getElementById(addUser.id, +"option").innerText,
+              name: addUser.name,
             },
           },
         ]);
