@@ -377,7 +377,6 @@ export default function Info({
                         onSelect={(e) => handleChange(e)}
                         // onChange={(e) => handleChange(e)}
                       >
-                        <Option>Saransh</Option>
                         {allUser.map((user) => {
                           return (
                             <Option id={user.id + "option"} value={user.id}>
@@ -405,6 +404,7 @@ export default function Info({
                     </div>
                   </div>
                   <div style={{ marginTop: "20px" }}>
+                    <p>Users:</p>{" "}
                     {projectUser.map((user) => {
                       return (
                         <Tag color={color[Math.floor(Math.random() * 11)]}>
@@ -426,7 +426,7 @@ export default function Info({
                     onCancel={() => setShowConfirm(false)}
                   >
                     <Button
-                      disabled={canImport || !admin}
+                      disabled={canImport && !admin}
                       type="danger"
                       onClick={() => setShowConfirm(true)}
                     >
@@ -438,7 +438,7 @@ export default function Info({
             </TabPane>
             <TabPane tab="Import Project" key="2">
               <Button
-                disabled={!canImport || admin}
+                disabled={!canImport}
                 type="primary"
                 onClick={() => importData("import")}
               >
