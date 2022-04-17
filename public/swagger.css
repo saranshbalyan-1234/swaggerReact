@@ -8627,7 +8627,7 @@
   font-weight: 600;
 }
 .swagger-ui .topbar {
-  background-color: #1b1b1b;
+  background-color: black;
   padding: 10px 0;
 }
 .swagger-ui .topbar .topbar-wrapper,

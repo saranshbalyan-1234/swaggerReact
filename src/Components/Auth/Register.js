@@ -67,6 +67,17 @@ const Register = () => {
     >
       <Spin spinning={loading}>
         <Card title="Register" bordered>
+          <center>
+            {" "}
+            <img
+              src="/logo2.png"
+              style={{
+                height: "50px",
+                marginBottom: "10px",
+                justifySelf: "center",
+              }}
+            />
+          </center>
           <Form
             name="register"
             onFinish={onRegister}

@@ -48,6 +48,10 @@ const Login = () => {
     >
       <Spin spinning={loading}>
         <Card title="Login" bordered class="shadow">
+          <img
+            src="/logo2.png"
+            style={{ height: "50px", marginBottom: "10px" }}
+          />
           <Form
             name="normal_login"
             className="login-form"

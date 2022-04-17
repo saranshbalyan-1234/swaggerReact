@@ -334,7 +334,7 @@ export default function Info({
                   {basePath && (
                     <>
                       <Tag color="red">{basePath}</Tag>{" "}
-                      <Tag color="green">By Saransh</Tag>{" "}
+                      <Tag color="green">By SaranCe</Tag>{" "}
                     </>
                   )}
                 </a>
