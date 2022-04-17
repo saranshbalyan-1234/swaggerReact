@@ -226,7 +226,6 @@ export default function Info({
       });
   };
   const changeAdmin = (value) => {
-    console.log("admin", value);
     value
       ? setAddUser({ ...addUser, admin: 1 })
       : setAddUser({ ...addUser, admin: 0 });

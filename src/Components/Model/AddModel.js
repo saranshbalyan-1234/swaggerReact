@@ -8,6 +8,7 @@ import {
   Select,
   AutoComplete,
   message,
+  InputNumber,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -29,6 +30,7 @@ export default function AddModel({
     setPropertiesData(temp);
   };
   const handleData = (value, index, type) => {
+    console.log("number", value);
     let temp = [...propertiesData];
     if (type != "ref") {
       temp[index][type] = value;
@@ -245,6 +247,17 @@ export default function AddModel({
                                 }
                               />
                             )}
+                            {(propertiesData[index].type == "integer" ||
+                              propertiesData[index].type == "number") && (
+                              <InputNumber
+                                placeholder="Example"
+                                style={{ width: "170px", marginLeft: "10px" }}
+                                onChange={(e) =>
+                                  handleData(e, index, "example")
+                                }
+                              />
+                            )}
+
                             <Select
                               placeholder="ENUM?"
                               style={{ width: "170px", marginLeft: "10px" }}

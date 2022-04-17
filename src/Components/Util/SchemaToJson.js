@@ -42,7 +42,9 @@ export default function SchemaToJson({
               : model.properties[key].enum[0]
             : model.properties[key].type == "integer" ||
               model.properties[key].type == "number"
-            ? 0
+            ? model.properties[key].example
+              ? model.properties[key].example
+              : 0
             : model.properties[key].type == "boolean"
             ? true
             : model.properties[key].example
@@ -98,9 +100,11 @@ export default function SchemaToJson({
       if (
         models[temp].properties[key1].type == "integer" ||
         models[temp].properties[key1].type == "number"
-      )
-        tempData[key1] = 0;
-      else if (models[temp].properties[key1].type == "boolean")
+      ) {
+        if (models[temp].properties[key1].example != undefined) {
+          tempData[key1] = models[temp].properties[key1].example;
+        } else tempData[key1] = 0;
+      } else if (models[temp].properties[key1].type == "boolean")
         tempData[key1] = true;
       else if (models[temp].properties[key1].example)
         tempData[key1] = models[temp].properties[key1].example;
