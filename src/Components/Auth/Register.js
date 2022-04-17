@@ -35,23 +35,23 @@ const Register = () => {
   };
   const formItemLayout = {
     labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
+      xs: { span: 28 },
+      sm: { span: 9 },
     },
     wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
+      xs: { span: 28 },
+      sm: { span: 18 },
     },
   };
   const tailFormItemLayout = {
     wrapperCol: {
       xs: {
-        span: 24,
+        span: 28,
         offset: 0,
       },
       sm: {
-        span: 16,
-        offset: 8,
+        span: 20,
+        offset: 9,
       },
     },
   };
@@ -68,6 +68,7 @@ const Register = () => {
       <Spin spinning={loading}>
         <Card title="Register" bordered>
           <Form
+            // style={{ minWidth: "450px" }}
             {...formItemLayout}
             name="register"
             onFinish={onRegister}
@@ -147,11 +148,7 @@ const Register = () => {
                     if (!value || getFieldValue("password") === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(
-                      new Error(
-                        "The two passwords that you entered do not match!"
-                      )
-                    );
+                    return Promise.reject(new Error("Passwords do not match!"));
                   },
                 }),
               ]}

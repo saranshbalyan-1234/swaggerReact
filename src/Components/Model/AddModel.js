@@ -236,6 +236,15 @@ export default function AddModel({
                                   .indexOf(inputValue.toUpperCase()) !== -1
                               }
                             />
+                            {propertiesData[index].type == "string" && (
+                              <Input
+                                placeholder="Example"
+                                style={{ width: "170px", marginLeft: "10px" }}
+                                onChange={(e) =>
+                                  handleData(e.target.value, index, "example")
+                                }
+                              />
+                            )}
                             <Select
                               placeholder="ENUM?"
                               style={{ width: "170px", marginLeft: "10px" }}
