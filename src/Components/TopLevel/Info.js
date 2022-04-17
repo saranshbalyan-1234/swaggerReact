@@ -22,8 +22,6 @@ export default function Info({
   setEditMode,
   editMode,
   canImport,
-  getFromDataBase,
-  setBasePath,
   scheme,
   getAllProjectsByUser,
   setLoading,
@@ -35,9 +33,11 @@ export default function Info({
   const [addUser, setAddUser] = useState({ id: 0, admin: 1 });
   const [visible, setVisible] = useState(false);
   const [loadingImport, setLoadingImport] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [leaveConfirm, setLeaveConfirm] = useState(false);
   const [allUser, setAllUser] = useState([]);
   const [projectUser, setProjectUser] = useState([]);
+  const [currentProjectLoading, setCurrentProjectLoading] = useState(true);
   const [details, setDetails] = useState({
     name: "",
     description: "",
@@ -77,10 +77,12 @@ export default function Info({
           project_id: JSON.parse(localStorage.getItem("project"))?.id,
         })
         .then((res) => {
+          setCurrentProjectLoading(false);
           setAllUser(res.data.allUser);
           setProjectUser(res.data.projectUser);
         })
         .catch((err) => {
+          setCurrentProjectLoading(false);
           message.error("Cannot Get User List");
         });
     }
@@ -156,7 +158,7 @@ export default function Info({
         message.error("Something Went Wrong");
         setLoading(false);
       });
-    setShowConfirm(false);
+    setDeleteConfirm(false);
     setVisible(false);
     setLoadingImport(false);
   };
@@ -203,6 +205,7 @@ export default function Info({
     });
   };
   const addUserToProject = () => {
+    setCurrentProjectLoading(true);
     axios
       .post(api_base_url + "/addUserToProject", {
         user_id: addUser.id,
@@ -219,9 +222,16 @@ export default function Info({
             },
           },
         ]);
+        setAllUser([
+          ...allUser.filter((el) => {
+            return el.id != addUser.id;
+          }),
+        ]);
         message.success("User Added Successfully");
+        setCurrentProjectLoading(false);
       })
       .catch((err) => {
+        setCurrentProjectLoading(false);
         message.error("Something Went Wrong");
       });
   };
@@ -354,32 +364,26 @@ export default function Info({
         header={false}
       >
         <Spin spinning={loadingImport}>
-          <Tabs
-            style={{ marginTop: "-30px" }}
-            defaultActiveKey="1"
-            // onChange={callback}
-          >
+          <Tabs style={{ marginTop: "-30px" }} defaultActiveKey="1">
             <TabPane tab="Current Project" key="1">
-              <Spin spinning={!allUser.length > 0}>
+              <Spin spinning={currentProjectLoading}>
                 <div>
                   <div style={{ display: "flex" }}>
-                    {allUser.length > 0 && (
-                      <Select
-                        showSearch
-                        style={{ width: 200 }}
-                        placeholder="Search Email"
-                        onSelect={(e) => handleChange(e)}
-                        // onChange={(e) => handleChange(e)}
-                      >
-                        {allUser.map((user) => {
-                          return (
-                            <Option id={user.id + "option"} value={user.id}>
-                              {user.name}
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    )}
+                    <Select
+                      showSearch
+                      style={{ width: 200 }}
+                      placeholder="Search Name"
+                      onSelect={(e) => handleChange(e)}
+                    >
+                      {allUser.map((user) => {
+                        return (
+                          <Option id={user.id + "option"} value={user.id}>
+                            {user.name}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+
                     <Switch
                       style={{ marginTop: "5px", marginLeft: "10px" }}
                       defaultChecked
@@ -397,8 +401,8 @@ export default function Info({
                       </Button>
                     </div>
                   </div>
-                  <div style={{ marginTop: "20px" }}>
-                    <p>Users:</p>{" "}
+                  <div style={{ marginTop: "20px", display: "flex" }}>
+                    <div style={{ marginRight: "10px" }}> Users:</div>
                     {projectUser.map((user) => {
                       return (
                         <Tag color={color[Math.floor(Math.random() * 11)]}>
@@ -409,24 +413,47 @@ export default function Info({
                   </div>
                 </div>
 
-                <div style={{ marginTop: "20px" }}>
-                  <Popconfirm
-                    title="Are you Sure? "
-                    placement="left"
-                    visible={showConfirm}
-                    onConfirm={deleteProject}
-                    okText="Yes"
-                    okButtonProps={{ loading: loadingImport }}
-                    onCancel={() => setShowConfirm(false)}
-                  >
-                    <Button
-                      disabled={canImport && !admin}
-                      type="danger"
-                      onClick={() => setShowConfirm(true)}
+                <div style={{ marginTop: "20px", display: "flex" }}>
+                  <div>
+                    <Popconfirm
+                      title="Are you Sure To Leave?"
+                      placement="left"
+                      visible={leaveConfirm}
+                      onConfirm={deleteProject}
+                      okText="Yes"
+                      okButtonProps={{ loading: loadingImport }}
+                      onCancel={() => setLeaveConfirm(false)}
                     >
-                      Delete Current Project
-                    </Button>
-                  </Popconfirm>
+                      <Button
+                        disabled={canImport && !admin}
+                        type="primary"
+                        onClick={() => setLeaveConfirm(true)}
+                        ghost
+                      >
+                        Leave Project
+                      </Button>
+                    </Popconfirm>
+                  </div>
+                  <div style={{ marginLeft: "20px" }}>
+                    <Popconfirm
+                      title="Are you Sure To Delete? "
+                      placement="left"
+                      visible={deleteConfirm}
+                      onConfirm={deleteProject}
+                      okText="Yes"
+                      okButtonProps={{ loading: loadingImport }}
+                      onCancel={() => setDeleteConfirm(false)}
+                    >
+                      <Button
+                        disabled={canImport && !admin}
+                        type="primary"
+                        onClick={() => setDeleteConfirm(true)}
+                        ghost
+                      >
+                        Delete Project
+                      </Button>
+                    </Popconfirm>
+                  </div>
                 </div>
               </Spin>
             </TabPane>
