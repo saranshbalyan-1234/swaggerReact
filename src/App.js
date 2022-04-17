@@ -30,6 +30,7 @@ export default function App() {
         localStorage.clear();
         navigate("/login");
         message.error("Please Login Again, Token Expired");
+        return err.response;
       }
     }
   );
