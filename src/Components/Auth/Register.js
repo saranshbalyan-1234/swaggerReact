@@ -35,8 +35,8 @@ const Register = () => {
   };
   const formItemLayout = {
     labelCol: {
-      xs: { span: 28 },
-      sm: { span: 9 },
+      xs: { span: 40 },
+      sm: { span: 10 },
     },
     wrapperCol: {
       xs: { span: 28 },
@@ -51,7 +51,7 @@ const Register = () => {
       },
       sm: {
         span: 20,
-        offset: 9,
+        offset: 5,
       },
     },
   };
@@ -68,14 +68,10 @@ const Register = () => {
       <Spin spinning={loading}>
         <Card title="Register" bordered>
           <Form
-            // style={{ minWidth: "450px" }}
-            {...formItemLayout}
             name="register"
             onFinish={onRegister}
-            initialValues={{
-              residence: ["zhejiang", "hangzhou", "xihu"],
-              prefix: "86",
-            }}
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 16 }}
           >
             <Form.Item
               name="name"
