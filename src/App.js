@@ -19,14 +19,20 @@ export default function App() {
 
     return request;
   });
-  axios.interceptors.response.use((response) => {
-    console.log("response", response.data);
-    if (response.data.message == "Unauthenticated") {
-      localStorage.clear();
-      navigate("/login");
-      message.error("Please Login Again, Token Expired");
-    } else return response;
-  });
+  axios.interceptors.response.use(
+    (response) => {
+      console.log("response", response.data);
+      return response;
+    },
+    (err) => {
+      console.log("errorResponse", err.response);
+      if (err.response.data.message == "Unauthenticated.") {
+        localStorage.clear();
+        navigate("/login");
+        message.error("Please Login Again, Token Expired");
+      }
+    }
+  );
   useEffect(() => {
     !localStorage.getItem("token") && navigate("/login");
   }, []);
