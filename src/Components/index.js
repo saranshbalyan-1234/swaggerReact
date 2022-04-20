@@ -52,6 +52,7 @@ export default function Swagger({
         }
       })
       .catch((err) => {
+        console.log("error", err);
         getFromJson("/swagger.json");
         setEditMode(false);
         setAdmin(false);
@@ -82,7 +83,7 @@ export default function Swagger({
         setAdmin(true);
         setEditMode(true);
       }
-      setBasePath(projects[0].value);
+      // setBasePath(projects[0].value);
     }
 
     setCanImport(false);
@@ -138,12 +139,14 @@ export default function Swagger({
           object[el.name] = { ...el, properties: JSON.parse(el.properties) };
           modelTemp = { ...modelTemp, ...object };
         });
+
         setData({
           ...res.data,
           paths: pathTemp,
           definitions: modelTemp,
         });
       })
+
       .catch((err) => {
         message.error("Something Went Wrong");
         setLoading(false);
@@ -221,7 +224,6 @@ export default function Swagger({
           editMode={editMode}
           refresh={refresh}
           setRefresh={setRefresh}
-          editMode={editMode}
           admin={admin}
         />
         <div style={{ height: "10px" }}></div>

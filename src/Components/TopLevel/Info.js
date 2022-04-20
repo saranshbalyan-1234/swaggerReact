@@ -38,6 +38,7 @@ export default function Info({
   const [allUser, setAllUser] = useState([]);
   const [projectUser, setProjectUser] = useState([]);
   const [currentProjectLoading, setCurrentProjectLoading] = useState(true);
+  const [logoutLoading, setLogoutLoading] = useState(false);
   const [details, setDetails] = useState({
     name: "",
     description: "",
@@ -162,8 +163,29 @@ export default function Info({
     setVisible(false);
     setLoadingImport(false);
   };
-  const logout = () => {
-    axios
+  const leaveProject = async () => {
+    setLoadingImport(true);
+    setLoading(true);
+    await axios
+      .post(api_base_url + "/deleteProjectById", {
+        id: JSON.parse(localStorage.getItem("project"))?.id,
+      })
+      .then((res) => {
+        getAllProjectsByUser();
+        localStorage.removeItem("project");
+        message.success("Project Removed");
+      })
+      .catch((err) => {
+        message.error("Something Went Wrong");
+        setLoading(false);
+      });
+    setLeaveConfirm(false);
+    setVisible(false);
+    setLoadingImport(false);
+  };
+  const logout = async () => {
+    setLogoutLoading(true);
+    await axios
       .post(api_base_url + "/logout")
       .then((res) => {
         navigate("/login");
@@ -173,6 +195,7 @@ export default function Info({
       .catch(() => {
         message.error("something Went Wrong");
       });
+    setLogoutLoading(false);
   };
   const formItemLayout = {
     labelCol: {
@@ -316,6 +339,7 @@ export default function Info({
                             type="danger"
                             ghost
                             style={{ marginLeft: "10px" }}
+                            loading={logoutLoading}
                             onClick={() => logout()}
                           >
                             Logout
@@ -419,7 +443,7 @@ export default function Info({
                       title="Are you Sure To Leave?"
                       placement="left"
                       visible={leaveConfirm}
-                      onConfirm={deleteProject}
+                      onConfirm={leaveProject}
                       okText="Yes"
                       okButtonProps={{ loading: loadingImport }}
                       onCancel={() => setLeaveConfirm(false)}
