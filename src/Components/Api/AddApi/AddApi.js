@@ -18,7 +18,7 @@ export default function AddApi({
   const [responseData, setResponseData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState({
-    type: "get",
+    type: "post",
     tags: [tag.name],
     produces: ["application/json"],
     consumes: ["application/json"],
@@ -118,7 +118,7 @@ export default function AddApi({
       onCancel={() => setAddApi(false)}
       footer={false}
     >
-      <Spin spinning={false} spinning={loading}>
+      <Spin spinning={loading}>
         <Form name="basic" {...formItemLayout}>
           <div style={{ display: "flex" }}>
             <Form.Item
@@ -143,7 +143,7 @@ export default function AddApi({
             >
               <Select
                 name="type"
-                defaultValue="get"
+                defaultValue="post"
                 onChange={(e) => handleDetails(e, "type")}
               >
                 <Option value="get">GET</Option>
@@ -256,17 +256,15 @@ export default function AddApi({
 
           <hr />
           <Tabs defaultActiveKey="1">
-            <TabPane tab="Request" key="1">
-              {/* <div style={{ display: "flex", marginBottom: "10px" }}> */}
-              {/* <span style={{ marginLeft: "5px" }}>In</span> */}
-              {/* <span style={{ marginLeft: "167px" }}>Name</span> */}
-              {/* <span style={{ marginLeft: "140px" }}>Type</span> */}
-              {/* </div> */}
-              <AddParameter
-                setParameterData={setParameterData}
-                parameterData={parameterData}
-              />
-            </TabPane>
+            {details.type != "get" && (
+              <TabPane tab="Request" key="1">
+                <AddParameter
+                  setParameterData={setParameterData}
+                  parameterData={parameterData}
+                  type={details.type}
+                />
+              </TabPane>
+            )}
             <TabPane tab="Response" key="2">
               <div style={{ display: "flex", marginBottom: "10px" }}>
                 <span style={{ marginLeft: "5px" }}>Status Code</span>
