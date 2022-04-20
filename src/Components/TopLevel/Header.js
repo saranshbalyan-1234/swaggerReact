@@ -49,12 +49,14 @@ export default function Header({
           <a rel="noopener noreferrer" className="link">
             <img
               height="40"
-              src="/logo.png"
+              src="/logo.svg"
               alt="Swagger UI"
               style={{
-                minWidth: "200px",
+                minWidth: "188px",
                 marginRight: "20px",
                 marginBottom: "7px",
+                backgroundColor: "white",
+                // display: "block",
               }}
             />
           </a>
