@@ -17,10 +17,14 @@ const Login = () => {
     axios
       .post(api_base_url + "/login", details)
       .then((res) => {
-        message.success("Logged In Successfully");
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", res.data.id);
-        navigate("/");
+        if (res.data.status == "failure") {
+          message.error("Invalid Email or Password");
+        } else {
+          message.success("Logged In Successfully");
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("user", res.data.id);
+          navigate("/");
+        }
         setLoading(false);
       })
       .catch((err) => {
