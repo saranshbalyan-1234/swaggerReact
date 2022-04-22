@@ -19,6 +19,7 @@ export default function AddModel({
   refresh,
   setRefresh,
 }) {
+  const [form] = Form.useForm();
   const [propertiesData, setPropertiesData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allModel, setAllModel] = useState([]);
@@ -40,65 +41,61 @@ export default function AddModel({
     setPropertiesData(temp);
   };
   const handleSubmit = () => {
-    if (name.trim() != "") {
-      let temp1 = [...propertiesData];
+    let temp1 = [...propertiesData];
 
-      let check = temp1.find((el) => {
-        return el.name == "";
-      });
+    let check = temp1.find((el) => {
+      return el.name == "";
+    });
 
-      if (check) {
-        message.error("Please Check Input Again");
-        return;
-      }
-
-      setLoading(true);
-      let temp = {};
-      propertiesData.forEach((el) => {
-        let temp1 = { ...el };
-        delete temp1.name;
-        temp1.type == "model" && delete temp1.type;
-        if (temp1.enumCheck != "yes") {
-          temp1.enumCheck && delete temp1.enumCheck;
-          temp1.enum && delete temp1.enum;
-        }
-        if (temp1.arrayType) {
-          temp1.items = {
-            type: temp1.arrayType,
-          };
-          delete temp1.arrayType;
-        }
-        if (temp1.arrayref) {
-          temp1.items = {
-            $ref: "#/definitions/" + temp1.arrayref,
-          };
-          delete temp1.arrayref;
-        }
-        temp1.arrayref && delete temp1.arrayref;
-        temp[el.name] = temp1;
-      });
-
-      let data = {
-        name: name,
-        project_id: JSON.parse(localStorage.getItem("project")).id,
-        properties: JSON.stringify(temp),
-      };
-      axios
-        .post(api_base_url + "/addModel", data)
-        .then((res) => {
-          setLoading(false);
-          message.success("Model Added Successfully");
-          setEditModal(false);
-          setRefresh(!refresh);
-        })
-        .catch((err) => {
-          setLoading(false);
-          message.error("Model Not Added");
-        });
-      // setLoading(false);
-    } else {
-      message.error("Please Enter Model Name");
+    if (check) {
+      message.error("Please Check Input Again");
+      return;
     }
+
+    setLoading(true);
+    let temp = {};
+    propertiesData.forEach((el) => {
+      let temp1 = { ...el };
+      delete temp1.name;
+      temp1.type == "model" && delete temp1.type;
+      if (temp1.enumCheck != "yes") {
+        temp1.enumCheck && delete temp1.enumCheck;
+        temp1.enum && delete temp1.enum;
+      }
+      if (temp1.arrayType) {
+        temp1.items = {
+          type: temp1.arrayType,
+        };
+        delete temp1.arrayType;
+      }
+      if (temp1.arrayref) {
+        temp1.items = {
+          $ref: "#/definitions/" + temp1.arrayref,
+        };
+        delete temp1.arrayref;
+      }
+      temp1.arrayref && delete temp1.arrayref;
+      temp[el.name] = temp1;
+    });
+
+    let data = {
+      name: name,
+      project_id: JSON.parse(localStorage.getItem("project")).id,
+      properties: JSON.stringify(temp),
+    };
+    axios
+      .post(api_base_url + "/addModel", data)
+      .then((res) => {
+        setLoading(false);
+        message.success("Model Added Successfully");
+        setEditModal(false);
+        setRefresh(!refresh);
+      })
+      .catch((err) => {
+        setLoading(false);
+        message.error("Model Not Added");
+      });
+    // setLoading(false);
   };
   useEffect(() => {
     axios
@@ -144,7 +141,7 @@ export default function AddModel({
         footer={false}
       >
         <Spin spinning={loading}>
-          <Form name="basic">
+          <Form name="basic" form={form} onFinish={handleSubmit}>
             <Form.Item
               label="Name"
               name="name"
@@ -164,10 +161,7 @@ export default function AddModel({
               {/* <span style={{ marginLeft: "150px" }}>Format</span> */}
             </div>
             {/* <Form> */}
-            <Form
-              name="names"
-              style={{ overflow: "scroll", maxHeight: "40vh" }}
-            >
+            <div name="names" style={{ overflow: "scroll", maxHeight: "40vh" }}>
               {propertiesData.map((data, index) => (
                 <div
                   style={{
@@ -391,10 +385,10 @@ export default function AddModel({
               >
                 Add Property
               </Button>
-            </Form>
+            </div>
             {/* </Form> */}
             <Form.Item wrapperCol={{ offset: 10, span: 8 }}>
-              <Button type="primary" htmlType="button" onClick={handleSubmit}>
+              <Button type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>

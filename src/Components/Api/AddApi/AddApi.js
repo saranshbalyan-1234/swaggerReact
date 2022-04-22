@@ -14,6 +14,7 @@ export default function AddApi({
 }) {
   const { TabPane } = Tabs;
   const { Option } = Select;
+  const [form] = Form.useForm();
   const [parameterData, setParameterData] = useState([]);
   const [responseData, setResponseData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,7 @@ export default function AddApi({
     tags: [tag.name],
     produces: ["application/json"],
     consumes: ["application/json"],
+    path: "",
   });
   const formItemLayout = {
     labelCol: {
@@ -39,6 +41,10 @@ export default function AddApi({
     setDetails({ ...details, ...object });
   };
   const handleSubmit = () => {
+    if (details.path.trim() == "") {
+      message.error("Please Enter API End Point");
+      return;
+    }
     setLoading(true);
 
     const temp = parameterData.map((el) => {
@@ -119,7 +125,17 @@ export default function AddApi({
       footer={false}
     >
       <Spin spinning={loading}>
-        <Form name="basic" {...formItemLayout}>
+        <Form
+          name="basic"
+          {...formItemLayout}
+          form={form}
+          onFinish={handleSubmit}
+          initialValues={{
+            type: "post",
+            consumes: "application/json",
+            produces: "application/json",
+          }}
+        >
           <div style={{ display: "flex" }}>
             <Form.Item
               style={{ width: "45%" }}
@@ -143,7 +159,7 @@ export default function AddApi({
             >
               <Select
                 name="type"
-                defaultValue="post"
+                // value="post"
                 onChange={(e) => handleDetails(e, "type")}
               >
                 <Option value="get">GET</Option>
@@ -188,7 +204,7 @@ export default function AddApi({
               <Select
                 mode="tags"
                 name="type"
-                defaultValue="application/json"
+                // defaultValue="application/json"
                 onChange={(e) => handleDetails(e, "consumes")}
               >
                 <Option value="application/json">application/json</Option>
@@ -280,7 +296,7 @@ export default function AddApi({
 
           <Form style={{ overflow: "scroll", maxHeight: "40vh" }}></Form>
           <Form.Item wrapperCol={{ offset: 10, span: 8 }}>
-            <Button type="primary" htmlType="button" onClick={handleSubmit}>
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
