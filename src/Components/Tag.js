@@ -100,7 +100,7 @@ export default function Tag({
             </div>
           </small>
           <div></div>
-          <button
+          <div
             aria-expanded="false"
             className="expand-operation"
             title="Expand operation"
@@ -150,7 +150,7 @@ export default function Tag({
                 transform: api && "rotate(180deg)",
               }}
             ></i>
-          </button>
+          </div>
         </div>
       </h3>
 

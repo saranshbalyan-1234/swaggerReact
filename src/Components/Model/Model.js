@@ -15,7 +15,7 @@ export default function Model({ data, editMode, refresh, setRefresh, admin }) {
     <div className="wrapper">
       <section className="models ">
         <h4>
-          <button
+          <div
             style={{ outline: "none" }}
             aria-expanded="true"
             className="models-control"
@@ -37,7 +37,7 @@ export default function Model({ data, editMode, refresh, setRefresh, admin }) {
               }}
               className="fa-solid fa-angle-down"
             ></i>
-          </button>{" "}
+          </div>{" "}
           <div
             style={{
               width: "250px",

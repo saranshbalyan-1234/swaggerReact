@@ -28,19 +28,17 @@ export default function AddParameter({
       })
       .then((res) => setAllModel(res.data));
   }, []);
-  // useEffect(() => {
-  //   console.log("type", type);
-  //   console.log([
-  //     ...parameterData.map((el) => {
-  //       if (el.in == "delete" || el.in == "get") return { ...el, in: "path" };
-  //       else return el;
-  //     }),
-  //   ]);
-  // }, [type]);
+  useEffect(() => {
+    setParameterData([
+      ...parameterData.filter((el) => {
+        return el.in !== "body" && el.in != "formData";
+      }),
+    ]);
+  }, [type]);
 
   useEffect(() => {
     const check = parameterData.some((el) => {
-      return el.in == "body";
+      return el.in == "body" || el.in == "formData";
     });
 
     setCanAddBody(!check);
@@ -115,9 +113,12 @@ export default function AddParameter({
                   <Option value="path">Path</Option>
                   <Option value="query">Query</Option>
                   {canAddBody && type != "get" && type != "delete" && (
-                    <Option value="body">Body</Option>
+                    <>
+                      <Option value="body">Body</Option>
+                      <Option value="formData">FormData</Option>
+                    </>
                   )}
-                  <Option value="formData">FormData</Option>
+
                   {/* <Option value="header">Header</Option> */}
                 </Select>
                 {parameterData[index].in !== "body" && (
