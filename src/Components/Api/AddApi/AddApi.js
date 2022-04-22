@@ -256,15 +256,16 @@ export default function AddApi({
 
           <hr />
           <Tabs defaultActiveKey="1">
-            {details.type != "get" && (
-              <TabPane tab="Request" key="1">
-                <AddParameter
-                  setParameterData={setParameterData}
-                  parameterData={parameterData}
-                  type={details.type}
-                />
-              </TabPane>
-            )}
+            {details.type != "get" ||
+              (details.type != "delete" && (
+                <TabPane tab="Request" key="1">
+                  <AddParameter
+                    setParameterData={setParameterData}
+                    parameterData={parameterData}
+                    type={details.type}
+                  />
+                </TabPane>
+              ))}
             <TabPane tab="Response" key="2">
               <div style={{ display: "flex", marginBottom: "10px" }}>
                 <span style={{ marginLeft: "5px" }}>Status Code</span>
