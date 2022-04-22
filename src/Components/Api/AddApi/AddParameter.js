@@ -12,7 +12,11 @@ import {
 import axios from "axios";
 import { api_base_url } from "../../../constants";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-export default function AddParameter({ setParameterData, parameterData }) {
+export default function AddParameter({
+  setParameterData,
+  parameterData,
+  type,
+}) {
   const [allModel, setAllModel] = useState([]);
   const [canAddBody, setCanAddBody] = useState(true);
   const { Option } = Select;
@@ -24,6 +28,16 @@ export default function AddParameter({ setParameterData, parameterData }) {
       })
       .then((res) => setAllModel(res.data));
   }, []);
+  // useEffect(() => {
+  //   console.log("type", type);
+  //   console.log([
+  //     ...parameterData.map((el) => {
+  //       if (el.in == "delete" || el.in == "get") return { ...el, in: "path" };
+  //       else return el;
+  //     }),
+  //   ]);
+  // }, [type]);
+
   useEffect(() => {
     const check = parameterData.some((el) => {
       return el.in == "body";
@@ -100,7 +114,9 @@ export default function AddParameter({ setParameterData, parameterData }) {
                 >
                   <Option value="path">Path</Option>
                   <Option value="query">Query</Option>
-                  {canAddBody && <Option value="body">Body</Option>}
+                  {canAddBody && type != "get" && type != "delete" && (
+                    <Option value="body">Body</Option>
+                  )}
                   <Option value="formData">FormData</Option>
                   {/* <Option value="header">Header</Option> */}
                 </Select>
@@ -312,7 +328,10 @@ export default function AddParameter({ setParameterData, parameterData }) {
           setParameterData([
             ...parameterData,
             {
-              in: canAddBody ? "body" : "path",
+              in:
+                canAddBody && type != "delete" && type != "get"
+                  ? "body"
+                  : "path",
               name: "",
               type: canAddBody ? "model" : "string",
             },
