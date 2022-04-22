@@ -42,7 +42,10 @@ export default function AddModel({
   };
   const handleSubmit = () => {
     let temp1 = [...propertiesData];
-
+    if (temp1.length == 0) {
+      message.error("Please Enter Atleast One Property");
+      return;
+    }
     let check = temp1.find((el) => {
       return el.name == "";
     });
