@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import ApiUrl from "./Api/ApiUrl";
+import ApiUrl from "../Api/ApiUrl";
 import { Input, Switch, Popconfirm, message, Empty } from "antd";
-import AddApi from "./Api/AddApi/AddApi";
+import AddApi from "../Api/AddApi/AddApi";
 import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { api_base_url } from "../constants";
+import { api_base_url } from "../../constants";
 export default function Tag({
   tag,
   paths,

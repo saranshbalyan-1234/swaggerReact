@@ -4,7 +4,7 @@ import Header from "./TopLevel/Header";
 import Info from "./TopLevel/Info";
 import Settings from "./TopLevel/Settings";
 import "antd/dist/antd.css";
-import Tag from "./Tag";
+import Tag from "./Tag/Tag";
 import { Spin, message, Button, Input } from "antd";
 import Model from "./Model/Model";
 import { LoadingOutlined } from "@ant-design/icons";
