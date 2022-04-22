@@ -40,50 +40,65 @@ export default function AddModel({
     setPropertiesData(temp);
   };
   const handleSubmit = () => {
-    setLoading(true);
-    let temp = {};
-    propertiesData.forEach((el) => {
-      let temp1 = { ...el };
-      delete temp1.name;
-      temp1.type == "model" && delete temp1.type;
-      if (temp1.enumCheck != "yes") {
-        temp1.enumCheck && delete temp1.enumCheck;
-        temp1.enum && delete temp1.enum;
-      }
-      if (temp1.arrayType) {
-        temp1.items = {
-          type: temp1.arrayType,
-        };
-        delete temp1.arrayType;
-      }
-      if (temp1.arrayref) {
-        temp1.items = {
-          $ref: "#/definitions/" + temp1.arrayref,
-        };
-        delete temp1.arrayref;
-      }
-      temp1.arrayref && delete temp1.arrayref;
-      temp[el.name] = temp1;
-    });
+    if (name.trim() != "") {
+      let temp1 = [...propertiesData];
 
-    let data = {
-      name: name,
-      project_id: JSON.parse(localStorage.getItem("project")).id,
-      properties: JSON.stringify(temp),
-    };
-    axios
-      .post(api_base_url + "/addModel", data)
-      .then((res) => {
-        setLoading(false);
-        message.success("Model Added Successfully");
-        setEditModal(false);
-        setRefresh(!refresh);
-      })
-      .catch((err) => {
-        setLoading(false);
-        message.error("Model Not Added");
+      let check = temp1.find((el) => {
+        return el.name == "";
       });
-    // setLoading(false);
+
+      if (check) {
+        message.error("Please Check Input Again");
+        return;
+      }
+
+      setLoading(true);
+      let temp = {};
+      propertiesData.forEach((el) => {
+        let temp1 = { ...el };
+        delete temp1.name;
+        temp1.type == "model" && delete temp1.type;
+        if (temp1.enumCheck != "yes") {
+          temp1.enumCheck && delete temp1.enumCheck;
+          temp1.enum && delete temp1.enum;
+        }
+        if (temp1.arrayType) {
+          temp1.items = {
+            type: temp1.arrayType,
+          };
+          delete temp1.arrayType;
+        }
+        if (temp1.arrayref) {
+          temp1.items = {
+            $ref: "#/definitions/" + temp1.arrayref,
+          };
+          delete temp1.arrayref;
+        }
+        temp1.arrayref && delete temp1.arrayref;
+        temp[el.name] = temp1;
+      });
+
+      let data = {
+        name: name,
+        project_id: JSON.parse(localStorage.getItem("project")).id,
+        properties: JSON.stringify(temp),
+      };
+      axios
+        .post(api_base_url + "/addModel", data)
+        .then((res) => {
+          setLoading(false);
+          message.success("Model Added Successfully");
+          setEditModal(false);
+          setRefresh(!refresh);
+        })
+        .catch((err) => {
+          setLoading(false);
+          message.error("Model Not Added");
+        });
+      // setLoading(false);
+    } else {
+      message.error("Please Enter Model Name");
+    }
   };
   useEffect(() => {
     axios
@@ -102,6 +117,21 @@ export default function AddModel({
     }
     // }
     propertiesData[index].enum = temp;
+  };
+  const addProperty = () => {
+    let temp = [...propertiesData];
+
+    if (temp.length > 0) {
+      let check = temp.find((el) => {
+        return el.name == "";
+      });
+      console.log(check);
+      if (!check) {
+        setPropertiesData([...propertiesData, { name: "", type: "object" }]);
+      } else message.error("Please Check Input Again");
+    } else {
+      setPropertiesData([...propertiesData, { name: "", type: "object" }]);
+    }
   };
   return (
     <>
@@ -355,12 +385,7 @@ export default function AddModel({
 
               <Button
                 type="dashed"
-                onClick={() =>
-                  setPropertiesData([
-                    ...propertiesData,
-                    { name: "", type: "object" },
-                  ])
-                }
+                onClick={addProperty}
                 style={{ width: "30%" }}
                 icon={<PlusOutlined />}
               >
