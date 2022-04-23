@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Spin, message, Tabs } from "antd";
-import axios from "axios";
-import { api_base_url } from "../../../../constants";
+import { Spin, Tabs } from "antd";
 import ImportProject from "./ImportProject";
 import CurrentProject from "./CurrentProject";
 import NewProject from "./NewProject";
