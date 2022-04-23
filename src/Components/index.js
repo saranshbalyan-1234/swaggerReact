@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./TopLevel/Header";
 import Info from "./TopLevel/Info";
-import Settings from "./TopLevel/Settings";
+import Settings from "./TopLevel/Additional";
 import "antd/dist/antd.css";
-import Tag from "./Tag/Tag";
+import Tag from "./Tag";
 import { Spin, message, Button, Input } from "antd";
-import Model from "./Model/Model";
+import Model from "./Model";
 import { LoadingOutlined } from "@ant-design/icons";
 import { api_base_url } from "../constants";
 export default function Swagger({
@@ -23,6 +23,9 @@ export default function Swagger({
   const [projects, setProjects] = useState([]);
   const [tagSearch, setTagSearch] = useState("");
   const [scheme, setScheme] = useState("http://");
+  const [path, setPath] = useState("");
+  const [host, setHost] = useState("");
+
   // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   useEffect(() => {
     setLoading(true);
@@ -117,6 +120,8 @@ export default function Swagger({
         localTemp.name = res.data.info.title;
         localStorage.setItem("project", JSON.stringify(localTemp));
         setBasePath(res.data.host + res.data.basePath);
+        setHost(res.data.host);
+        setPath(res.data.basePath);
         res.data.path.forEach((el) => {
           let object = {};
           object[el.type] = {
@@ -185,6 +190,8 @@ export default function Swagger({
           getAllProjectsByUser={getAllProjectsByUser}
           admin={admin}
           setAdmin={setAdmin}
+          host={host}
+          path={path}
         />
 
         {/* <Spin indicator={antIcon} spinning={loading}> */}

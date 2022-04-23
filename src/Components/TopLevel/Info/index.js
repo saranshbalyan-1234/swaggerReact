@@ -11,10 +11,11 @@ import {
   Popconfirm,
   Select,
   Switch,
+  Divider,
 } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { api_base_url } from "../../constants";
+import { api_base_url } from "../../../constants";
 const { TabPane } = Tabs;
 export default function Info({
   basePath,
@@ -27,6 +28,8 @@ export default function Info({
   setLoading,
   setAdmin,
   admin,
+  host,
+  path,
 }) {
   const { Option } = Select;
   const navigate = useNavigate();
@@ -49,6 +52,7 @@ export default function Info({
     schemes: ["http", "https"],
     project_id: null,
   });
+
   const color = [
     "magenta",
     "red",
@@ -392,6 +396,43 @@ export default function Info({
             <TabPane tab="Current Project" key="1">
               <Spin spinning={currentProjectLoading}>
                 <div>
+                  <Divider style={{ marginTop: "-5px" }} plain>
+                    Manage Details
+                  </Divider>
+                  <Input
+                    placeholder="Project Name"
+                    value={datas?.info?.title}
+                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "10px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <Input
+                      placeholder="Host"
+                      style={{ width: 240 }}
+                      value={host}
+                    />
+                    <Input
+                      placeholder="Base Path"
+                      style={{
+                        width: 230,
+                        marginLeft: "10px",
+                      }}
+                      value={path}
+                    />
+                  </div>
+                  <Input.TextArea
+                    name="description"
+                    placeholder="Project Description"
+                    value={datas?.info?.description}
+                  />
+                  <Button type="primary" ghost style={{ marginTop: "10px" }}>
+                    Save Details
+                  </Button>
+                  <Divider plain>Manage User</Divider>
                   <div style={{ display: "flex" }}>
                     <Select
                       showSearch
@@ -425,6 +466,7 @@ export default function Info({
                       </Button>
                     </div>
                   </div>
+
                   <div style={{ marginTop: "20px", display: "flex" }}>
                     <div style={{ marginRight: "10px" }}> Users:</div>
                     {projectUser.map((user) => {
@@ -436,7 +478,7 @@ export default function Info({
                     })}
                   </div>
                 </div>
-
+                <Divider></Divider>
                 <div style={{ marginTop: "20px", display: "flex" }}>
                   <div>
                     <Popconfirm
@@ -450,7 +492,7 @@ export default function Info({
                     >
                       <Button
                         disabled={canImport && !admin}
-                        type="primary"
+                        type="danger"
                         onClick={() => setLeaveConfirm(true)}
                         ghost
                       >
@@ -470,7 +512,7 @@ export default function Info({
                     >
                       <Button
                         disabled={canImport && !admin}
-                        type="primary"
+                        type="danger"
                         onClick={() => setDeleteConfirm(true)}
                         ghost
                       >
