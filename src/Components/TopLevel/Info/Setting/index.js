@@ -15,6 +15,7 @@ export default function Settings({
   getAllProjectsByUser,
   setEditMode,
   setAdmin,
+  setDetails,
 }) {
   const { TabPane } = Tabs;
 
@@ -31,6 +32,7 @@ export default function Settings({
           visible={visible}
           setVisible={setVisible}
           getAllProjectsByUser={getAllProjectsByUser}
+          setDetails={setDetails}
         />
       </TabPane>
       <TabPane tab="Import Project" key="2">

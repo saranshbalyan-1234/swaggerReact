@@ -19,12 +19,24 @@ export default function Info({
   host,
   path,
 }) {
-  const { Option } = Select;
   const navigate = useNavigate();
 
   const [visible, setVisible] = useState(false);
-
   const [logoutLoading, setLogoutLoading] = useState(false);
+  const [details, setDetails] = useState({
+    title: datas?.info?.title,
+    description: datas?.info?.description,
+    basePath: basePath,
+    version: datas?.info?.version,
+  });
+  useEffect(() => {
+    setDetails({
+      title: datas?.info?.title,
+      description: datas?.info?.description,
+      basePath: basePath,
+      version: datas?.info?.version,
+    });
+  }, [datas?.info, basePath]);
 
   const logout = async () => {
     setLogoutLoading(true);
@@ -65,7 +77,7 @@ export default function Info({
                     {datas.info && (
                       <>
                         {" "}
-                        {datas?.info?.title}
+                        {details.title}
                         <Tag
                           style={{
                             position: "absolute",
@@ -74,7 +86,7 @@ export default function Info({
                           }}
                           color="blue"
                         >
-                          {datas?.info?.version}
+                          {details.version}
                         </Tag>
                       </>
                     )}
@@ -145,13 +157,13 @@ export default function Info({
                 >
                   {basePath && (
                     <>
-                      <Tag color="red">{basePath}</Tag>{" "}
+                      <Tag color="red">{details.basePath}</Tag>{" "}
                       <Tag color="green">By SaranCe</Tag>{" "}
                     </>
                   )}
                 </a>
               </hgroup>
-              <div className="description">{datas?.info?.description}</div>
+              <div className="description">{details.description}</div>
             </div>
           </div>
         </section>
@@ -177,6 +189,7 @@ export default function Info({
           setEditMode={setEditMode}
           setAdmin={setAdmin}
           visible={visible}
+          setDetails={setDetails}
         />
       </Modal>
     </>

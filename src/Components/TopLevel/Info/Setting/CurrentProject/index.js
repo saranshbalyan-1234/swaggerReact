@@ -14,6 +14,7 @@ export default function CurrentProject({
   visible,
   setVisible,
   getAllProjectsByUser,
+  setDetails,
 }) {
   const [currentProjectLoading, setCurrentProjectLoading] = useState(true);
 
@@ -23,7 +24,12 @@ export default function CurrentProject({
         <Divider style={{ marginTop: "-5px" }} plain>
           Manage Details
         </Divider>
-        <ManageDetails host={host} path={path} datas={datas} />
+        <ManageDetails
+          host={host}
+          path={path}
+          datas={datas}
+          setDetails={setDetails}
+        />
         <Divider plain>Manage User</Divider>
         <ManageUser
           visible={visible}
