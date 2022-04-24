@@ -1,11 +1,9 @@
-import React from "react";
-import { Button, message } from "antd";
+import React, { useState } from "react";
+import { Button, message, Spin } from "antd";
 import axios from "axios";
 import { api_base_url } from "../../../../constants";
 export default function ImportProject({
   canImport,
-  setLoadingImport,
-
   getAllProjectsByUser,
   datas,
   setAdmin,
@@ -13,8 +11,9 @@ export default function ImportProject({
   setLoading,
   setEditMode,
 }) {
+  const [importProjectLoading, setImportProjectLoading] = useState(false);
   const importData = async () => {
-    setLoadingImport(true);
+    setImportProjectLoading(true);
     setLoading(true);
     const { data } = await axios.post(api_base_url + "/createProject", {
       admin: 1,
@@ -43,11 +42,13 @@ export default function ImportProject({
     setEditMode(true);
 
     setVisible(false);
-    setLoadingImport(false);
+    setImportProjectLoading(false);
   };
   return (
-    <Button disabled={!canImport} type="primary" onClick={importData}>
-      Import Current Swagger
-    </Button>
+    <Spin spinning={importProjectLoading}>
+      <Button disabled={!canImport} type="primary" onClick={importData}>
+        Import Current Swagger
+      </Button>
+    </Spin>
   );
 }

@@ -5,11 +5,11 @@ import { Button, Spin, message, Input, Form } from "antd";
 export default function NewProject({
   setEditMode,
   setVisible,
-  setLoadingImport,
   setAdmin,
   getAllProjectsByUser,
   setLoading,
 }) {
+  const [newProjectLoading, setNewProjectLoading] = useState(false);
   const [details, setDetails] = useState({
     name: "",
     description: "",
@@ -51,7 +51,7 @@ export default function NewProject({
     setDetails({ ...details, ...object });
   };
   const importData = async () => {
-    setLoadingImport(true);
+    setNewProjectLoading(true);
     setLoading(true);
     const { data } = await axios.post(api_base_url + "/createProject", {
       admin: 1,
@@ -80,123 +80,124 @@ export default function NewProject({
       "project",
       JSON.stringify({ id: data.id, name: details.title, admin: 1 })
     );
-
     setAdmin(true);
     setEditMode(true);
     setVisible(false);
-    setLoadingImport(false);
+    setNewProjectLoading(false);
   };
   return (
-    <Form
-      {...formItemLayout}
-      name="register"
-      onFinish={importData}
-      initialValues={{
-        residence: ["zhejiang", "hangzhou", "xihu"],
-        prefix: "86",
-      }}
-    >
-      <Form.Item
-        name="title"
-        label="Title"
-        rules={[
-          {
-            required: true,
-            message: "Please enter Project Name",
-          },
-        ]}
+    <Spin spinning={newProjectLoading}>
+      <Form
+        {...formItemLayout}
+        name="register"
+        onFinish={importData}
+        initialValues={{
+          residence: ["zhejiang", "hangzhou", "xihu"],
+          prefix: "86",
+        }}
       >
-        <Input
+        <Form.Item
           name="title"
-          onChange={(e) => {
-            handleDetails(e);
-          }}
-          placeholder="My Project"
-        />
-      </Form.Item>
-      <Form.Item
-        name="host"
-        label="Host"
-        rules={[
-          {
-            required: true,
-            message: "Please enter API Host!",
-          },
-        ]}
-      >
-        <Input
-          name="host"
-          onChange={(e) => {
-            handleDetails(e);
-          }}
-          placeholder="www.google.com"
-        />
-      </Form.Item>
-      <Form.Item
-        name="basePath"
-        label="Base Path"
-        rules={[
-          {
-            required: true,
-            message: "Please enter API Base Path",
-          },
-        ]}
-      >
-        <Input
-          name="basePath"
-          onChange={(e) => {
-            handleDetails(e);
-          }}
-          placeholder="/api"
-        />
-      </Form.Item>
-      <Form.Item
-        name="version"
-        label="Version"
-        rules={[
-          {
-            required: true,
-            message: "Please enter Version",
-          },
-        ]}
-      >
-        <Input
-          name="version"
-          onChange={(e) => {
-            handleDetails(e);
-          }}
-          placeholder="1.0"
-        />
-      </Form.Item>
-      <Form.Item
-        name="description"
-        label="Description"
-        rules={[
-          {
-            required: true,
-            message: "Please enter Description",
-          },
-        ]}
-      >
-        <Input.TextArea
-          name="description"
-          onChange={(e) => {
-            handleDetails(e);
-          }}
-          placeholder="My Description"
-        />
-      </Form.Item>
-
-      <Form.Item {...tailFormItemLayout}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-          style={{ marginRight: "20px" }}
+          label="Title"
+          rules={[
+            {
+              required: true,
+              message: "Please enter Project Name",
+            },
+          ]}
         >
-          Create
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input
+            name="title"
+            onChange={(e) => {
+              handleDetails(e);
+            }}
+            placeholder="My Project"
+          />
+        </Form.Item>
+        <Form.Item
+          name="host"
+          label="Host"
+          rules={[
+            {
+              required: true,
+              message: "Please enter API Host!",
+            },
+          ]}
+        >
+          <Input
+            name="host"
+            onChange={(e) => {
+              handleDetails(e);
+            }}
+            placeholder="www.google.com"
+          />
+        </Form.Item>
+        <Form.Item
+          name="basePath"
+          label="Base Path"
+          rules={[
+            {
+              required: true,
+              message: "Please enter API Base Path",
+            },
+          ]}
+        >
+          <Input
+            name="basePath"
+            onChange={(e) => {
+              handleDetails(e);
+            }}
+            placeholder="/api"
+          />
+        </Form.Item>
+        <Form.Item
+          name="version"
+          label="Version"
+          rules={[
+            {
+              required: true,
+              message: "Please enter Version",
+            },
+          ]}
+        >
+          <Input
+            name="version"
+            onChange={(e) => {
+              handleDetails(e);
+            }}
+            placeholder="1.0"
+          />
+        </Form.Item>
+        <Form.Item
+          name="description"
+          label="Description"
+          rules={[
+            {
+              required: true,
+              message: "Please enter Description",
+            },
+          ]}
+        >
+          <Input.TextArea
+            name="description"
+            onChange={(e) => {
+              handleDetails(e);
+            }}
+            placeholder="My Description"
+          />
+        </Form.Item>
+
+        <Form.Item {...tailFormItemLayout}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+            style={{ marginRight: "20px" }}
+          >
+            Create
+          </Button>
+        </Form.Item>
+      </Form>
+    </Spin>
   );
 }

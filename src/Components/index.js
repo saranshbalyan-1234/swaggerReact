@@ -5,16 +5,11 @@ import Info from "./TopLevel/Info";
 import Settings from "./TopLevel/Additional";
 import "antd/dist/antd.css";
 import Tag from "./Tag";
-import { Spin, message, Button, Input } from "antd";
+import { message } from "antd";
 import Model from "./Model";
-import { LoadingOutlined } from "@ant-design/icons";
+
 import { api_base_url } from "../constants";
-export default function Swagger({
-  basePath,
-  setBasePath,
-  loading,
-  setLoading,
-}) {
+export default function Swagger({ basePath, setBasePath, setLoading }) {
   const [data, setData] = useState([]);
   const [admin, setAdmin] = useState(false);
   const [editMode, setEditMode] = useState(false);
