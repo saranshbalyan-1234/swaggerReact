@@ -33,7 +33,6 @@ export default function AddModel({
     setPropertiesData(temp);
   };
   const handleData = (value, index, type) => {
-    console.log("number", value);
     let temp = [...propertiesData];
     if (type != "ref") {
       temp[index][type] = value;
@@ -99,7 +98,6 @@ export default function AddModel({
         temp[res.data.name] = res.data;
         temp[res.data.name].properties = JSON.parse(res.data.properties);
         setModels({ ...models, ...temp });
-        console.log("saransh", { ...models, ...temp });
       })
       .catch((err) => {
         setLoading(false);
@@ -132,7 +130,7 @@ export default function AddModel({
       let check = temp.find((el) => {
         return el.name == "";
       });
-      console.log(check);
+
       if (!check) {
         setPropertiesData([...propertiesData, { name: "", type: "object" }]);
       } else message.error("Please Check Input Again");

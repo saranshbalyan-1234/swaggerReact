@@ -185,6 +185,8 @@ export default function Tag({
           setAddApi={setAddApi}
           tags={tags}
           tag={tag}
+          apiData={data}
+          setApiData={setData}
         />
       )}
     </>

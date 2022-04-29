@@ -14,7 +14,7 @@ export default function Model({
   const [showModel, setShowModel] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [search, setSearch] = useState("");
-  console.log("saransh", models);
+
   const onSearch = (e) => {
     setShowModel(true);
     setSearch(e.target.value.toLowerCase());

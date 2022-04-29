@@ -11,6 +11,8 @@ export default function AddApi({
   tag,
   setRefresh,
   refresh,
+  setApiData,
+  apiData,
 }) {
   const { TabPane } = Tabs;
   const { Option } = Select;
@@ -107,7 +109,24 @@ export default function AddApi({
         setLoading(false);
         message.success("API Added Successfully");
         setAddApi(false);
-        setRefresh(!refresh);
+        let temp = {};
+        temp[res.data.path] = {};
+        temp[res.data.path][res.data.type] = res.data;
+        temp[res.data.path][res.data.type].consumes = JSON.parse(
+          res.data.consumes
+        );
+        temp[res.data.path][res.data.type].produces = JSON.parse(
+          res.data.produces
+        );
+        temp[res.data.path][res.data.type].responses = JSON.parse(
+          res.data.responses
+        );
+        temp[res.data.path][res.data.type].parameters = JSON.parse(
+          res.data.parameters
+        );
+        temp[res.data.path][res.data.type].tags = JSON.parse(res.data.tags);
+        setApiData({ ...apiData, ...temp });
+        // setRefresh(!refresh);
       })
       .catch((err) => {
         setLoading(false);

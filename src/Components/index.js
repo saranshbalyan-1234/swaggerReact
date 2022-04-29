@@ -51,7 +51,6 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
         }
       })
       .catch((err) => {
-        console.log("error", err);
         getFromJson("/swagger.json");
         setEditMode(false);
         setAdmin(false);
