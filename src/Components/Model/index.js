@@ -3,10 +3,18 @@ import SingleModel from "./singleModel";
 import { Button, Input, Empty } from "antd";
 import AddModel from "./AddModel";
 const { Search } = Input;
-export default function Model({ data, editMode, refresh, setRefresh, admin }) {
+export default function Model({
+  models,
+  setModels,
+  editMode,
+  refresh,
+  setRefresh,
+  admin,
+}) {
   const [showModel, setShowModel] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [search, setSearch] = useState("");
+  console.log("saransh", models);
   const onSearch = (e) => {
     setShowModel(true);
     setSearch(e.target.value.toLowerCase());
@@ -55,14 +63,14 @@ export default function Model({ data, editMode, refresh, setRefresh, admin }) {
         </h4>
         {showModel && (
           <div style={{ marginBottom: "20px" }}>
-            {Object.keys(data).length > 0 ? (
-              Object.keys(data).map(function (key, index) {
+            {Object.keys(models).length > 0 ? (
+              Object.keys(models).map(function (key, index) {
                 return (
                   key.toLowerCase().includes(search) && (
                     <SingleModel
                       data={key}
-                      arrays={data[key]}
-                      allData={data}
+                      arrays={models[key]}
+                      allData={models}
                       inside={false}
                       key={index}
                       editMode={editMode}
@@ -82,6 +90,8 @@ export default function Model({ data, editMode, refresh, setRefresh, admin }) {
 
       {editModal && (
         <AddModel
+          models={models}
+          setModels={setModels}
           editModal={editModal}
           setEditModal={setEditModal}
           refresh={refresh}

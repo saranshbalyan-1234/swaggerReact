@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Tooltip, Input, Form, Button, message, Spin } from "antd";
 import axios from "axios";
 import { api_base_url } from "../../constants";
-export default function Settings({
+export default function Additional({
   servers,
   schemes,
   editMode,
@@ -11,6 +11,8 @@ export default function Settings({
   setTagSearch,
   setScheme,
   admin,
+  setTags,
+  tags,
 }) {
   const [authVisible, setAuthVisible] = useState(false);
   const [addTagVisible, setAddTagVisible] = useState(false);
@@ -53,7 +55,7 @@ export default function Settings({
     axios
       .post(api_base_url + "/addTag", data)
       .then((res) => {
-        setRefresh(!refresh);
+        setTags([...tags, res.data]);
         message.success("Tag Added SuccessFully");
         setAddTagLoading(false);
         setAddTagVisible(false);

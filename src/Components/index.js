@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./TopLevel/Header";
 import Info from "./TopLevel/Info";
-import Settings from "./TopLevel/Additional";
 import "antd/dist/antd.css";
 import Tag from "./Tag";
 import { message } from "antd";
 import Model from "./Model";
-
 import { api_base_url } from "../constants";
+import Additional from "./TopLevel/Additional";
 export default function Swagger({ basePath, setBasePath, setLoading }) {
   const [data, setData] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [models, setModels] = useState({});
   const [admin, setAdmin] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -97,6 +98,8 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
       .get(basePath)
       .then((res) => {
         setData(res.data);
+        setTags(res.data.tags);
+        setModels(res.data.definitions);
         setLoading(false);
       })
       .catch((err) => {
@@ -145,6 +148,9 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
           paths: pathTemp,
           definitions: modelTemp,
         });
+        setTags(res.data.tags);
+
+        setModels(modelTemp);
       })
 
       .catch((err) => {
@@ -190,9 +196,11 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
         />
 
         {/* <Spin indicator={antIcon} spinning={loading}> */}
-        <Settings
+        <Additional
           servers={data.servers}
           schemes={data.schemes}
+          setTags={setTags}
+          tags={tags}
           editMode={editMode}
           refresh={refresh}
           setRefresh={setRefresh}
@@ -201,8 +209,8 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
           admin={admin}
         />
 
-        {data.tags &&
-          data.tags.map((el, index) => {
+        {tags &&
+          tags.map((el, index) => {
             return (
               el.name.toLowerCase().includes(tagSearch) && (
                 <Tag
@@ -210,7 +218,7 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
                   tag={el}
                   paths={data.paths}
                   models={data.definitions}
-                  tags={data.tags}
+                  tags={tags}
                   basePath={basePath}
                   editMode={editMode}
                   refresh={refresh}
@@ -222,7 +230,8 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
             );
           })}
         <Model
-          data={data.definitions}
+          models={models}
+          setModels={setModels}
           editMode={editMode}
           refresh={refresh}
           setRefresh={setRefresh}

@@ -18,6 +18,8 @@ export default function AddModel({
   setEditModal,
   refresh,
   setRefresh,
+  models,
+  setModels,
 }) {
   const [form] = Form.useForm();
   const [propertiesData, setPropertiesData] = useState([]);
@@ -92,7 +94,12 @@ export default function AddModel({
         setLoading(false);
         message.success("Model Added Successfully");
         setEditModal(false);
-        setRefresh(!refresh);
+        // setRefresh(!refresh);
+        let temp = {};
+        temp[res.data.name] = res.data;
+        temp[res.data.name].properties = JSON.parse(res.data.properties);
+        setModels({ ...models, ...temp });
+        console.log("saransh", { ...models, ...temp });
       })
       .catch((err) => {
         setLoading(false);
