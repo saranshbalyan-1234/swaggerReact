@@ -218,6 +218,8 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
                   paths={data.paths}
                   models={data.definitions}
                   tags={tags}
+                  setTags={setTags}
+                  index={index}
                   basePath={basePath}
                   editMode={editMode}
                   refresh={refresh}

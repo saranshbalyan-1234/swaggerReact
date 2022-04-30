@@ -13,6 +13,8 @@ export default function Tag({
   basePath,
   editMode,
   tags,
+  setTags,
+  index,
   refresh,
   setRefresh,
   scheme,
@@ -57,7 +59,11 @@ export default function Tag({
       .post(api_base_url + "/deleteTag", { id: tag.id })
       .then((res) => {
         message.success("Tag Deleted Successfully");
-        setRefresh(!refresh);
+        // setRefresh(!refresh);
+        // setTags([...tags.spilce(index, 0)])
+        let temp = [...tags];
+        temp.splice(index, 1);
+        setTags(temp);
         setCofirmLoading(false);
         setShowConfirm(false);
       })

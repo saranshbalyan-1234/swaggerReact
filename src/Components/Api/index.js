@@ -21,6 +21,7 @@ export default function Api({
   editMode,
   scheme,
   admin,
+  allApi,
 }) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
@@ -33,7 +34,7 @@ export default function Api({
   const [response, setResponse] = useState();
   const [consumes, setConsumes] = useState(data.consumes[0]);
   const [formData, setFormdata] = useState(new FormData());
-
+  console.log("saransh", allApi, data);
   const deletePath = () => {
     setCofirmLoading(true);
     axios

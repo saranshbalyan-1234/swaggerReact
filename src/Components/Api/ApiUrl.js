@@ -18,6 +18,7 @@ export default function ApiUrl({
           <Api
             key={index}
             data={data[key]}
+            allApi={data}
             type={key}
             url={url}
             models={models}

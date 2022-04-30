@@ -12,6 +12,7 @@ export default function SingleModel({
   refresh,
   setRefresh,
   admin,
+  setModels,
 }) {
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -23,7 +24,9 @@ export default function SingleModel({
       .post(api_base_url + "/deleteModel", { id: id })
       .then((res) => {
         message.success("Model Deleted Successfully");
-        setRefresh(!refresh);
+        let temp = { ...allData };
+        delete temp[data];
+        setModels(temp);
         setCofirmLoading(false);
         setShowConfirm(false);
       })

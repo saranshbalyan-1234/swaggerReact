@@ -71,6 +71,7 @@ export default function Model({
                       data={key}
                       arrays={models[key]}
                       allData={models}
+                      setModels={setModels}
                       inside={false}
                       key={index}
                       editMode={editMode}
