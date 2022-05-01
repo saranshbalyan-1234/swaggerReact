@@ -22,6 +22,7 @@ export default function Api({
   scheme,
   admin,
   allApi,
+  setApiData,
 }) {
   const [body, showBody] = useState(false);
   const [tryApi, setTryApi] = useState(false);
@@ -34,18 +35,22 @@ export default function Api({
   const [response, setResponse] = useState();
   const [consumes, setConsumes] = useState(data.consumes[0]);
   const [formData, setFormdata] = useState(new FormData());
-  console.log("saransh", allApi, data);
+
   const deletePath = () => {
     setCofirmLoading(true);
     axios
       .post(api_base_url + "/deletePath", { id: data.id })
       .then((res) => {
         message.success("API Deleted Successfully");
-        setRefresh(!refresh);
+        // setRefresh(!refresh);
+        let temp = { ...allApi };
+        delete temp[data.type];
+        setApiData(temp);
         setCofirmLoading(false);
         setShowConfirm(false);
       })
       .catch((err) => {
+        console.log("saransh", err);
         message.error("something Went Wrong");
         setCofirmLoading(false);
         setShowConfirm(false);

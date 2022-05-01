@@ -10,6 +10,7 @@ export default function ApiUrl({
   editMode,
   scheme,
   admin,
+  setApiData,
 }) {
   return (
     <>
@@ -28,6 +29,7 @@ export default function ApiUrl({
             editMode={editMode}
             scheme={scheme}
             admin={admin}
+            setApiData={setApiData}
           />
         );
       })}

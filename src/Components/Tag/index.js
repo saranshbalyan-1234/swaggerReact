@@ -176,6 +176,7 @@ export default function Tag({
                   editMode={editMode}
                   scheme={scheme}
                   admin={admin}
+                  setApiData={setData}
                 />
               )
             );
