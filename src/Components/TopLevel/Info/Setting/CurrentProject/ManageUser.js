@@ -1,27 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { api_base_url } from "../../../../../constants";
-import {
-  Button,
-  Tag,
-  Spin,
-  Divider,
-  Select,
-  Popconfirm,
-  Switch,
-  Input,
-  message,
-} from "antd";
-export default function ManageUser({
-  visible,
-  admin,
-  canImport,
-  setCurrentProjectLoading,
-}) {
+import { Button, Tag, Spin, Select, Switch, message } from "antd";
+export default function ManageUser({ visible, admin, canImport }) {
   const { Option } = Select;
   const [allUser, setAllUser] = useState([]);
   const [addUser, setAddUser] = useState({ id: 0, admin: 1 });
   const [projectUser, setProjectUser] = useState([]);
+  const [manageUserLoading, setManageUserLoading] = useState(true);
 
   const color = [
     "magenta",
@@ -50,7 +36,7 @@ export default function ManageUser({
     });
   };
   const addUserToProject = () => {
-    setCurrentProjectLoading(true);
+    setManageUserLoading(true);
     axios
       .post(api_base_url + "/addUserToProject", {
         user_id: addUser.id,
@@ -73,10 +59,10 @@ export default function ManageUser({
           }),
         ]);
         message.success("User Added Successfully");
-        setCurrentProjectLoading(false);
+        setManageUserLoading(false);
       })
       .catch((err) => {
-        setCurrentProjectLoading(false);
+        setManageUserLoading(false);
         message.error("Something Went Wrong");
       });
   };
@@ -87,20 +73,19 @@ export default function ManageUser({
           project_id: JSON.parse(localStorage.getItem("project"))?.id,
         })
         .then((res) => {
-          setCurrentProjectLoading(false);
+          setManageUserLoading(false);
           setAllUser(res.data.allUser);
           setProjectUser(res.data.projectUser);
         })
         .catch((err) => {
-          setCurrentProjectLoading(false);
+          setManageUserLoading(false);
           message.error("Cannot Get User List");
         });
     }
   }, [visible]);
 
   return (
-    <>
-      {" "}
+    <Spin spinning={manageUserLoading}>
       <div style={{ display: "flex" }}>
         <Select
           showSearch
@@ -144,6 +129,6 @@ export default function ManageUser({
           );
         })}
       </div>
-    </>
+    </Spin>
   );
 }

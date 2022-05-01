@@ -16,10 +16,8 @@ export default function CurrentProject({
   getAllProjectsByUser,
   setDetails,
 }) {
-  const [currentProjectLoading, setCurrentProjectLoading] = useState(true);
-
   return (
-    <Spin spinning={currentProjectLoading}>
+    <>
       <div>
         <Divider style={{ marginTop: "-5px" }} plain>
           Manage Details
@@ -31,12 +29,7 @@ export default function CurrentProject({
           setDetails={setDetails}
         />
         <Divider plain>Manage User</Divider>
-        <ManageUser
-          visible={visible}
-          admin={admin}
-          canImport={canImport}
-          setCurrentProjectLoading={setCurrentProjectLoading}
-        />
+        <ManageUser visible={visible} admin={admin} canImport={canImport} />
       </div>
       <Divider plain>More</Divider>
       <More
@@ -46,6 +39,6 @@ export default function CurrentProject({
         getAllProjectsByUser={getAllProjectsByUser}
         setVisible={setVisible}
       />
-    </Spin>
+    </>
   );
 }
