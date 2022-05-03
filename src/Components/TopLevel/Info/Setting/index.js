@@ -21,20 +21,22 @@ export default function Settings({
 
   return (
     <Tabs style={{ marginTop: "-30px" }} defaultActiveKey="1">
-      <TabPane tab="Current Project" key="1">
-        <CurrentProject
-          admin={admin}
-          canImport={canImport}
-          setLoading={setLoading}
-          path={path}
-          host={host}
-          datas={datas}
-          visible={visible}
-          setVisible={setVisible}
-          getAllProjectsByUser={getAllProjectsByUser}
-          setDetails={setDetails}
-        />
-      </TabPane>
+      {admin && (
+        <TabPane tab="Current Project" key="1">
+          <CurrentProject
+            admin={admin}
+            canImport={canImport}
+            setLoading={setLoading}
+            path={path}
+            host={host}
+            datas={datas}
+            visible={visible}
+            setVisible={setVisible}
+            getAllProjectsByUser={getAllProjectsByUser}
+            setDetails={setDetails}
+          />
+        </TabPane>
+      )}
       <TabPane tab="Import Project" key="2">
         <ImportProject
           canImport={canImport}
