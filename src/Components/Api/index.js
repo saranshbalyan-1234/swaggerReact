@@ -44,7 +44,7 @@ export default function Api({
         message.success("API Deleted Successfully");
         // setRefresh(!refresh);
         let temp = { ...allApi };
-        delete temp[data.type];
+        delete temp[data.path][data.type];
         setApiData(temp);
         setCofirmLoading(false);
         setShowConfirm(false);

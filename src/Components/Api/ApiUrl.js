@@ -11,6 +11,7 @@ export default function ApiUrl({
   scheme,
   admin,
   setApiData,
+  allData,
 }) {
   return (
     <>
@@ -19,7 +20,7 @@ export default function ApiUrl({
           <Api
             key={index}
             data={data[key]}
-            allApi={data}
+            allApi={allData}
             type={key}
             url={url}
             models={models}

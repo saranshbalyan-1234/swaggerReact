@@ -169,6 +169,7 @@ export default function Tag({
                   key={index}
                   basePath={basePath}
                   data={data[key]}
+                  allData={data}
                   url={key}
                   models={models}
                   refresh={refresh}
