@@ -32,6 +32,7 @@ export default function AddResponse({ responseData, setResponseData }) {
           style={{
             display: "flex",
           }}
+          key={index}
         >
           <Form.Item required={true} key={index}>
             <Form.Item
@@ -66,8 +67,12 @@ export default function AddResponse({ responseData, setResponseData }) {
                 placeholder="Select Model"
                 onChange={(e) => handleData(e, index, "model")}
               >
-                {allModel.map((el) => {
-                  return <Option value={el.name}>{el.name}</Option>;
+                {allModel.map((el, index) => {
+                  return (
+                    <Option key={index} value={el.name}>
+                      {el.name}
+                    </Option>
+                  );
                 })}
               </Select>
               <Switch

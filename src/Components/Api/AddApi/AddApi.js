@@ -283,8 +283,12 @@ export default function AddApi({
               // onSelect={(e) => handleDetails(e, "tags")}
             >
               <Option>{"safa"}</Option>
-              {tags.map((el) => {
-                return <Option value={el.name}>{el.name}</Option>;
+              {tags.map((el, index) => {
+                return (
+                  <Option value={el.name} key={index}>
+                    {el.name}
+                  </Option>
+                );
               })}
             </Select>
           </Form.Item>

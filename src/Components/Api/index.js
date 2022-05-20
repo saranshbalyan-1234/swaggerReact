@@ -323,13 +323,18 @@ export default function Api({
                                                   setConsumes(e.target.value);
                                                 }}
                                               >
-                                                {data.consumes.map((el) => {
-                                                  return (
-                                                    <option value={el}>
-                                                      {el}
-                                                    </option>
-                                                  );
-                                                })}
+                                                {data.consumes.map(
+                                                  (el, index) => {
+                                                    return (
+                                                      <option
+                                                        value={el}
+                                                        key={index}
+                                                      >
+                                                        {el}
+                                                      </option>
+                                                    );
+                                                  }
+                                                )}
                                               </select>
                                             </div>
                                           </ul>

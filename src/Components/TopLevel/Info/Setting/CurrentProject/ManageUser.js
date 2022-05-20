@@ -93,9 +93,9 @@ export default function ManageUser({ visible, admin, canImport }) {
           placeholder="Search Name"
           onSelect={(e) => handleChange(e)}
         >
-          {allUser.map((user) => {
+          {allUser.map((user, index) => {
             return (
-              <Option id={user.id + "option"} value={user.id}>
+              <Option key={index} id={user.id + "option"} value={user.id}>
                 {user.name}
               </Option>
             );
@@ -121,9 +121,9 @@ export default function ManageUser({ visible, admin, canImport }) {
       </div>
       <div style={{ marginTop: "20px", display: "flex" }}>
         <div style={{ marginRight: "10px" }}> Users:</div>
-        {projectUser.map((user) => {
+        {projectUser.map((user, index) => {
           return (
-            <Tag color={color[Math.floor(Math.random() * 11)]}>
+            <Tag key={index} color={color[Math.floor(Math.random() * 11)]}>
               {user.user.name}
             </Tag>
           );

@@ -21,7 +21,7 @@ export default function App() {
   });
   axios.interceptors.response.use(
     (response) => {
-      console.log("successResponse", response.data);
+      // console.log("successResponse", response.data);
       return response;
     },
     (err) => {

@@ -79,6 +79,7 @@ export default function AddParameter({
           style={{
             display: "flex",
           }}
+          key={index}
         >
           <Form.Item required={true} key={index}>
             <Form.Item
@@ -263,8 +264,12 @@ export default function AddParameter({
                     value={parameterData[index].ref?.substring(14)}
                     onChange={(e) => handleData(e, index, "ref")}
                   >
-                    {allModel.map((el) => {
-                      return <Option value={el.name}>{el.name}</Option>;
+                    {allModel.map((el, index) => {
+                      return (
+                        <Option value={el.name} key={index}>
+                          {el.name}
+                        </Option>
+                      );
                     })}
                   </Select>
                 )}
@@ -301,8 +306,12 @@ export default function AddParameter({
                       value={parameterData[index].arrayref}
                       onChange={(e) => handleData(e, index, "arrayref")}
                     >
-                      {allModel.map((el) => {
-                        return <Option value={el.name}>{el.name}</Option>;
+                      {allModel.map((el, index) => {
+                        return (
+                          <Option key={index} value={el.name}>
+                            {el.name}
+                          </Option>
+                        );
                       })}
                     </Select>
                   )}

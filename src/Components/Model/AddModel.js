@@ -175,6 +175,7 @@ export default function AddModel({
                   style={{
                     display: "flex",
                   }}
+                  key={index}
                 >
                   <Form.Item required={true} key={index}>
                     <Form.Item
@@ -323,8 +324,12 @@ export default function AddModel({
                             value={propertiesData[index].ref?.substring(14)}
                             onChange={(e) => handleData(e, index, "ref")}
                           >
-                            {allModel.map((el) => {
-                              return <Option value={el.name}>{el.name}</Option>;
+                            {allModel.map((el, index) => {
+                              return (
+                                <Option key={index} value={el.name}>
+                                  {el.name}
+                                </Option>
+                              );
                             })}
                           </Select>
                         )}
@@ -361,9 +366,11 @@ export default function AddModel({
                               value={propertiesData[index].arrayref}
                               onChange={(e) => handleData(e, index, "arrayref")}
                             >
-                              {allModel.map((el) => {
+                              {allModel.map((el, index) => {
                                 return (
-                                  <Option value={el.name}>{el.name}</Option>
+                                  <Option key={index} value={el.name}>
+                                    {el.name}
+                                  </Option>
                                 );
                               })}
                             </Select>
