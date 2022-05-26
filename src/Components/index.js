@@ -216,7 +216,7 @@ export default function Swagger({ basePath, setBasePath, setLoading }) {
                   key={index}
                   tag={el}
                   paths={data.paths}
-                  models={data.definitions}
+                  models={models}
                   tags={tags}
                   setTags={setTags}
                   index={index}
