@@ -41,15 +41,7 @@ const Login = () => {
     setDetails({ ...details, ...object });
   };
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        paddingTop: "10%",
-        backgroundColor: "rgba(101,108,133,.8)",
-        height: "100vh",
-      }}
-    >
+    <div className="outsideApp">
       <Spin spinning={loading}>
         <Card title="Login" bordered class="shadow">
           <img

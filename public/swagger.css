@@ -8936,3 +8936,24 @@
 }
 
 /*# sourceMappingURL=swagger-ui.css.map*/
+
+.outsideApp {
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(to right, rgb(238 240 238), #326bfe);
+  align-items: center;
+  background-color: rgba(101, 108, 133, 0.8);
+  height: 100vh;
+}
+.outsideApp::before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: "";
+  left: 0;
+  top: -10px;
+  background-image: url(https://rcteambuilder.com/img/video-bb.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
